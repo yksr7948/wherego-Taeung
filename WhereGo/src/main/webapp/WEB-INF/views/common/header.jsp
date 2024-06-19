@@ -187,11 +187,11 @@
     <section class="hbody">
       <article class="nav">
         <div class="title">
-          <img src="resources/img/removebg-preview.png" alt="Logo">
+          <a href="index.jsp"><img src="resources/img/removebg-preview.png" alt="Logo"></a>
         </div>
         <div id="menu">
           <ul>
-            <li><a href="">홈</a></li>
+            <li><a href="index.jsp">홈</a></li>
             <li><a href="">여행지</a>
               <div class="submenu">
                 <ul>
@@ -204,7 +204,7 @@
               </div>
             </li>
             <li><a href="">날씨</a></li>
-            <li><a href="">지도</a></li>
+            <li><a href="${pageContext.request.contextPath}/travelMap">지도</a></li>
             <li><a href="">게시판</a>
               <div class="submenu">
                 <ul>

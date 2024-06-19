@@ -120,7 +120,20 @@ color:black;
 	});
 	function showWeather(location){
 		console.log("대충 날씨관련 함수함들기");
-		console.log(location);
+		var area=location;
+		console.log(area);
+		$.ajax({
+			url : "location.we",
+			data : {
+				location : area
+			},
+			success : function(code){
+				console.log(code);
+			},
+			error : function(){
+				console.log("정보 가져오기 실패");
+			}
+		});
 	}
 	</script>
 	<%@ include file="../common/footer.jsp" %>

@@ -10,6 +10,12 @@
 width:90%;
 margin:auto;
 border:1px solid black;
+background-color:white;
+}
+.location-btn{
+width:80%;
+background-color:azure;
+color:black;
 }
 </style>
 </head>
@@ -21,7 +27,7 @@ border:1px solid black;
 		<thead>
 			<tr>
 				<th colspan="11">
-				<table>
+				<table style="width:100%; text-align:center">
 					<tr>
 						<td><button class="location-btn">광역시</button></td>
 						<td><button class="location-btn">경기도</button></td>
@@ -31,7 +37,8 @@ border:1px solid black;
 						<td><button class="location-btn">전라도</button></td>
 					</tr>
 					<tr>
-						<td colspan="6">
+						<td colspan="6" style="text-align:left">
+						<!-- ajax를 통해 버튼 클릭시 해당 구역에 속하는 시 이름들 버튼 나열 -->
 						<button>서울</button>
 						<button>인천</button>
 						<button>세종</button>
@@ -48,6 +55,8 @@ border:1px solid black;
 			</tr>
 		</thead>
 		<tbody>
+		<!-- 처음은 서울 날씨 보여주고 다른 버튼 클릭시 해당 지역의 날씨 조회 -->
+		<!-- aspect 기능을 사용해 매일 06시마다 날짜갱신 -->
 			<tr>
 				<th rowspan="2">날짜</th>
 				<td colspan="2">3일후</td>
@@ -105,6 +114,15 @@ border:1px solid black;
 		</tbody>
 	</table>
 	</div>
+	<script>
+	$(function(){
+		showWeather("서울"); /* 처음실행시 서울날씨 조회 */
+	});
+	function showWeather(location){
+		console.log("대충 날씨관련 함수함들기");
+		console.log(location);
+	}
+	</script>
 	<%@ include file="../common/footer.jsp" %>
 </body>
 </html>

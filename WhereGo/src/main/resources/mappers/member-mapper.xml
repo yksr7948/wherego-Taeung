@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	
+	<resultMap type="Member" id="memberResultSet">
+		<result column="USER_ID" property="userId"/>
+		<result column="USER_PWD" property="userPwd"/>
+		<result column="USER_NAME" property="userName"/>
+		<result column="EMAIL" property="email"/>
+		<result column="GENDER" property="gender"/>
+		<result column="AGE" property="age"/>
+		<result column="PHONE" property="phone"/>
+		<result column="ENROLL_DATE" property="enrollDate"/>
+		<result column="MODIFY_DATE" property="modifyDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap>
+	
+	
+	
+	<select id="loginMember" resultMap="memberResultSet">
+	  SELECT USER_ID
+		    ,USER_PWD
+		    ,USER_NAME
+		    ,EMAIL
+		    ,GENDER
+		    ,AGE
+		    ,PHONE
+		    ,ENROLL_DATE
+		    ,MODIFY_DATE
+		    ,STATUS
+		FROM MEMBER
+		WHERE USER_ID = #{userId}
+<!-- 	암호화 작업 후 조회할땐 아이디만 가지고 조회하기  
+		비밀번호는 확인할수없음 - 이미 암호화 처리되어있기 때문	-->
+<!-- 		AND USER_PWD= #{userPwd} -->
+		AND STATUS='Y'
+	</select>
+	
+	
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO MEMBER(
+						  USER_ID
+						  ,USER_PWD
+						  ,USER_NAME
+						  ,USER_NICKNAME
+						  ,EMAIL
+						  ,GENDER
+						  ,AGE
+						  ,PHONE)
+            VALUES(
+            		#{userId}
+            	   ,#{userPwd}
+            	   ,#{userName}
+            	   ,#{userNickname}
+            	   ,#{email}
+            	   ,#{gender}
+            	   ,#{age}
+            	   ,#{phone}
+            	 )
+	</insert>
+	
+	<update id="updateMember" parameterType="Member">
+		UPDATE MEMBER
+		SET USER_NAME = #{userName}
+		   ,EMAIL = #{email}
+		   ,AGE = #{age}
+		   ,PHONE = #{phone}
+		   ,GENDER = #{gender}
+		   ,MODIFY_DATE = SYSDATE
+		WHERE USER_ID = #{userId}
+		AND STATUS = 'Y'
+	</update>
+	
+	<update id="deleteMember" parameterType="string">
+		UPDATE MEMBER
+		SET STATUS = 'N'
+		WHERE USER_ID = #{userId}
+		AND STATUS = 'Y'
+	</update>
+	
+	<select id="checkId" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE USER_ID = #{checkId}
+	</select>
+	
+	
+	
+	
+	
+</mapper>

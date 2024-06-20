@@ -163,7 +163,7 @@ public class TripController {
 	}
 	
 	//여행지리스트 페이지로 이동
-	@RequestMapping("tripList.bo")
+	@RequestMapping("tripList.tl")
 	public String tripList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
 		
 		int listCount = tripService.listCount();
@@ -178,6 +178,41 @@ public class TripController {
 		model.addAttribute("tList",tList);
 		
 		return "trip/tripList";
+	}
+	
+	//지역별리스트 페이지로 이동
+	@RequestMapping("areaList.tl")
+	public String areaList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String areaCode, Model model) {
+		
+		String location = "";
+		
+		switch (areaCode) {
+			case "1": location = "서울"; break;
+			case "2": location = "인천"; break;
+			case "3": location = "대전"; break;
+			case "4": location = "대구"; break;
+			case "5": location = "광주"; break;
+			case "6": location = "부산"; break;
+			case "7": location = "울산"; break;
+			case "31": location = "경기"; break;
+			case "32": location = "강원"; break;
+			default: location = "제주"; break;
+		}
+		
+		int areaListCount = tripService.areaListCount(areaCode); 
+		int pageLimit = 5;
+		int boardLimit = 12;
+		
+		PageInfo pi = Pagination.getPageInfo(areaListCount, currentPage, pageLimit, boardLimit);
+		
+		ArrayList<Trip> aList = tripService.selectAreaList(pi, areaCode);
+		
+		model.addAttribute("pi",pi);
+		model.addAttribute("aList",aList);
+		model.addAttribute("location",location);
+		model.addAttribute("areaCode",areaCode);
+		
+		return "trip/areaList";
 	}
 	
 }

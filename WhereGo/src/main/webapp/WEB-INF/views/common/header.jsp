@@ -195,7 +195,7 @@
             <li><a href="">여행지</a>
               <div class="submenu">
                 <ul>
-                  <li><a href="tripList.bo?currentPage=1">여행지1</a></li>
+                  <li><a href="tripList.tl">여행지1</a></li>
                   <li><a href="#">여행지2</a></li>
                   <li><a href="#">여행지3</a></li>
                   <li><a href="#">여행지4</a></li>

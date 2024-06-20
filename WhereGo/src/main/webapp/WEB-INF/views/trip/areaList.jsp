@@ -106,8 +106,6 @@ main {
 .current-page a{
 	color: black;
 	background: lightgray;
-	cursor: auto;
-	disabled: true;
 }
 </style>
 </head>
@@ -117,7 +115,7 @@ main {
 
 	
 	<main>
-		<h1 id="area-title"># 여행지 > 전체</h1>
+		<h1 id="area-title"># 여행지 > ${location}</h1>
 		
 		<br> <br> <hr> <br> <br> <br>
 		
@@ -134,14 +132,14 @@ main {
 			<a href="areaList.tl?areaCode=39">제주</a>
 		</div>
 		<div class="card-container">
-			<c:forEach items="${tList }" var="t">
+			<c:forEach items="${aList }" var="a">
 			<div class="card">
-				<img src="${t.firstImage2 }" alt="">
+				<img src="${a.firstImage2 }" alt="">
 				<div class="card-content">
-					<h2>${t.title }</h2>
-					<p>${t.addr1 }</p>
+					<h2>${a.title }</h2>
+					<p>${a.addr1 }</p>
 					<br>
-					<p><img src="resources/img/eye-icon.png"> ${t.count}</p>
+					<p><img src="resources/img/eye-icon.png"> ${a.count}</p>
 				</div>
 			</div>
 			</c:forEach>
@@ -157,15 +155,15 @@ main {
 		                    <li class="page-item disabled"><a class="page-link" href="#">&lt;</a></li>
                 		</c:when>
                 		<c:otherwise>
-                			<li class="page-item"><a class="page-link" href="tripList.tl?currentPage=1">&laquo;</a></li>
-                			<li class="page-item"><a class="page-link" href="tripList.tl?currentPage=${pi.currentPage-1 }">&lt;</a></li>
+                			<li class="page-item"><a class="page-link" href="areaList.tl?areaCode=${areaCode }&currentPage=1">&laquo;</a></li>
+                			<li class="page-item"><a class="page-link" href="areaList.tl?areaCode=${areaCode }&currentPage=${pi.currentPage-1 }">&lt;</a></li>
                 		</c:otherwise>
                 	</c:choose>
                 	
 					<!-- 페이징바 번호 뽑아주기 -->
                 	<c:forEach begin="${pi.startPage }" end="${pi.endPage }" var="p">
                 		<li class="<c:if test='${pi.currentPage == p}'>current-page</c:if>">
-        				<a class="page-link" href="tripList.tl?currentPage=${p}">${p}</a>
+        				<a class="page-link" href="areaList.tl?areaCode=${areaCode }&currentPage=${p}">${p}</a>
     					</li>
                 	</c:forEach>
                     
@@ -176,8 +174,8 @@ main {
                     		<li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
                     	</c:when>
                     	<c:otherwise>
-                    		<li class="page-item"><a class="page-link" href="tripList.tl?currentPage=${pi.currentPage+1}">&gt;</a></li>
-                    		<li class="page-item"><a class="page-link" href="tripList.tl?currentPage=${pi.maxPage}">&raquo;</a></li>
+                    		<li class="page-item"><a class="page-link" href="areaList.tl?areaCode=${areaCode }&currentPage=${pi.currentPage+1}">&gt;</a></li>
+                    		<li class="page-item"><a class="page-link" href="areaList.tl?areaCode=${areaCode }&currentPage=${pi.maxPage}">&raquo;</a></li>
                     	</c:otherwise>
                     </c:choose>
                 </ul>

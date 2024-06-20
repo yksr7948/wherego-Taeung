@@ -23,6 +23,12 @@ public class TripDao {
 			
 		return sqlSession.selectOne("tripMapper.listCount");
 	}
+	
+	//지역별 여행지 총 개수
+		public int areaListCount(SqlSessionTemplate sqlSession, String areaCode) {
+
+			return sqlSession.selectOne("tripMapper.areaListCount",areaCode); 
+		}
 		
 	//여행지 목록 조회
 	public ArrayList<Trip> selectList(SqlSessionTemplate sqlSession,PageInfo pi){
@@ -33,5 +39,16 @@ public class TripDao {
 		RowBounds rowBounds = new RowBounds(offset,limit);
 			
 		return (ArrayList)sqlSession.selectList("tripMapper.selectList", null, rowBounds);
+	}
+	
+	//지역별 여행지 목록 조회
+	public ArrayList<Trip> selectAreaList(SqlSessionTemplate sqlSession, PageInfo pi, String areaCode){
+		
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage()-1)*limit;
+			
+		RowBounds rowBounds = new RowBounds(offset,limit);
+			
+		return (ArrayList)sqlSession.selectList("tripMapper.selectAreaList", areaCode, rowBounds);
 	}
 }

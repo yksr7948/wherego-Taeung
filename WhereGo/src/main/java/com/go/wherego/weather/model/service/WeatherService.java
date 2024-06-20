@@ -1,5 +1,7 @@
 package com.go.wherego.weather.model.service;
 
 public interface WeatherService {
-	String selectCode(String location);
+	String selectTcode(String location);
+	
+	String selectWcode(String location);
 }

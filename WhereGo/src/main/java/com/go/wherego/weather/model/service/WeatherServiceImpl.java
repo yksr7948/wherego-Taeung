@@ -16,8 +16,14 @@ public class WeatherServiceImpl implements WeatherService{
 
 	
 	@Override
-	public String selectCode(String location) {
-		return dao.selectCode(sqlSession,location);
+	public String selectTcode(String location) {
+		return dao.selectTcode(sqlSession,location);
+	}
+
+
+	@Override
+	public String selectWcode(String location) {
+		return dao.selectWcode(sqlSession, location);
 	}
 
 }

@@ -22,7 +22,7 @@ color:black;
 <body>
 	<%@ include file="../common/header.jsp" %>
 	<div class="weather-area">
-	<h2>날씨</h2>
+	<h2>서울의 날씨</h2>
 	<table border="1">
 		<thead>
 			<tr>
@@ -82,7 +82,7 @@ color:black;
 				<th>최저기온 / 최고기온</th>
 				<td colspan="10">데이터를 불러오는 중입니다.</td>
 			</tr>
-			<tr>
+			<tr id="wWeather">
 				<th>날씨 상태</th>
 				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
 				<td><img src="resources/img/weather/sun_cloudy.png" width="60" height="60" alt=""><br>맑음</td>
@@ -95,7 +95,7 @@ color:black;
 				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
 				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
 			</tr>
-			<tr>
+			<tr id="wRain">
 				<th>강수확률(%)</th>
 				<td>0</td>
 				<td>10</td>
@@ -113,14 +113,33 @@ color:black;
 	</div>
 	<script>
 	$(function(){
-		showWeather("서울"); /* 처음실행시 서울날씨 조회 */
+		showDate();/* 처음 실행시 날짜 구성 */
+		showTemperature("서울"); /* 처음실행시 기온 조회(서울) */
+		showWeather("광역시","서울"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
 	});
-	function showWeather(location){
-		console.log("대충 날씨관련 함수함들기");
-		var area=location;
-		console.log(area);
+	//날짜 표시함수(처음에만 실행)
+	function showDate(){
 		$.ajax({
-			url : "location.we",
+			url : "date.we",
+			data : {},
+			success : function(list){
+				var str="<th rowspan='2'>날짜</th>"
+				for(var i=0;i<list.length;i++){
+					str +="<td colspan='2'>"+list[i]+"</td>";
+				}
+				$("#wDate").html(str);
+			},
+			error : function(){
+				console.log("날짜 가져오기 실패");
+			}
+		})
+	}
+	
+	//기온 표시함수(처음실행 및 지역버튼 클릭시 실행)
+	function showTemperature(location){
+		var area=location;
+		$.ajax({
+			url : "temperature.we",
 			data : {
 				location : area
 			},
@@ -136,8 +155,77 @@ color:black;
 			},
 			error : function(){
 				console.log("정보 가져오기 실패");
+				var str="<th> 최저기온 / 최고기온 </th>"
+					+"<td colspan='10'>데이터를 가져오는데 실패했습니다.</td>";
+				$("#wTemp").html(str);
 			}
 		});
+	}
+	
+	//날씨 표시함수(처음 및 지역버튼 클릭시 실행)
+	function showWeather(area,location){
+		$.ajax({
+			url : "weather.we",
+			data : {
+				area : area,
+				location : location
+			},
+			method : "post",
+			success : function(result){
+				var data=$(result).find('item');
+				var str1="<th> 강수확률(%) </th>"
+						+"<td>"+$(data).find("rnSt3Am").text()+"</td>"
+						+"<td>"+$(data).find("rnSt3Pm").text()+"</td>"
+						+"<td>"+$(data).find("rnSt4Am").text()+"</td>"
+						+"<td>"+$(data).find("rnSt4Pm").text()+"</td>"
+						+"<td>"+$(data).find("rnSt5Am").text()+"</td>"
+						+"<td>"+$(data).find("rnSt5Pm").text()+"</td>"
+						+"<td>"+$(data).find("rnSt6Am").text()+"</td>"
+						+"<td>"+$(data).find("rnSt6Pm").text()+"</td>"
+						+"<td>"+$(data).find("rnSt7Am").text()+"</td>"
+						+"<td>"+$(data).find("rnSt7Pm").text()+"</td>";
+				$("#wRain").html(str1);
+				
+				let arr=new Array();
+				for(var i=3;i<8;i++){
+					var am="wf"+i+"Am";
+					var pm="wf"+i+"Pm";
+					arr.push($(data).find(am).text());
+					arr.push($(data).find(pm).text());
+				}
+				console.log(arr);
+				var str2="<th> 날씨 상태 </th>";
+				for(var i=0;i<arr.length;i++){
+					var keyword="wf"+Math.floor(3+i/2);
+					if(i%2==0){
+						keyword+="Am";
+					} else {
+						keyword+="Pm";
+					}
+					switch(arr[i]){
+					case "맑음":
+						str2 +="<td><img src='resources/img/weather/sun.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
+						break;
+					case "구름많음":
+						str2 +="<td><img src='resources/img/weather/sun_cloudy.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
+						break;
+					case "흐림":
+						str2 +="<td><img src='resources/img/weather/cloud.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
+						break;
+					case "흐리고 비":
+						str2 +="<td><img src='resources/img/weather/rain.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
+						break;
+					case "흐리고 눈":
+						str2 +="<td><img src='resources/img/weather/snow.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
+						break;
+					}
+				}
+				$("#wWeather").html(str2);
+			},
+			error : function(){
+				console.log("날씨 가져오기 실패");
+			}
+		})
 	}
 	</script>
 	<%@ include file="../common/footer.jsp" %>

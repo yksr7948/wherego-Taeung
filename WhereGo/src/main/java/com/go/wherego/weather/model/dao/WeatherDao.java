@@ -6,9 +6,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class WeatherDao {
 	
+	//기온코드 조회
+	public String selectTcode(SqlSessionTemplate sqlSession,String location) {
+		return sqlSession.selectOne("weatherMapper.selectTcode", location);
+	}
 
-	public String selectCode(SqlSessionTemplate sqlSession,String location) {
-		return sqlSession.selectOne("weatherMapper.selectCode", location);
+	//날씨코드 조회
+	public String selectWcode(SqlSessionTemplate sqlSession, String location) {
+		return sqlSession.selectOne("weatherMapper.selectWcode", location);
 	}
 	
 }

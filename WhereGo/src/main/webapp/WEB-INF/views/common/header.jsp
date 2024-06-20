@@ -227,7 +227,7 @@
          		<c:choose>
 					<%--로그인 전 --%>
 					<c:when test="${empty loginUser }">
-						<a href="login.me" class="login-button">로그인</a> <a href="insertEnrollForm.me" class="login-button">회원가입</a>
+						<a href="loginPage.me" class="login-button">로그인</a> <a href="insertEnrollForm.me" class="login-button">회원가입</a>
 					</c:when>
 					<%-- 로그인 후 --%>				
 					<c:otherwise>

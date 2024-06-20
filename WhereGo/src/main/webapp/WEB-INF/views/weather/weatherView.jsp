@@ -57,7 +57,7 @@ color:black;
 		<tbody>
 		<!-- 처음은 서울 날씨 보여주고 다른 버튼 클릭시 해당 지역의 날씨 조회 -->
 		<!-- aspect 기능을 사용해 매일 06시마다 날짜갱신 -->
-			<tr>
+			<tr id="wDate">
 				<th rowspan="2">날짜</th>
 				<td colspan="2">3일후</td>
 				<td colspan="2">4일후</td>
@@ -77,13 +77,10 @@ color:black;
 				<td>오전</td>
 				<td>오후</td>
 			</tr>
-			<tr>
+			<tr id="wTemp">
+				<!-- 최저기온 / 최고기온 -->
 				<th>최저기온 / 최고기온</th>
-				<td colspan="2">18℃ / 28℃</td>
-				<td colspan="2">18℃ / 28℃</td>
-				<td colspan="2">18℃ / 28℃</td>
-				<td colspan="2">18℃ / 28℃</td>
-				<td colspan="2">18℃ / 28℃</td>
+				<td colspan="10">데이터를 불러오는 중입니다.</td>
 			</tr>
 			<tr>
 				<th>날씨 상태</th>
@@ -127,8 +124,15 @@ color:black;
 			data : {
 				location : area
 			},
-			success : function(code){
-				console.log(code);
+			success : function(result){
+				var data=$(result).find('item');
+				var str="<th> 최저기온 / 최고기온 </th>";
+					str +="<td colspan='2'>"+$(data).find("taMin3").text()+"℃ / "+$(data).find("taMax3").text()+"℃ </td>"
+						+"<td colspan='2'>"+$(data).find("taMin4").text()+"℃ / "+$(data).find("taMax4").text()+"℃ </td>"
+						+"<td colspan='2'>"+$(data).find("taMin5").text()+"℃ / "+$(data).find("taMax5").text()+"℃ </td>"
+						+"<td colspan='2'>"+$(data).find("taMin6").text()+"℃ / "+$(data).find("taMax6").text()+"℃ </td>"
+						+"<td colspan='2'>"+$(data).find("taMin7").text()+"℃ / "+$(data).find("taMax7").text()+"℃ </td>";
+				$("#wTemp").html(str);
 			},
 			error : function(){
 				console.log("정보 가져오기 실패");

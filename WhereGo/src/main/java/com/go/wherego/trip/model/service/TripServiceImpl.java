@@ -37,6 +37,15 @@ public class TripServiceImpl implements TripService{
 		return listCount;
 	}
 	
+	//지역별 여행지 총 개수
+		@Override
+		public int areaListCount(String areaCode) {
+			
+			int listCount = tripDao.areaListCount(sqlSession, areaCode);
+			
+			return listCount;
+		}
+	
 	//여행지 목록 조회
 	@Override
 	public ArrayList<Trip> selectList(PageInfo pi){
@@ -45,4 +54,14 @@ public class TripServiceImpl implements TripService{
 		
 		return tList;
 	}
+	
+	//지역별 여행지 목록 조회
+		@Override
+		public ArrayList<Trip> selectAreaList(PageInfo pi, String areaCode){
+			
+			ArrayList<Trip> aList = tripDao.selectAreaList(sqlSession, pi, areaCode);
+			
+			return aList;
+		}
+	
 }

@@ -17,11 +17,10 @@
 	</resultMap>
 	
 	
-	
 	<!-- 지역별 데이터 저장 -->
 	<insert id="saveArea" parameterType="arraylist">
 		INSERT ALL
-		<foreach collection="list" item="areaVO">
+		<foreach collection="list" item="trip">
 			INTO TRIP(CONTENT_ID
 					 ,CONTENT_TYPE_ID
 					 ,TITLE
@@ -30,14 +29,14 @@
 					 ,ZIP_CODE
 					 ,AREA_CODE
 					 ,FIRST_IMAGE2)
-			VALUES(#{areaVO.contentId}
-				  ,#{areaVO.contentTypeId}
-				  ,#{areaVO.title}
-				  ,#{areaVO.addr1}
-				  ,#{areaVO.addr2}
-				  ,#{areaVO.zipCode}
-				  ,#{areaVO.areaCode}
-				  ,#{areaVO.firstImage2})
+			VALUES(#{trip.contentId}
+				  ,#{trip.contentTypeId}
+				  ,#{trip.title}
+				  ,#{trip.addr1}
+				  ,#{trip.addr2}
+				  ,#{trip.zipCode}
+				  ,#{trip.areaCode}
+				  ,#{trip.firstImage2})
 		</foreach>
 		SELECT * FROM DUAL
 	</insert>
@@ -48,6 +47,15 @@
 		FROM TRIP 
 		WHERE FIRST_IMAGE2 IS NOT NULL 
 		AND CONTENT_TYPE_ID='12'
+	</select>
+	
+	<!--지역별  여행지 총 개수 -->
+	<select id="areaListCount" parameterType="string" resultType="_int">
+		SELECT COUNT(*) 
+		FROM TRIP 
+		WHERE FIRST_IMAGE2 IS NOT NULL 
+		AND CONTENT_TYPE_ID='12'
+		AND AREA_CODE = #{areaCode}
 	</select>
 	
 	<!-- 여행지 목록 조회 -->
@@ -61,6 +69,23 @@
 			  ,AREA_CODE
 			  ,FIRST_IMAGE2
 		FROM TRIP 
-		WHERE FIRST_IMAGE2 IS NOT NULL AND CONTENT_TYPE_ID='12'
+		WHERE FIRST_IMAGE2 IS NOT NULL 
+		AND CONTENT_TYPE_ID='12'
+	</select>
+	
+	<!-- 지역별 여행지 목록 조회 -->
+	<select id="selectAreaList" resultMap="tripResultSet">
+		SELECT CONTENT_ID
+			  ,CONTENT_TYPE_ID
+			  ,TITLE
+			  ,ADDR1
+			  ,ADDR2
+			  ,ZIP_CODE
+			  ,AREA_CODE
+			  ,FIRST_IMAGE2
+		FROM TRIP 
+		WHERE FIRST_IMAGE2 IS NOT NULL 
+		AND CONTENT_TYPE_ID='12'
+		AND AREA_CODE = ${areaCode}
 	</select>
 </mapper>

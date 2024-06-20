@@ -13,6 +13,12 @@ public interface TripService {
 	//여행지 전체 개수
 	int listCount();
 	
+	//지역별 여행지 전체 개수
+	int areaListCount(String areaCode);
+	
 	//여행지 목록 조회
 	ArrayList<Trip> selectList(PageInfo pi);
+	
+	//지역 별 목록 조회
+	ArrayList<Trip> selectAreaList(PageInfo pi, String areaCode);
 }

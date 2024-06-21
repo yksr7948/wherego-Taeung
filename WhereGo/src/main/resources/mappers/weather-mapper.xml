@@ -3,6 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="weatherMapper">
+	<resultMap type="Weather" id="WeatherResultSet">
+	<result column="LOCATION_NAME" property="locationName"/>
+	<result column="CODE_WEATHER" property="codeWeather"/>
+	<result column="CODE_TEMPERATURE" property="codeTemperature"/>
+	<result column="AREA" property="area"/>
+	</resultMap>
+
 	<select id="selectTcode" parameterType="string" resultType="string">
 		SELECT CODE_TEMPERATURE FROM WEATHER
 		WHERE LOCATION_NAME=#{location}
@@ -10,5 +17,9 @@
 	<select id="selectWcode" parameterType="string" resultType="string">
 		SELECT CODE_WEATHER FROM WEATHER
 		WHERE LOCATION_NAME=#{location}
+	</select>
+	<select id="selectLocations" parameterType="string" resultMap="WeatherResultSet">
+		SELECT LOCATION_NAME FROM WEATHER
+		WHERE AREA LIKE '%'||#{location}||'%'
 	</select>
 </mapper>

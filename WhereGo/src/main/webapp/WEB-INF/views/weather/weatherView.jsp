@@ -12,9 +12,17 @@ margin:auto;
 border:1px solid black;
 background-color:white;
 }
+.weather-table{
+text-align:center;
+}
 .location-btn{
-width:80%;
+width:120px;
 background-color:azure;
+color:black;
+}
+.location-detail-btn{
+width:70px;
+background-color:lightblue;
 color:black;
 }
 </style>
@@ -23,7 +31,7 @@ color:black;
 	<%@ include file="../common/header.jsp" %>
 	<div class="weather-area">
 	<h2>서울의 날씨</h2>
-	<table border="1">
+	<table class="weather-table" border="1">
 		<thead>
 			<tr>
 				<th colspan="11">
@@ -36,18 +44,18 @@ color:black;
 						<td><button class="location-btn">경상도</button></td>
 						<td><button class="location-btn">전라도</button></td>
 					</tr>
-					<tr>
+					<tr id="wLocation">
 						<td colspan="6" style="text-align:left">
 						<!-- ajax를 통해 버튼 클릭시 해당 구역에 속하는 시 이름들 버튼 나열 -->
-						<button>서울</button>
-						<button>인천</button>
-						<button>세종</button>
-						<button>대전</button>
-						<button>대구</button>
-						<button>광주</button>
-						<button>울산</button>
-						<button>부산</button>
-						<button>제주</button>
+						<button class="location-detail-btn">서울</button>
+						<button class="location-detail-btn">인천</button>
+						<button class="location-detail-btn">세종</button>
+						<button class="location-detail-btn">대전</button>
+						<button class="location-detail-btn">대구</button>
+						<button class="location-detail-btn">광주</button>
+						<button class="location-detail-btn">울산</button>
+						<button class="location-detail-btn">부산</button>
+						<button class="location-detail-btn">제주</button>
 						</td>
 					</tr>
 				</table>
@@ -56,7 +64,6 @@ color:black;
 		</thead>
 		<tbody>
 		<!-- 처음은 서울 날씨 보여주고 다른 버튼 클릭시 해당 지역의 날씨 조회 -->
-		<!-- aspect 기능을 사용해 매일 06시마다 날짜갱신 -->
 			<tr id="wDate">
 				<th rowspan="2">날짜</th>
 				<td colspan="2">3일후</td>
@@ -84,29 +91,11 @@ color:black;
 			</tr>
 			<tr id="wWeather">
 				<th>날씨 상태</th>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun_cloudy.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/cloud.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/rain.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/snow.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
-				<td><img src="resources/img/weather/sun.png" width="60" height="60" alt=""><br>맑음</td>
+				<td colspan="10">데이터를 불러오는 중입니다.</td>
 			</tr>
 			<tr id="wRain">
 				<th>강수확률(%)</th>
-				<td>0</td>
-				<td>10</td>
-				<td>20</td>
-				<td>30</td>
-				<td>40</td>
-				<td>50</td>
-				<td>60</td>
-				<td>70</td>
-				<td>80</td>
-				<td>90</td>
+				<td colspan="10">데이터를 불러오는 중입니다.</td>
 			</tr>
 		</tbody>
 	</table>
@@ -116,7 +105,31 @@ color:black;
 		showDate();/* 처음 실행시 날짜 구성 */
 		showTemperature("서울"); /* 처음실행시 기온 조회(서울) */
 		showWeather("광역시","서울"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
+		
+		$(".location-btn").click(function(){
+			getDetailLocation($(this).html());
+		})
 	});
+	//시,도버튼 클릭시 상세지역 버튼 출력 함수
+	function getDetailLocation(location){
+		$.ajax({
+			url : "location.we",
+			data : {
+				location : location
+			},
+			success : function(result){
+				var str="";
+				for(var i=0;i<result.length;i++){
+					str +="<td><button class='location-detail-btn'>"+result[i].locationName+"</button></td>";
+				}
+				$("#wLocation").html(str);
+			},
+			error : function(){
+				console.log("지역 불러오기 실패");
+			}
+		})
+	}
+	
 	//날짜 표시함수(처음에만 실행)
 	function showDate(){
 		$.ajax({
@@ -193,7 +206,6 @@ color:black;
 					arr.push($(data).find(am).text());
 					arr.push($(data).find(pm).text());
 				}
-				console.log(arr);
 				var str2="<th> 날씨 상태 </th>";
 				for(var i=0;i<arr.length;i++){
 					var keyword="wf"+Math.floor(3+i/2);
@@ -224,6 +236,12 @@ color:black;
 			},
 			error : function(){
 				console.log("날씨 가져오기 실패");
+				var str1="<th> 강수확률(%) </th>"
+					+"<td colspan='10'>데이터를 가져오는데 실패했습니다.</td>";
+				$("#wRain").html(str);
+				var str2="<th> 날씨 상태 </th>"
+					+"<td colspan='10'>데이터를 가져오는데 실패했습니다.</td>";
+				$("#wWeather").html(str);
 			}
 		})
 	}

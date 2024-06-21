@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Weather {
-	private String locationCode; //지역코드
 	private String locationName; //지역이름
+	private String codeWeather; //날씨코드
+	private String codeTemperature; //기온코드
 	private String area; //광역시/도
 }

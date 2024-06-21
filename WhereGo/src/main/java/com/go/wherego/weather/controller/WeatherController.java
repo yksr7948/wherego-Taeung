@@ -14,11 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.weather.model.service.WeatherServiceImpl;
-import com.google.gson.Gson;
+import com.go.wherego.weather.model.vo.Weather;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,6 +53,14 @@ public class WeatherController {
 		}
 		cal.add(cal.DATE, -8);
 		return dList;
+	}
+	
+	@ResponseBody
+	@GetMapping("location.we")
+	public ArrayList<Weather> getLocation(String location) {
+		ArrayList<Weather> locations=new ArrayList<>();
+		locations=ws.getLocation(location);
+		return locations;
 	}
 	
 	@ResponseBody
@@ -134,9 +141,8 @@ public class WeatherController {
 	}
 	
 	
-	//예보시간 구하는 메소드
+	//예보시간 구하는 메소드(06시마다 갱신되기때문에 6시 기준으로 날짜변경)
 	private void getTime() {
-		
 		if(cal.HOUR<6) {
 			cal.add(cal.DATE, -1);
 		}

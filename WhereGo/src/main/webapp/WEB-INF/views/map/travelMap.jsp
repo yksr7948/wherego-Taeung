@@ -1,6 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,12 +95,31 @@
         #searchBtn:hover {
             background-color: #0056b3;
         }
+        #suggestions {
+            border: 1px solid #ddd;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            width: 300px;
+            background: #fff;
+            z-index: 1000;
+            display: none;
+        }
+        #suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        #suggestions div:hover {
+            background-color: #f1f1f1;
+        }
     </style>
 </head>
 <body>
     <div id="searchForm">
         <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
         <button id="searchBtn">검색</button>
+        <div id="suggestions"></div>
     </div>
     <div id="mapContainer">
         <div id="map"></div>
@@ -117,6 +136,7 @@
     <script>
         var mapX = ${mapX};
         var mapY = ${mapY};
+        var keyword = '${keyword}';
 
         var mapOptions = {
             center: new naver.maps.LatLng(mapY, mapX),
@@ -134,6 +154,18 @@
                 var items = parsedData.response.body.items.item;
 
                 if (items && items.length) {
+                    if (items.length > 1) {
+                        // Center map to fit all markers without changing zoom level
+                        var bounds = new naver.maps.LatLngBounds();
+                        items.forEach(function(location) {
+                            bounds.extend(new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)));
+                        });
+                        map.panToBounds(bounds);  // Adjust center to fit all markers
+                    } else {
+                        var firstItem = items[0];
+                        map.setCenter(new naver.maps.LatLng(parseFloat(firstItem.mapy), parseFloat(firstItem.mapx)));
+                    }
+
                     items.forEach(function(location) {
                         var marker = new naver.maps.Marker({
                             position: new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)),
@@ -190,7 +222,7 @@
             var mapX = center.lng();
             var mapY = center.lat();
 
-            window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + mapX + '&mapY=' + mapY;
+            window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + encodeURIComponent(mapX) + '&mapY=' + encodeURIComponent(mapY);
         }
 
         function displaySidebar(location) {
@@ -240,6 +272,46 @@
                 window.location.href = '${pageContext.request.contextPath}/travelMap?keyword=' + encodeURIComponent(keyword);
             }
         });
+
+        // Search input event listener for real-time suggestions
+        document.getElementById('searchInput').addEventListener('input', function() {
+            var term = document.getElementById('searchInput').value;
+            if (term.length >= 2) {
+                fetchRelatedTerms(term);
+            } else {
+                document.getElementById('suggestions').style.display = 'none';
+            }
+        });
+
+        // Fetch related search terms from the server
+        function fetchRelatedTerms(term) {
+            fetch('${pageContext.request.contextPath}/relatedSearchTerms?term=' + encodeURIComponent(term))
+                .then(response => response.json())
+                .then(data => {
+                    displaySuggestions(data);
+                });
+        }
+
+        // Display the search suggestions
+        function displaySuggestions(suggestions) {
+            var suggestionsContainer = document.getElementById('suggestions');
+            suggestionsContainer.innerHTML = '';
+
+            if (suggestions.length > 0) {
+                suggestions.forEach(term => {
+                    var suggestionDiv = document.createElement('div');
+                    suggestionDiv.textContent = term;
+                    suggestionDiv.addEventListener('click', function() {
+                        document.getElementById('searchInput').value = term;
+                        suggestionsContainer.style.display = 'none';
+                    });
+                    suggestionsContainer.appendChild(suggestionDiv);
+                });
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>

@@ -16,6 +16,7 @@ public class TravelMapController {
     @RequestMapping(value = "/travelMap")
     public String travelMap(@RequestParam(value = "mapX", required = false) String mapX,
                             @RequestParam(value = "mapY", required = false) String mapY,
+                            @RequestParam(value = "keyword", required = false) String keyword,
                             Model model) {
         double mapXDouble = 126.981611; // Default longitude
         double mapYDouble = 37.568477;  // Default latitude
@@ -29,7 +30,13 @@ public class TravelMapController {
             }
         }
 
-        String touristData = travelMapService.getTouristData(mapXDouble, mapYDouble);
+        String touristData;
+        if (keyword != null && !keyword.isEmpty()) {
+            touristData = travelMapService.getTouristDataByKeyword(keyword);
+        } else {
+            touristData = travelMapService.getNearbyTouristData(mapXDouble, mapYDouble);
+        }
+
         model.addAttribute("touristData", touristData);
         model.addAttribute("mapX", mapXDouble);
         model.addAttribute("mapY", mapYDouble);

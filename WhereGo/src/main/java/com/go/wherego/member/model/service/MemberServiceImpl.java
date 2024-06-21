@@ -2,15 +2,18 @@ package com.go.wherego.member.model.service;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.go.wherego.member.model.dao.MemberDao;
 import com.go.wherego.member.model.vo.Member;
+import com.go.wherego.member.model.vo.MemberAuth;
+
 
 
 @Service
 public class MemberServiceImpl implements MemberService {
-
+	private final BCryptPasswordEncoder pwEncoder = new BCryptPasswordEncoder();
 	@Autowired
 	private MemberDao memberDao;
 	@Autowired
@@ -28,6 +31,45 @@ public class MemberServiceImpl implements MemberService {
 	public int insertMember(Member m) {
 		return memberDao.insertMember(sqlSession,m);
 	}
+	
+	/*소셜 로그인 회원가입 */
+	@Override
+	public void addNaverUserinfo(Member m) {
+		String rawPw = m.getUserPwd(); // 사용자가 입력한 원래의 비밀번호
+		String encodePw = pwEncoder.encode(rawPw); // 비밀번호 인코딩
+		m.setUserPwd(encodePw); // 인코딩된 비밀번호를 설정
+
+		memberDao.insertNaverUserinfo(sqlSession,m);
+//		
+//		/* 권한 설정 */
+//		if(userinfoRole.equals("ROLE_USER")) {
+//			memberDao.insertSecurityAuth(new MemberAuth(m.getUserId(),"ROLE_USER"));
+//		}
+//		if(userinfoRole.equals("ROLE_ADMIN")) {
+//			memberDao.insertSecurityAuth(new MemberAuth(m.getUserId(),"ROLE_ADMIN"));
+//		}
+	}
+	
+	@Override
+	public void addGoogleUserinfo(Member m) {
+		String rawPw = m.getUserPwd(); // 사용자가 입력한 원래의 비밀번호
+		String encodePw = pwEncoder.encode(rawPw); // 비밀번호 인코딩
+		m.setUserPwd(encodePw); // 인코딩된 비밀번호를 설정
+
+		memberDao.insertGoogleUserinfo(sqlSession,m);
+	}
+	
+	@Override
+	public void addKakaoUserinfo(Member m) {
+		String rawPw = m.getUserPwd(); // 사용자가 입력한 원래의 비밀번호
+		String encodePw = pwEncoder.encode(rawPw); // 비밀번호 인코딩
+		m.setUserPwd(encodePw); // 인코딩된 비밀번호를 설정
+
+		memberDao.insertKakaoUserinfo(sqlSession,m);
+	}
+	
+	
+	
 	@Override
 	public int updateMember(Member m) {
 		
@@ -45,6 +87,9 @@ public class MemberServiceImpl implements MemberService {
 		
 		return memberDao.checkId(sqlSession,checkId);
 	}
+
+
+
 	
 	
 	

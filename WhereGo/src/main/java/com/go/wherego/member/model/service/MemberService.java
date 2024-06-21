@@ -18,4 +18,11 @@ public interface MemberService {
 	
 	//아이디 중복체크
 	int checkId(String checkId);
+	
+	void addNaverUserinfo(Member m);
+
+	void addGoogleUserinfo(Member m);
+	
+	void addKakaoUserinfo(Member m);
+	
 }

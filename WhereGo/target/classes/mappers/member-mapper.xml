@@ -61,6 +61,58 @@
             	 )
 	</insert>
 	
+	<insert id="insertNaverUser" parameterType="Member">
+		INSERT INTO MEMBER(
+						  USER_ID
+						  ,USER_PWD
+						  ,USER_NAME
+						  ,USER_NICKNAME
+						  ,EMAIL
+						  ,GENDER
+						  ,PHONE)
+            VALUES(
+            		#{userId}
+            	   ,#{userPwd}
+            	   ,#{userName}
+            	   ,#{userNickname}
+            	   ,#{email}
+            	   ,#{gender}
+            	   ,#{phone}
+            	 )
+	</insert>
+	
+	<insert id="insertKakaoUser" parameterType="Member">
+		INSERT INTO MEMBER(
+						  USER_ID
+						  ,USER_PWD
+						  ,USER_NAME)
+            VALUES(
+            		#{userId}
+            	   ,#{userPwd}
+            	   ,#{userName}
+            	 )
+	</insert>
+	
+	<insert id="insertGoogleUser" parameterType="Member">
+		INSERT INTO MEMBER(
+						  USER_ID
+						  ,USER_PWD
+						  ,USER_NAME
+						  ,USER_NICKNAME
+						  ,EMAIL)
+            VALUES(
+            		#{userId}
+            	   ,#{userPwd}
+            	   ,#{userName}
+            	   ,#{userNickname}
+            	   ,#{email}
+            	 )
+	</insert>
+	
+	
+	
+	
+	
 	<update id="updateMember" parameterType="Member">
 		UPDATE MEMBER
 		SET USER_NAME = #{userName}

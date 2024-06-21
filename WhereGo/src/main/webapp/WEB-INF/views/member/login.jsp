@@ -78,6 +78,28 @@ body {
 .signup-form button:hover, .login-form button:hover {
 	background-color: #0056b3;
 }
+.naver-login-img {
+  width: 58px;
+  height: 57px;
+  position: absolute;
+  top: 83%; 
+  left: 25%;
+}
+.google-login-img {
+  width: 57px; 
+  height: 56px;
+  position: absolute;
+  top: 83%; 
+  left: 59%;
+}
+.kakao-login-img {
+  width: 64px;
+  height: 57px;
+  position: absolute;
+  top: 83%; 
+  left: 41.3%;
+}
+
 </style>
 </head>
 <body>
@@ -87,27 +109,14 @@ body {
 			<label for="userId">아이디</label> <input type="text" id="userId"
 				name="userId" required> <label for="userPwd">비밀번호</label> <input
 				type="password" id="userPwd" name="userPwd" required>
-
 			<button type="submit">로그인하기</button>
 		</form>
-		<a
-			href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=370b2ac32b1684b9567ff8f7e89edb05&redirect_uri=http://localhost:8777/wherego">
-			<img src="resources/img/kakao_login_medium_narrow.png" />
-		</a>
-		<div id="naver_id_login" style="text-align: center">
-			<a href="${url}"><img width="223"
-				src="https://developers.naver.com/doc/review_201802/CK_bEFnWMeEBjXpQ5o8N_20180202_7aot50.png" /></a>
-		</div>
-		<br>
-		<!-- 구글 로그인 화면으로 이동 시키는 URL -->
-		<!-- 구글 로그인 화면에서 ID, PW를 올바르게 입력하면 oauth2callback 메소드 실행 요청-->
-		<div id="google_id_login" style="text-align: center">
-			<a href="${google_url}"> <img width="230"
-				src="resources/img/web_light_sq_SU@1x.png" />
-			</a>
-		</div>
-
-
 	</div>
+	<div class="social-login-buttons">
+	<a href="naver/login"><img class="naver-login-img" alt="네이버로그인" src="resources/img/naver_login.png"></a>
+	<a href="kakao/login"><img class="kakao-login-img" alt="카카오로그인" src="resources/img/kakao_login.png"></a>
+	<a href="google/login"><img class="google-login-img" alt="구글로그인" src="resources/img/google_login.png"></a>
+	</div>
+
 </body>
 </html>

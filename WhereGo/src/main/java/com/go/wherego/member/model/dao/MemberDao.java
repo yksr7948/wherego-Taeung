@@ -5,9 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import com.go.wherego.member.model.vo.Member;
 
-
-
-
 //Repository 저장소
 //주로 DB(저장소) 와 관련된 작업을 수행하는 역할로 사용(DAO)
 @Repository
@@ -20,6 +17,22 @@ public class MemberDao {
 		
 		return loginMember;
 	}
+	/* 네이버 */
+	   public int insertNaverUserinfo(SqlSessionTemplate sqlSession, Member m) {
+	      return sqlSession.insert("memberMapper.insertNaverUser",m);
+	 
+	   }
+	/* 구글 */
+	  public int insertGoogleUserinfo(SqlSessionTemplate sqlSession, Member m) {
+	     return sqlSession.insert("memberMapper.insertGoogleUser",m);
+	
+	  }
+	  /* 카카오 */
+	  public int insertKakaoUserinfo(SqlSessionTemplate sqlSession, Member m) {
+	     return sqlSession.insert("memberMapper.insertKakaoUser",m);
+	
+	  }
+	   
 	
 	//회원가입 메소드
 	public int insertMember(SqlSessionTemplate sqlSession, Member m) {

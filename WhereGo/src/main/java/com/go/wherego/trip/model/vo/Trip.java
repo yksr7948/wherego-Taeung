@@ -15,9 +15,17 @@ public class Trip {
 	private String addr2;	//	ADDR2	VARCHAR2(10 BYTE)
 	private String zipCode;	//	ZIP_CODE	VARCHAR2(10 BYTE)
 	private String areaCode;	//	AREA_CODE	VARCHAR2(10 BYTE)
+	private String firstImage1;
 	private String firstImage2;	//	FIRST_IMAGE2	VARCHAR2(100 BYTE)
+	private String createdTime;
+	private String modifiedTime;
+	private String homepage;
+	private String mapx;
+	private String mapy;
+	private String mLevel;
+	private String overView;
 	private int count;
-	private int like_count;
+	private int likeCount;
 	
 	public Trip(String contentId, String contentTypeId, String title, String addr1, 
 				String addr2, String zipCode, String areaCode, String firstImage2) {
@@ -29,6 +37,7 @@ public class Trip {
 		this.addr1 = addr1;
 		this.addr2 = addr2;
 		this.zipCode = zipCode;
+		this.areaCode = areaCode;
 		this.firstImage2 = firstImage2;
 	}
 }

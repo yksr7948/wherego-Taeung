@@ -40,6 +40,7 @@ main {
     cursor: pointer;
 }
 
+/* 여행지 리스트*/
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -107,7 +108,6 @@ main {
 	color: black;
 	background: lightgray;
 	cursor: auto;
-	disabled: true;
 }
 </style>
 </head>
@@ -136,12 +136,14 @@ main {
 		<div class="card-container">
 			<c:forEach items="${tList }" var="t">
 			<div class="card">
+				<input type="hidden" value="${t.contentId }">
 				<img src="${t.firstImage2 }" alt="">
 				<div class="card-content">
 					<h2>${t.title }</h2>
 					<p>${t.addr1 }</p>
 					<br>
-					<p><img src="resources/img/eye-icon.png"> ${t.count}</p>
+					<p><img src="resources/img/trip-board/eye-icon.png"> ${t.count} &nbsp;
+					   <img src="resources/img/trip-board/heart-icon.png"> ${t.likeCount}</p>
 				</div>
 			</div>
 			</c:forEach>
@@ -185,7 +187,12 @@ main {
 	</main>
 	
 	<script>
-		
+		$(function(){
+			$(".card").click(function(){
+				var contentId = $(this).children().first().val();
+				location.href = "tripDetail.tl?contentId="+contentId;
+			})
+		})
 	</script>
 
 	<%@include file="/WEB-INF/views/common/footer.jsp" %>

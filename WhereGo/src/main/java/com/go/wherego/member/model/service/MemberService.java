@@ -25,4 +25,6 @@ public interface MemberService {
 	
 	void addKakaoUserinfo(Member m);
 	
+
+	
 }

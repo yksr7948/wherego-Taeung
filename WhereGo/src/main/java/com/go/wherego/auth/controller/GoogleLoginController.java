@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.go.wherego.auth.exception.MemberExistException;
+import com.go.wherego.auth.exception.MemberNotFoundException;
 import com.go.wherego.auth.model.GoogleLoginBean;
 import com.go.wherego.member.model.service.MemberService;
 import com.go.wherego.member.model.vo.Member;
@@ -39,7 +41,7 @@ public class GoogleLoginController {
 
 	@RequestMapping("/callback")
 	public String googlelogin(@RequestParam String code, @RequestParam String state, HttpSession session)
-			throws IOException, ParseException, ParseException {
+			throws IOException, ParseException, MemberExistException, MemberNotFoundException, ParseException {
 		OAuth2AccessToken accessToken = googleLoginBean.getAccessToken(session, code, state);
 
 		String apiResult = googleLoginBean.getUserProfile(accessToken);
@@ -55,14 +57,16 @@ public class GoogleLoginController {
 		String name=(String)responseObject.get("family_name")+(String)responseObject.get("given_name");
 		String nickname = (String)responseObject.get("name");
 		String profile=(String)responseObject.get("picture");
-
+		
+		
+		
 		// (spring-security) 소셜 로그인 계정에 "ROLE_SOCIAL" 권한 부여
-		MemberAuth auth = new MemberAuth();
-		auth.setId("google_" + id);
-		auth.setAuth("ROLE_SOCIAL");
-
-		List<MemberAuth> authList = new ArrayList<MemberAuth>();
-		authList.add(auth);
+//		MemberAuth auth = new MemberAuth();
+//		auth.setId("google_" + id);
+//		auth.setAuth("ROLE_SOCIAL");
+//
+//		List<MemberAuth> authList = new ArrayList<MemberAuth>();
+//		authList.add(auth);
 
 		
 		Member m=new Member();
@@ -74,12 +78,21 @@ public class GoogleLoginController {
 		m.setProfile(profile);
 		//m.setAddress(null);
 		//m.setEnabled("0");
-		m.setSecurityAuthList(authList);
+		//m.setSecurityAuthList(authList);
+		System.out.println(m);
 		
-		// 사용자의 정보를 userinfo 테이블과 auth 테이블에 저장
-		memberService.addGoogleUserinfo(m);
+		int checkId = memberService.checkId(m.getUserId());
+		if(checkId>0) {
+			session.setAttribute("loginUser", m);
+			return "redirect:/";
+		}else {
+			// 사용자의 정보를 userinfo 테이블과 auth 테이블에 저장
+			memberService.addGoogleUserinfo(m);
+			return "member/additional";
+		}
+		
 
 			
-		return "redirect:/";
+		
 	}
 }

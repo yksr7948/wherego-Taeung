@@ -85,11 +85,17 @@ public class NaverLoginController {
 		//m.setAddress(null);
 		//m.setEnabled("0");
 		m.setSecurityAuthList(authList);
-		
-		// 네이버 로그인 사용자의 권한을 SECURITY_AUTH 테이블에 저장
-		memberService.addNaverUserinfo(m);
+		int checkId = memberService.checkId(m.getUserId());
+		System.out.println(m.getUserId());
+		System.out.println(checkId);
+		if(checkId>0) {
+			session.setAttribute("loginUser", m);
+			return "redirect:/";
+		}else {
+			// 사용자의 정보를 userinfo 테이블과 auth 테이블에 저장
+			memberService.addGoogleUserinfo(m);
+			return "member/additional";
+		}
 
-
-		return "redirect:/";
 	}
 }

@@ -79,10 +79,16 @@ public class KaKaoLoginController {
 		//m.setAddress(null);
 		//m.setEnabled("0");
 		m.setSecurityAuthList(authList);
+		int checkId = memberService.checkId(m.getUserId());
+		if(checkId>0) {
+			session.setAttribute("loginUser", m);
+			return "redirect:/";
+		}else {
+			// 사용자의 정보를 userinfo 테이블과 auth 테이블에 저장
+			memberService.addGoogleUserinfo(m);
+			return "member/additional";
+		}
 
-		memberService.addKakaoUserinfo(m);
-
-		return "redirect:/";
 	}
 	
 }

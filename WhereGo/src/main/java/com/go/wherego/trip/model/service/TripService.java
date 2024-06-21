@@ -21,4 +21,10 @@ public interface TripService {
 	
 	//지역 별 목록 조회
 	ArrayList<Trip> selectAreaList(PageInfo pi, String areaCode);
+
+	//조회수 증가
+	int increaseCount(String contentId);
+	
+	//조회수 조회
+	int selectCount(String contentId);
 }

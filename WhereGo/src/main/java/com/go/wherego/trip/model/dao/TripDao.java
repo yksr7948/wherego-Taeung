@@ -25,10 +25,10 @@ public class TripDao {
 	}
 	
 	//지역별 여행지 총 개수
-		public int areaListCount(SqlSessionTemplate sqlSession, String areaCode) {
+	public int areaListCount(SqlSessionTemplate sqlSession, String areaCode) {
 
-			return sqlSession.selectOne("tripMapper.areaListCount",areaCode); 
-		}
+		return sqlSession.selectOne("tripMapper.areaListCount",areaCode); 
+	}
 		
 	//여행지 목록 조회
 	public ArrayList<Trip> selectList(SqlSessionTemplate sqlSession,PageInfo pi){
@@ -50,5 +50,17 @@ public class TripDao {
 		RowBounds rowBounds = new RowBounds(offset,limit);
 			
 		return (ArrayList)sqlSession.selectList("tripMapper.selectAreaList", areaCode, rowBounds);
+	}
+
+	//조회수 증가
+	public int increaseCount(SqlSessionTemplate sqlSession, String contentId) {
+
+		return sqlSession.update("tripMapper.increaseCount", contentId);
+	}
+	
+	//조회수 가져오기
+	public int selectCount(SqlSessionTemplate sqlSession, String contentId) {
+		
+		return sqlSession.selectOne("tripMapper.selectCount", contentId);
 	}
 }

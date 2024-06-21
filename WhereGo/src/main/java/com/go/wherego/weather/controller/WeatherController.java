@@ -105,7 +105,7 @@ public class WeatherController {
 	
 	@ResponseBody
 	@PostMapping(value="weather.we",produces = "text/plain;charset=UTF-8")
-	public String weather(String area,String location) throws IOException {
+	public String weather(String location) throws IOException {
 		String url="";
 		String responseStr="";
 		HttpURLConnection urlConn=null;

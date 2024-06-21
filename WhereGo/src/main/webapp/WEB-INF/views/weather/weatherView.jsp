@@ -6,63 +6,106 @@
 <meta charset="UTF-8">
 <title>날씨</title>
 <style>
-.weather-area{
-width:90%;
-margin:auto;
-border:1px solid black;
-background-color:white;
+main {
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    margin-top: 5%;
 }
-.weather-table{
+.weather-area{
+width:100%;
+margin:auto;
+}
+.weather-container,.weather-info{
 text-align:center;
 }
+.weather-container{
+width:100%;
+border-top: 2px solid black;
+border-bottom: 2px solid black;
+border-left: 2px solid black;
+border-right: 2px solid black;
+background-color:aliceblue;
+}
+.weather-container button{
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-right: 10px;
+}
+.weather-info{
+
+}
+.weather-info th{
+background-color:beige;
+}
+#wLocation{
+background-color:skyblue;
+width:100%;
+height:150px;
+text-align:center;
+vertical-align:text-top;
+}
+#wLocation td{
+width:14%;
+}
+#wLocation button{
+font-size:12px;
+}
+
+#wWeather>td{
+width:80px;
+height:100px;
+}
 .location-btn{
-width:120px;
+width:80%;
 background-color:azure;
 color:black;
+transition:background-color 0.3s,color 0.3s;
+}
+.location-btn:hover{
+background-color:dodgerblue;
+color:white;
 }
 .location-detail-btn{
-width:70px;
+width:80px;
 background-color:lightblue;
 color:black;
+}
+.location-detail-btn:hover{
+background-color:mediumblue;
+color:white;
 }
 </style>
 </head>
 <body>
 	<%@ include file="../common/header.jsp" %>
+	<main>
 	<div class="weather-area">
-	<h2>서울의 날씨</h2>
-	<table class="weather-table" border="1">
-		<thead>
+		<table class="weather-container">
 			<tr>
-				<th colspan="11">
-				<table style="width:100%; text-align:center">
-					<tr>
-						<td><button class="location-btn">광역시</button></td>
-						<td><button class="location-btn">경기도</button></td>
-						<td><button class="location-btn">강원도</button></td>
-						<td><button class="location-btn">충청도</button></td>
-						<td><button class="location-btn">경상도</button></td>
-						<td><button class="location-btn">전라도</button></td>
-					</tr>
-					<tr id="wLocation">
-						<td colspan="6" style="text-align:left">
-						<!-- ajax를 통해 버튼 클릭시 해당 구역에 속하는 시 이름들 버튼 나열 -->
-						<button class="location-detail-btn">서울</button>
-						<button class="location-detail-btn">인천</button>
-						<button class="location-detail-btn">세종</button>
-						<button class="location-detail-btn">대전</button>
-						<button class="location-detail-btn">대구</button>
-						<button class="location-detail-btn">광주</button>
-						<button class="location-detail-btn">울산</button>
-						<button class="location-detail-btn">부산</button>
-						<button class="location-detail-btn">제주</button>
-						</td>
-					</tr>
-				</table>
-				</th>
+				<td><button class="location-btn">광역시</button></td>
+				<td><button class="location-btn">경기도</button></td>
+				<td><button class="location-btn">강원도</button></td>
+				<td><button class="location-btn">충청도</button></td>
+				<td><button class="location-btn">경상도</button></td>
+				<td><button class="location-btn">전라도</button></td>
 			</tr>
-		</thead>
-		<tbody>
+		<tr>
+			<td colspan="6">
+			<table id="wLocation">
+			<tr>
+				<td style="text-align:left">
+				<!-- ajax를 통해 버튼 클릭시 해당 구역에 속하는 시 이름들 버튼 나열 -->
+			</td>
+			</tr>
+			</table>
+			</td>
+		</tr>
+		</table>
+	<br>
+	<h2 id="area">서울의 날씨</h2>
+		<table class="weather-info" border="1">
 		<!-- 처음은 서울 날씨 보여주고 다른 버튼 클릭시 해당 지역의 날씨 조회 -->
 			<tr id="wDate">
 				<th rowspan="2">날짜</th>
@@ -100,14 +143,22 @@ color:black;
 		</tbody>
 	</table>
 	</div>
+	</main>
 	<script>
 	$(function(){
 		showDate();/* 처음 실행시 날짜 구성 */
 		showTemperature("서울"); /* 처음실행시 기온 조회(서울) */
-		showWeather("광역시","서울"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
+		showWeather("서울"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
 		
 		$(".location-btn").click(function(){
 			getDetailLocation($(this).html());
+		})
+		
+		$("#wLocation").on("click",".location-detail-btn",function(){
+			var area=$(this).html();
+			showTemperature(area);
+			showWeather(area);
+			$("#area").html(area+"의 날씨");
 		})
 	});
 	//시,도버튼 클릭시 상세지역 버튼 출력 함수
@@ -118,10 +169,19 @@ color:black;
 				location : location
 			},
 			success : function(result){
-				var str="";
+				var str="<tr>";
 				for(var i=0;i<result.length;i++){
 					str +="<td><button class='location-detail-btn'>"+result[i].locationName+"</button></td>";
+					if((i+1)%7==0){
+						str +="</tr><tr>";
+					}
 				}
+				if(result.length<7){
+					for(var i=result.length;i<7;i++){
+						str+="<td></td>";
+					}
+				}
+				str +="</tr>"
 				$("#wLocation").html(str);
 			},
 			error : function(){
@@ -158,7 +218,7 @@ color:black;
 			},
 			success : function(result){
 				var data=$(result).find('item');
-				var str="<th> 최저기온 / 최고기온 </th>";
+				var str="<th> 최저 / 최고기온 </th>";
 					str +="<td colspan='2'>"+$(data).find("taMin3").text()+"℃ / "+$(data).find("taMax3").text()+"℃ </td>"
 						+"<td colspan='2'>"+$(data).find("taMin4").text()+"℃ / "+$(data).find("taMax4").text()+"℃ </td>"
 						+"<td colspan='2'>"+$(data).find("taMin5").text()+"℃ / "+$(data).find("taMax5").text()+"℃ </td>"
@@ -168,7 +228,7 @@ color:black;
 			},
 			error : function(){
 				console.log("정보 가져오기 실패");
-				var str="<th> 최저기온 / 최고기온 </th>"
+				var str="<th> 최저 / 최고기온 </th>"
 					+"<td colspan='10'>데이터를 가져오는데 실패했습니다.</td>";
 				$("#wTemp").html(str);
 			}
@@ -176,11 +236,10 @@ color:black;
 	}
 	
 	//날씨 표시함수(처음 및 지역버튼 클릭시 실행)
-	function showWeather(area,location){
+	function showWeather(location){
 		$.ajax({
 			url : "weather.we",
 			data : {
-				area : area,
 				location : location
 			},
 			method : "post",

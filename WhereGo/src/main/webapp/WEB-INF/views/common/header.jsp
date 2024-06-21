@@ -195,11 +195,11 @@
             <li><a href="">여행지</a>
               <div class="submenu">
                 <ul>
-                  <li><a href="tripList.tl">여행지1</a></li>
-                  <li><a href="#">여행지2</a></li>
-                  <li><a href="#">여행지3</a></li>
-                  <li><a href="#">여행지4</a></li>
-                  <li><a href="#">여행지5</a></li>
+                  <li><a href="tripList.tl">관광지</a></li>
+                  <li><a href="#">축제공연행사</a></li>
+                  <li><a href="#">문화시설</a></li>
+                  <li><a href="#">숙박</a></li>
+                  <li><a href="#">음식점</a></li>
                 </ul>
               </div>
             </li>

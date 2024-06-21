@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -213,6 +218,112 @@ public class TripController {
 		model.addAttribute("areaCode",areaCode);
 		
 		return "trip/areaList";
+	}
+	
+	//상세보기 페이지로 이동
+	@RequestMapping("tripDetail.tl")
+	public String tripDetail(String contentId, Model model) throws IOException {
+		
+		String url = "http://apis.data.go.kr/B551011/KorService1/detailCommon1";
+		url+="?serviceKey="+SERVICEKEY;
+		//&MobileOS=ETC&MobileApp=AppTest&contentId=126508&defaultYN=Y&firstImageYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y
+		url+="&MobileOS=ETC&MobileApp=AppTest&_type=json";
+		url+="&contentId="+contentId;
+		url+="&defaultYN=Y&firstImageYN=Y&addrinfoYN=Y&mapinfoYN=Y&overviewYN=Y";
+		
+		URL requestUrl = new URL(url); //요청 url을 넣어서 객체 준비
+		
+		HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+		
+		urlCon.setRequestMethod("GET");//get방식 요청 설정
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+		
+		String responseStr = "";
+		String line;
+		while((line = br.readLine())!=null) {
+			responseStr+=line;
+		}
+		
+		JsonObject jobj = JsonParser.parseString(responseStr).getAsJsonObject();
+		
+		JsonObject response = jobj.getAsJsonObject("response");
+		
+		JsonObject body = response.getAsJsonObject("body");
+		JsonObject items = body.getAsJsonObject("items");
+		JsonArray item = items.getAsJsonArray("item");
+		
+		JsonObject it = item.get(0).getAsJsonObject();
+		
+		// 날짜 형식 지정
+		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+		DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// 문자열을 date 형식으로 변환
+		LocalDateTime createdtime = LocalDateTime.parse(it.get("createdtime").getAsString(), inputFormatter);
+		LocalDateTime modifiedtime = LocalDateTime.parse(it.get("modifiedtime").getAsString(), inputFormatter);
+
+		// 원하는 형식으로 변환
+		String formattedCreatedtime = createdtime.format(outputFormatter);
+		String formattedModifiedtime = modifiedtime.format(outputFormatter);
+		
+		//조회수 증가
+		tripService.increaseCount(contentId);
+		//조회수 가져오기
+		int count = tripService.selectCount(contentId);
+		
+		Trip t = new Trip();
+		
+		//여행지 공통정보 담기
+		t.setContentId(it.get("contentid").getAsString());
+		t.setContentTypeId(it.get("contenttypeid").getAsString());
+		t.setTitle(it.get("title").getAsString());
+		t.setCreatedTime(formattedCreatedtime);
+		t.setModifiedTime(formattedModifiedtime);
+		t.setHomepage(it.get("homepage").getAsString());
+		t.setFirstImage1(it.get("firstimage").getAsString());
+		t.setAddr1(it.get("addr1").getAsString());
+		t.setAddr2(it.get("addr2").getAsString());
+		t.setZipCode(it.get("zipcode").getAsString());
+		t.setOverView(it.get("overview").getAsString());
+		t.setCount(count);
+
+		br.close();
+		urlCon.disconnect();
+		
+		model.addAttribute("t",t);
+		
+		return "trip/tripDetail";
+	}
+	
+	//여행지 상세정보 가져오기
+	@ResponseBody
+	@RequestMapping(value="detailInfo.tl", produces="application/json;charset=UTF-8")
+	public String detailInfo(String contentId, String contentTypeId) throws IOException {
+		String url = "http://apis.data.go.kr/B551011/KorService1/detailIntro1";
+		url+="?serviceKey="+SERVICEKEY;
+		//&MobileOS=ETC&MobileApp=AppTest&_type=json&contentId=2871985&contentTypeId=12
+		url+="&MobileOS=ETC&MobileApp=AppTest&_type=json";
+		url+="&contentId="+contentId;
+		url+="&contentTypeId="+contentTypeId;
+		
+		URL requestUrl = new URL(url);
+		
+		HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+		
+		urlCon.setRequestMethod("GET");
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+		
+		String responseStr = "";
+		
+		String line;
+		
+		while((line = br.readLine())!=null) {
+			responseStr+=line;
+		}
+		
+		return responseStr;
 	}
 	
 }

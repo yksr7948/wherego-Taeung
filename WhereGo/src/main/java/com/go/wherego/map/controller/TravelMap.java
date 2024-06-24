@@ -1,4 +1,4 @@
-package com.go.wherego.map.controller;
+package com.go.wherego.map;
 
 public class TravelMap {
 

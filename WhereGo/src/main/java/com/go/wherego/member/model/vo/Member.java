@@ -1,7 +1,6 @@
 package com.go.wherego.member.model.vo;
 
 import java.sql.Date;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,5 +27,4 @@ public class Member {
 	private String status;
 	private String profile;
 	private String address;
-	private List<MemberAuth> securityAuthList;
 }

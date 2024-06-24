@@ -129,7 +129,7 @@
 			<h2>회원가입</h2>
 			<br>
 
-			<form id="signupForm" action="insert.me" method="post">
+			<form action="insert.me" method="post">
 				<div class="form-group">
 					<label for="enrollUserId">* ID</label> <input type="text"
 						id="enrollUserId" name="userId" class="form-control"> <br>
@@ -159,16 +159,13 @@
 					&nbsp;&nbsp;
 				</div>
 				<div class="btns" align="center">
-					<button type="submit" class="btn btn-primary">회원가입</button>
+					<button type="submit" class="btn btn-primary" disabled>회원가입</button>
 					<button type="reset" class="btn btn-danger">초기화</button>
 				</div>
 			</form>
 
 			<script>
-			
-					
-					
-					
+				$(function() {
 					//사용자가 입력한 아이디가 중복인지 확인하는 작업 (비동기처리)
 					//사용자가 키를 입력하면 이벤트 발생
 					//중복인지 아닌지 확인하여 네이버에서 처럼 NNNNN 또는 NNNNY 로 응답데이터 돌려받기

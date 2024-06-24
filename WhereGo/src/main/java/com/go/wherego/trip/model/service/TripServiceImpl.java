@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.go.wherego.trip.model.dao.TripDao;
 import com.go.wherego.trip.model.vo.PageInfo;
+import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
 
 
@@ -79,5 +80,21 @@ public class TripServiceImpl implements TripService{
 		int count = tripDao.selectCount(sqlSession, contentId);
 		
 		return count;
+	}
+	
+	//댓글 리스트
+	public ArrayList<Reply> replyList(String contentId){
+		
+		ArrayList<Reply> rList = tripDao.replyList(sqlSession, contentId);
+		
+		return rList;
+	}
+	
+	//댓글 작성
+	public int insertReply(Reply r) {
+		
+		int result = tripDao.insertReply(sqlSession, r);
+		
+		return result;
 	}
 }

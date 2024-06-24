@@ -6,6 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class TravelMapController {
@@ -16,9 +19,10 @@ public class TravelMapController {
     @RequestMapping(value = "/travelMap")
     public String travelMap(@RequestParam(value = "mapX", required = false) String mapX,
                             @RequestParam(value = "mapY", required = false) String mapY,
+                            @RequestParam(value = "keyword", required = false) String keyword,
                             Model model) {
-        double mapXDouble = 126.981611; // Default longitude
-        double mapYDouble = 37.568477;  // Default latitude
+        double mapXDouble = 126.981611;
+        double mapYDouble = 37.568477;
 
         if (mapX != null && mapY != null) {
             try {
@@ -29,12 +33,25 @@ public class TravelMapController {
             }
         }
 
-        String touristData = travelMapService.getTouristData(mapXDouble, mapYDouble);
+        String touristData;
+        if (keyword != null && !keyword.isEmpty()) {
+            touristData = travelMapService.getTouristDataByKeyword(keyword);
+        } else {
+            touristData = travelMapService.getNearbyTouristData(mapXDouble, mapYDouble);
+        }
+
         model.addAttribute("touristData", touristData);
         model.addAttribute("mapX", mapXDouble);
         model.addAttribute("mapY", mapYDouble);
+        model.addAttribute("keyword", keyword);
 
         return "map/travelMap";  // 네이버 지도 페이지로 이동
+    }
+
+    @RequestMapping(value = "/relatedSearchTerms")
+    @ResponseBody
+    public List<String> getRelatedSearchTerms(@RequestParam(value = "term") String term) {
+        return travelMapService.getRelatedSearchTerms(term);
     }
 
     @RequestMapping(value = "/")

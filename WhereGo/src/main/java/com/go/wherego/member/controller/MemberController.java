@@ -123,14 +123,15 @@ public class MemberController {
 	}
 	
 	@PostMapping("insert.me")
-	public String insertMember(Member m, HttpSession session, ModelAndView mv) {
+	public String insertMember(Member m, HttpSession session, ModelAndView mv,Model model) {
 		String bcrPwd = bcryptPasswordEncoder.encode(m.getUserPwd());
 		m.setUserPwd(bcrPwd);
 		int result = memberService.insertMember(m);
 		
 		if (result > 0) { 
 			session.setAttribute("alertMsg", "회원 가입 성공!");
-			return "redirect:/";
+			model.addAttribute("userId",m.getUserId());
+			return "member/additional";
 		} else {
 			mv.addObject("errorMsg", "회원 가입 실패");
 
@@ -155,5 +156,31 @@ public class MemberController {
 			//System.out.println(result);
 			return result;
 		}
+		
+		
+		@RequestMapping("goAdditional.me")
+		public String goAdditional(String rollingUserId,Model model,String userId){
+			model.addAttribute("userId",userId);
+			return "member/additional";
+		}
+		
+		
+		@RequestMapping("additional.me")
+		public String addtitionalInfo(String selectedMBTI, String selectedWords,String userId) {
+			System.out.println(selectedMBTI);
+			System.out.println(selectedWords);
+			Member m = memberService.getMemberById(userId);
+			m.setMBTI(selectedMBTI);
+			m.setTagWords(selectedWords);
+			memberService.insertMBTI(m);
+			memberService.insertWords(m);
+			
+			return "redirect:/";
+		}
+		
+		
+		
+		
+		
 	
 }

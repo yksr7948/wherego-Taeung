@@ -56,6 +56,21 @@ public class MemberDao {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne("memberMapper.checkId",checkId);
 	}
+	
+
+	
+	
+	public Member getMemberById(SqlSessionTemplate sqlSession, String userId) {
+		return sqlSession.selectOne("memberMapper.getMemberById",userId);
+	}
+	public void insertMBTI(SqlSessionTemplate sqlSession, Member m) {
+		sqlSession.update("memberMapper.insertMBTI",m);
+		
+	}
+	public void insertWords(SqlSessionTemplate sqlSession, Member m) {
+		sqlSession.update("memberMapper.insertWords",m);
+		
+	}
 
 
 }

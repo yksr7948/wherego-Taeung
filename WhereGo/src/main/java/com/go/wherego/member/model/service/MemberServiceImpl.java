@@ -89,6 +89,24 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 
+	@Override
+	public Member getMemberById(String userId) {
+		return memberDao.getMemberById(sqlSession,userId);
+	}
+
+	@Override
+	public void insertMBTI(Member m) {
+		memberDao.insertMBTI(sqlSession,m);
+		
+	}
+
+	@Override
+	public void insertWords(Member m) {
+		memberDao.insertWords(sqlSession,m);
+		
+	}
+
+
 
 
 	

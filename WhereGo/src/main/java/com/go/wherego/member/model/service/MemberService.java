@@ -24,6 +24,12 @@ public interface MemberService {
 	void addGoogleUserinfo(Member m);
 	
 	void addKakaoUserinfo(Member m);
+
+	Member getMemberById(String userId);
+
+	void insertMBTI(Member m);
+
+	void insertWords(Member m);
 	
 
 	

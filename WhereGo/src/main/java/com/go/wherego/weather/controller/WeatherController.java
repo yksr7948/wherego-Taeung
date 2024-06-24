@@ -14,14 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.go.wherego.weather.model.service.WeatherServiceImpl;
 import com.go.wherego.weather.model.vo.Weather;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+
 
 @Controller
 public class WeatherController {
@@ -36,8 +38,11 @@ public class WeatherController {
 	WeatherServiceImpl ws;
 
 	@GetMapping("weather.we")
-	public String weather() {
-		return "weather/weatherView";
+	public ModelAndView weather(ModelAndView mv,
+						@RequestParam(defaultValue = "서울")String location) {
+		mv.addObject("area", location);
+		mv.setViewName("weather/weatherView");
+		return mv;
 	}
 	
 	@ResponseBody
@@ -138,6 +143,18 @@ public class WeatherController {
 				}
 		}	
 		return responseStr;
+	}
+	
+	//t.addr1을 가져와서 위치정보 가져온후에 날씨페이지 이동
+	@GetMapping("checkWeather.we")
+	public ModelAndView checkWeather(ModelAndView mv,String location) {
+		String area=location.substring(0, 2);
+		if(area.equals("경기")) {
+			area=location.replaceAll(" ", "").substring(3, 5);
+		} else if(area.equals("강원")) {
+			area=location.replaceAll(" ", "").substring(7, 9);
+		}
+		return weather(mv,area);
 	}
 	
 	

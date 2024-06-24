@@ -46,6 +46,9 @@ height:150px;
 text-align:center;
 vertical-align:text-top;
 }
+#wLocation tr{
+height:50px;
+}
 #wLocation td{
 width:14%;
 }
@@ -147,8 +150,8 @@ color:white;
 	<script>
 	$(function(){
 		showDate();/* 처음 실행시 날짜 구성 */
-		showTemperature("서울"); /* 처음실행시 기온 조회(서울) */
-		showWeather("서울"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
+		showTemperature("${area}"); /* 처음실행시 기온 조회(서울) */
+		showWeather("${area}"); /* 처음 실행시 날씨 및 강수확률 조회(서울) */
 		
 		$(".location-btn").click(function(){
 			getDetailLocation($(this).html());

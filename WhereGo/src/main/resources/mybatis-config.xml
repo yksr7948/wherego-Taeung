@@ -10,6 +10,7 @@
  	<typeAliases>
  		<typeAlias type="com.go.wherego.member.model.vo.Member" alias="Member"/>
  		<typeAlias type="com.go.wherego.trip.model.vo.Trip" alias="Trip"/>
+ 		<typeAlias type="com.go.wherego.weather.model.vo.Weather" alias="Weather"/>
  	</typeAliases>
  	
  

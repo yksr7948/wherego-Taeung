@@ -21,8 +21,8 @@ public class TravelMapController {
                             @RequestParam(value = "mapY", required = false) String mapY,
                             @RequestParam(value = "keyword", required = false) String keyword,
                             Model model) {
-        double mapXDouble = 126.981611; // Default longitude (Seoul)
-        double mapYDouble = 37.568477;  // Default latitude (Seoul)
+        double mapXDouble = 126.981611;
+        double mapYDouble = 37.568477;
 
         if (mapX != null && mapY != null) {
             try {
@@ -43,7 +43,7 @@ public class TravelMapController {
         model.addAttribute("touristData", touristData);
         model.addAttribute("mapX", mapXDouble);
         model.addAttribute("mapY", mapYDouble);
-        model.addAttribute("keyword", keyword);  // Add the keyword to the model for use in the JSP
+        model.addAttribute("keyword", keyword);
 
         return "map/travelMap";  // 네이버 지도 페이지로 이동
     }

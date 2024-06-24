@@ -16,21 +16,21 @@
         #mapContainer {
             display: flex;
             width: 100%;
-            height: calc(100vh - 60px); /* Adjust the height to fit below the header */
+            height: calc(100vh - 60px);
         }
         #map {
             width: 100%;
-            height: 100%; /* Full height */
+            height: 100%;
             transition: width 0.3s;
         }
         #sidebar {
             width: 30%;
-            height: 100%; /* Full height */
+            height: 100%;
             overflow-y: auto;
             background-color: #ffffff;
             padding: 20px;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            display: none; /* Hide sidebar initially */
+            display: none;
             font-family: Arial, sans-serif;
             color: #333;
         }
@@ -131,7 +131,7 @@
             <img id="firstimage" src="" alt="대표 이미지" style="width:100%; height:auto;">
         </div>
     </div>
-    <button id="searchAgainBtn" onclick="searchAgain()">현재 위치에서 다시 검색하기</button>
+    <button id="searchAgainBtn" onclick="searchAgain()">현위치에서 주변 관광지 검색하기</button>
 
     <script>
         var mapX = ${mapX};
@@ -140,13 +140,14 @@
 
         var mapOptions = {
             center: new naver.maps.LatLng(mapY, mapX),
-            zoom: 15
+            zoom: 14  // 줌 레벨
         };
 
         var map = new naver.maps.Map('map', mapOptions);
 
         // 관광 데이터 파싱 및 마커 추가
         var touristData = '${touristData}';
+        var markers = [];
 
         if (touristData) {
             try {
@@ -154,34 +155,34 @@
                 var items = parsedData.response.body.items.item;
 
                 if (items && items.length) {
-                    if (items.length > 1) {
-                        // Center map to fit all markers without changing zoom level
-                        var bounds = new naver.maps.LatLngBounds();
-                        items.forEach(function(location) {
-                            bounds.extend(new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)));
-                        });
-                        map.panToBounds(bounds);  // Adjust center to fit all markers
-                    } else {
-                        var firstItem = items[0];
-                        map.setCenter(new naver.maps.LatLng(parseFloat(firstItem.mapy), parseFloat(firstItem.mapx)));
-                    }
+                	//검색어와 일치하는 관광지를 찾음
+                    var matchedItem = items.find(function(location) {
+                        return location.title === keyword;
+                    });
 
-                    items.forEach(function(location) {
+                    if (matchedItem) {
+                        // 기존 마커들을 모두 제거
+                        markers.forEach(function(marker) {
+                            marker.setMap(null);
+                        });
+                        markers = [];
+
+                        // 일치하는 관광지의 마커 추가
                         var marker = new naver.maps.Marker({
-                            position: new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)),
+                            position: new naver.maps.LatLng(parseFloat(matchedItem.mapy), parseFloat(matchedItem.mapx)),
                             map: map,
-                            title: location.title,
+                            title: matchedItem.title,
                             icon: {
                                 url: 'https://navermaps.github.io/maps.js/docs/img/example/pin_default.png',
-                                size: new naver.maps.Size(50, 50),
-                                scaledSize: new naver.maps.Size(50, 50),
+                                size: new naver.maps.Size(70, 70),
+                                scaledSize: new naver.maps.Size(70, 70),
                                 origin: new naver.maps.Point(0, 0),
-                                anchor: new naver.maps.Point(25, 50)
+                                anchor: new naver.maps.Point(35, 70)
                             }
                         });
 
                         var infowindow = new naver.maps.InfoWindow({
-                            content: '<div style="width:150px;text-align:center;padding:10px;">' + location.title + '</div>'
+                            content: '<div style="width:150px;text-align:center;padding:10px;">' + matchedItem.title + '</div>'
                         });
 
                         naver.maps.Event.addListener(marker, "mouseover", function(e) {
@@ -193,9 +194,53 @@
                         });
 
                         naver.maps.Event.addListener(marker, "click", function(e) {
-                            displaySidebar(location);
+                            displaySidebar(matchedItem);
                         });
-                    });
+
+                        markers.push(marker);
+
+                        map.setCenter(new naver.maps.LatLng(parseFloat(matchedItem.mapy), parseFloat(matchedItem.mapx)));
+                        displaySidebar(matchedItem);
+                    } else {
+                        //일치하는 관광지가 없을 경우, 모든 관광지 마커 추가
+                        var bounds = new naver.maps.LatLngBounds();
+                        items.forEach(function(location) {
+                            var marker = new naver.maps.Marker({
+                                position: new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)),
+                                map: map,
+                                title: location.title,
+                                icon: {
+                                    url: 'https://navermaps.github.io/maps.js/docs/img/example/pin_default.png',
+                                    size: new naver.maps.Size(70, 70), // 마커 크기를 70x70으로 변경
+                                    scaledSize: new naver.maps.Size(70, 70),
+                                    origin: new naver.maps.Point(0, 0),
+                                    anchor: new naver.maps.Point(35, 70) // 앵커 포인트 조정
+                                }
+                            });
+
+                            var infowindow = new naver.maps.InfoWindow({
+                                content: '<div style="width:150px;text-align:center;padding:10px;">' + location.title + '</div>'
+                            });
+
+                            naver.maps.Event.addListener(marker, "mouseover", function(e) {
+                                infowindow.open(map, marker);
+                            });
+
+                            naver.maps.Event.addListener(marker, "mouseout", function(e) {
+                                infowindow.close();
+                            });
+
+                            naver.maps.Event.addListener(marker, "click", function(e) {
+                                displaySidebar(location);
+                            });
+
+                            markers.push(marker);
+                            bounds.extend(new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)));
+                        });
+                        //모든 마커를 포함하도록 지도 중심 조정 및 줌 레벨 조정
+                        map.panToBounds(bounds);
+                        map.setZoom(map.getZoom() - 1);  // 여기에서 줌 레벨을 한 단계 축소
+                    }
                 } else {
                     document.write("No items found in the response");
                 }
@@ -206,12 +251,12 @@
             document.write("No touristData available");
         }
 
-        // 지도 클릭 이벤트 처리
+        // 지도 클릭 이벤트 처리 : 사이드 바 숨기기
         naver.maps.Event.addListener(map, 'click', function(e) {
             hideSidebar();
         });
 
-        // 지도 이동 이벤트 처리
+        // 지도 이동 이벤트 처리 : 다시 검색 버튼 표시
         naver.maps.Event.addListener(map, 'dragend', function() {
             document.getElementById('searchAgainBtn').style.display = 'block';
         });
@@ -225,6 +270,7 @@
             window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + encodeURIComponent(mapX) + '&mapY=' + encodeURIComponent(mapY);
         }
 
+        //사이드바에 관광지 정보 표시
         function displaySidebar(location) {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -257,6 +303,7 @@
             mapDiv.style.width = '70%';
         }
 
+        //사이드 바 숨기기
         function hideSidebar() {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -273,7 +320,7 @@
             }
         });
 
-        // Search input event listener for real-time suggestions
+        // 검색 입력 이벤트 처리: 실시간 검색어 제안
         document.getElementById('searchInput').addEventListener('input', function() {
             var term = document.getElementById('searchInput').value;
             if (term.length >= 2) {
@@ -283,7 +330,7 @@
             }
         });
 
-        // Fetch related search terms from the server
+        // 서버에서 관련 검색어 가져오기
         function fetchRelatedTerms(term) {
             fetch('${pageContext.request.contextPath}/relatedSearchTerms?term=' + encodeURIComponent(term))
                 .then(response => response.json())
@@ -292,7 +339,7 @@
                 });
         }
 
-        // Display the search suggestions
+        // 검색어 제안 표시
         function displaySuggestions(suggestions) {
             var suggestionsContainer = document.getElementById('suggestions');
             suggestionsContainer.innerHTML = '';

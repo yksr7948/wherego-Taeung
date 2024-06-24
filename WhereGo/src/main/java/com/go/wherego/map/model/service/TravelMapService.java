@@ -124,12 +124,12 @@ public class TravelMapService {
                             JsonArray items = itemsElement.getAsJsonArray();
                             for (int i = 0; i < items.size(); i++) {
                                 JsonObject item = items.get(i).getAsJsonObject();
-                                String title = item.get("title").getAsString();
+                                String title = item.has("title") ? item.get("title").getAsString() : "";
                                 relatedTerms.add(title);
                             }
                         } else if (itemsElement.isJsonObject()) {
                             JsonObject item = itemsElement.getAsJsonObject();
-                            String title = item.get("title").getAsString();
+                            String title = item.has("title") ? item.get("title").getAsString() : "";
                             relatedTerms.add(title);
                         }
                     }

@@ -70,7 +70,7 @@ public class WeatherController {
 	
 	@ResponseBody
 	@GetMapping("temperature.we")
-	public String temperature(String location) throws IOException {
+	public String temperature(String location,String sido) throws IOException {
 		String url="";
 		String responseStr="";
 		HttpURLConnection urlConn=null;
@@ -79,7 +79,9 @@ public class WeatherController {
 		URL requestUrl;
 		getTime();
 		
-		String code=ws.selectTcode(location);
+		Weather we= new Weather().builder().locationName(location)
+											.area(sido).build();
+		String code=ws.selectTcode(we);
 		if(code!=null) {
 			url="http://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa";
 			url += "?serviceKey="+SERVICE_KEY
@@ -110,7 +112,7 @@ public class WeatherController {
 	
 	@ResponseBody
 	@PostMapping(value="weather.we",produces = "text/plain;charset=UTF-8")
-	public String weather(String location) throws IOException {
+	public String weather(String location,String sido) throws IOException {
 		String url="";
 		String responseStr="";
 		HttpURLConnection urlConn=null;
@@ -119,7 +121,9 @@ public class WeatherController {
 		URL requestUrl;
 		getTime();
 		
-		String code=ws.selectWcode(location);
+		Weather we= new Weather().builder().locationName(location)
+				.area(sido).build();
+		String code=ws.selectWcode(we);
 		if(code!=null) {
 			url="http://apis.data.go.kr/1360000/MidFcstInfoService/getMidLandFcst"
 				+"?serviceKey="+SERVICE_KEY

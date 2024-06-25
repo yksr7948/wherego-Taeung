@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.go.wherego.trip.model.vo.PageInfo;
+import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
 
 @Repository
@@ -63,4 +64,17 @@ public class TripDao {
 		
 		return sqlSession.selectOne("tripMapper.selectCount", contentId);
 	}
+	
+	//댓글 리스트
+	public ArrayList<Reply> replyList(SqlSessionTemplate sqlSession, String contentId) {
+
+		return (ArrayList)sqlSession.selectList("tripMapper.replyList", contentId);
+	}
+	
+	//댓글 작성
+	public int insertReply(SqlSessionTemplate sqlSession, Reply r) {
+		
+		return sqlSession.insert("tripMapper.insertReply", r);
+	}
+
 }

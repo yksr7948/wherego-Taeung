@@ -4,9 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -14,13 +12,13 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.trip.model.service.TripService;
 import com.go.wherego.trip.model.vo.PageInfo;
+import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
 import com.go.wherego.trip.template.Pagination;
 import com.google.gson.JsonArray;
@@ -286,6 +284,8 @@ public class TripController {
 		t.setAddr2(it.get("addr2").getAsString());
 		t.setZipCode(it.get("zipcode").getAsString());
 		t.setOverView(it.get("overview").getAsString());
+		t.setMapx(it.get("mapx").getAsString());
+		t.setMapy(it.get("mapy").getAsString());
 		t.setCount(count);
 
 		br.close();
@@ -324,6 +324,26 @@ public class TripController {
 		}
 		
 		return responseStr;
+	}
+	
+	//댓글 리스트
+	@ResponseBody
+	@RequestMapping(value="replyList.tl", produces="application/json;charset=UTF-8")
+	public ArrayList<Reply> replyList(String contentId) {
+		
+		ArrayList<Reply> rList = tripService.replyList(contentId);
+		
+		return rList;
+	}
+	
+	//댓글 작성
+	@ResponseBody
+	@RequestMapping("insertReply.tl")
+	public int insertReply(Reply r) {
+		
+		int result = tripService.insertReply(r);
+		
+		return result;
 	}
 	
 }

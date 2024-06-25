@@ -3,6 +3,7 @@ package com.go.wherego.trip.model.service;
 import java.util.ArrayList;
 
 import com.go.wherego.trip.model.vo.PageInfo;
+import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
 
 public interface TripService {
@@ -27,4 +28,10 @@ public interface TripService {
 	
 	//조회수 조회
 	int selectCount(String contentId);
+	
+	//댓글 리스트
+	ArrayList<Reply> replyList(String contentId);
+	
+	//댓글 작성
+	int insertReply(Reply r);
 }

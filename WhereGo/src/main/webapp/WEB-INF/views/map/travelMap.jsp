@@ -9,110 +9,138 @@
     <title>여행지도</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7whhnl24e7"></script>
     <style>
-        body {
-            display: block;
-            margin: 0;
-        }
-        #mapContainer {
-            display: flex;
-            width: 100%;
-            height: calc(100vh - 60px);
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            transition: width 0.3s;
-        }
-        #sidebar {
-            width: 30%;
-            height: 100%;
-            overflow-y: auto;
-            background-color: #ffffff;
-            padding: 20px;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            display: none;
-            font-family: Arial, sans-serif;
-            color: #333;
-        }
-        #sidebar h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 10px;
-        }
-        #sidebar p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-        #sidebar img {
-            margin-top: 20px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        #searchAgainBtn {
-            display: none;
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #searchAgainBtn:hover {
-            background-color: #0056b3;
-        }
-        #searchForm {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 20px 0;
-        }
-        #searchInput {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        #searchBtn {
-            padding: 10px 20px;
-            margin-left: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        #searchBtn:hover {
-            background-color: #0056b3;
-        }
-        #suggestions {
-            border: 1px solid #ddd;
-            border-top: none;
-            max-height: 200px;
-            overflow-y: auto;
-            position: absolute;
-            width: 300px;
-            background: #fff;
-            z-index: 1000;
-            display: none;
-        }
-        #suggestions div {
-            padding: 10px;
-            cursor: pointer;
-        }
-        #suggestions div:hover {
-            background-color: #f1f1f1;
-        }
+		body {
+		    display: block;
+		    margin: 0;
+		    font-family: Arial, sans-serif;
+		    color: #333;
+		    background-color: #fff;
+		}
+		
+		#mapContainer {
+		    display: flex;
+		    width: 100%;
+		    height: calc(100vh - 60px);
+		}
+		
+		#map {
+		    width: 100%;
+		    height: 100%;
+		    transition: width 0.3s;
+		}
+		
+		#sidebar {
+		    width: 30%;
+		    height: 100%;
+		    overflow-y: auto;
+		    background-color: #f9f9f9;
+		    padding: 20px;
+		    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+		    display: none;
+		}
+		
+		#sidebar h2 {
+		    font-size: 24px;
+		    margin-bottom: 20px;
+		    border-bottom: 2px solid #333;
+		    padding-bottom: 10px;
+		}
+		
+		#sidebar p {
+		    margin: 10px 0;
+		    line-height: 1.6;
+		}
+		
+		#sidebar img {
+		    margin-top: 20px;
+		    border: 1px solid #ddd;
+		    border-radius: 4px;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		
+		#searchAgainBtn {
+		    display: none;
+		    position: absolute;
+		    bottom: 20px;
+		    left: 50%;
+		    transform: translateX(-50%);
+		    z-index: 10;
+		    padding: 10px 20px;
+		    background-color: #333;
+		    color: #fff;
+		    border: none;
+		    border-radius: 5px;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		    cursor: pointer;
+		    font-size: 16px;
+		}
+		
+		#searchAgainBtn:hover {
+		    background-color: #555;
+		}
+		
+		#searchForm {
+		    display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    margin: 20px 0;
+		}
+		
+		#searchInput {
+		    width: 300px;
+		    padding: 10px;
+		    font-size: 16px;
+		    border: 1px solid #ddd;
+		    border-radius: 5px;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		    transition: box-shadow 0.3s;
+		}
+		
+		#searchInput:focus {
+		    box-shadow: 0 2px 4px rgba(51, 51, 51, 0.5);
+		    border-color: #333;
+		    outline: none;
+		}
+		
+		#searchBtn {
+		    padding: 10px 20px;
+		    margin-left: 10px;
+		    background-color: #333;
+		    color: #fff;
+		    border: none;
+		    border-radius: 5px;
+		    cursor: pointer;
+		    font-size: 16px;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		    transition: background-color 0.3s;
+		}
+		
+		#searchBtn:hover {
+		    background-color: #555;
+		}
+		
+		#suggestions {
+		    border: 1px solid #ddd;
+		    border-top: none;
+		    max-height: 200px;
+		    overflow-y: auto;
+		    position: absolute;
+		    width: 300px;
+		    background: #fff;
+		    z-index: 1000;
+		    display: none;
+		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		
+		#suggestions div {
+		    padding: 10px;
+		    cursor: pointer;
+		    transition: background-color 0.3s;
+		}
+		
+		#suggestions div:hover {
+		    background-color: #f1f1f1;
+		}
     </style>
 </head>
 <body>

@@ -16,6 +16,15 @@
 		<result column="FIRST_IMAGE2" property="firstImage2"/>
 	</resultMap>
 	
+	<!-- Reply ResultMap -->
+	<resultMap type="Reply" id="replyResultSet">
+		<result column="REPLY_NO" property="replyNo"/>
+		<result column="CONTENT_ID" property="contentId"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="REPLY_CONTENT" property="replyContent"/>
+		<result column="CREATE_DATE" property="createDate"/>
+	</resultMap>
+	
 	
 	<!-- 지역별 데이터 저장 -->
 	<insert id="saveArea" parameterType="arraylist">
@@ -49,7 +58,7 @@
 		AND CONTENT_TYPE_ID='12'
 	</select>
 	
-	<!--지역별  여행지 총 개수 -->
+	<!-- 지역별  여행지 총 개수 -->
 	<select id="areaListCount" parameterType="string" resultType="_int">
 		SELECT COUNT(*) 
 		FROM TRIP 
@@ -104,4 +113,30 @@
 		FROM TRIP
 		WHERE CONTENT_ID = #{contentId}
 	</select>
+	
+	<!-- 댓글 리스트 -->
+	<select id="replyList" parameterType="string" resultMap="replyResultSet">
+		SELECT REPLY_NO
+			  ,CONTENT_ID
+			  ,USER_ID
+			  ,REPLY_CONTENT
+			  ,CREATE_DATE
+		FROM TRIP_REPLY 
+		WHERE CONTENT_ID=#{contentId}
+		ORDER BY CREATE_DATE DESC
+	</select>
+	
+	<!-- 댓글 작성 -->
+	<insert id="insertReply" parameterType="Reply">
+		INSERT INTO TRIP_REPLY(REPLY_NO, 
+							   CONTENT_ID, 
+							   USER_ID, 
+							   REPLY_CONTENT, 
+							   CREATE_DATE)
+               			VALUES(SEQ_TRP.NEXTVAL,
+               				   #{contentId},
+               				   #{userId},
+               				   #{replyContent},
+               				   SYSDATE)
+	</insert>
 </mapper>

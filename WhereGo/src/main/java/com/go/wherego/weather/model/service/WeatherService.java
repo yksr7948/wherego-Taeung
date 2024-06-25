@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.go.wherego.weather.model.vo.Weather;
 
 public interface WeatherService {
-	String selectTcode(String location);
+	String selectTcode(Weather we);
 	
-	String selectWcode(String location);
+	String selectWcode(Weather we);
 	
 	ArrayList<Weather> getLocation(String location);
 }

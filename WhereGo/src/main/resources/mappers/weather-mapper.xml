@@ -10,13 +10,15 @@
 	<result column="AREA" property="area"/>
 	</resultMap>
 
-	<select id="selectTcode" parameterType="string" resultType="string">
+	<select id="selectTcode" parameterType="Weather" resultType="string">
 		SELECT CODE_TEMPERATURE FROM WEATHER
-		WHERE LOCATION_NAME=#{location}
+		WHERE LOCATION_NAME=#{locationName}
+		AND AREA LIKE '%'||#{area}||'%'
 	</select>
-	<select id="selectWcode" parameterType="string" resultType="string">
+	<select id="selectWcode" parameterType="Weather" resultType="string">
 		SELECT CODE_WEATHER FROM WEATHER
-		WHERE LOCATION_NAME=#{location}
+		WHERE LOCATION_NAME=#{locationName}
+		AND AREA LIKE '%'||#{area}||'%'
 	</select>
 	<select id="selectLocations" parameterType="string" resultMap="WeatherResultSet">
 		SELECT LOCATION_NAME FROM WEATHER

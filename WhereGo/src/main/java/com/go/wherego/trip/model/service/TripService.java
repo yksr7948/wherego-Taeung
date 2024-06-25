@@ -34,4 +34,11 @@ public interface TripService {
 	
 	//댓글 작성
 	int insertReply(Reply r);
+	
+	//댓글 수정
+	int updateReply(Reply r);
+	
+	//댓글  삭제
+	int deleteReply(int replyNo);
+	
 }

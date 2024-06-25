@@ -76,5 +76,17 @@ public class TripDao {
 		
 		return sqlSession.insert("tripMapper.insertReply", r);
 	}
+	
+	//댓글 수정
+	public int updateReply(SqlSessionTemplate sqlSession, Reply r) {
+		
+		return sqlSession.update("tripMapper.updateReply", r);
+	}
+	
+	//댓글 삭제
+	public int deleteReply(SqlSessionTemplate sqlSession, int replyNo) {
+		
+		return sqlSession.delete("tripMapper.deleteReply", replyNo);
+	}
 
 }

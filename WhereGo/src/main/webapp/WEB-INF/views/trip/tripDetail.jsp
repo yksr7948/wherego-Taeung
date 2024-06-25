@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=r0j6vqaf5j"></script>
 <style>
 main {
     padding: 20px;
@@ -12,7 +13,10 @@ main {
     margin: auto;
     margin-top: 5%;
 }
-
+font{
+	cursor: auto;
+}
+/* 헤더부분 */
 .main-title {
 	font-size: 40px;
     font-weight: 900;
@@ -24,13 +28,12 @@ main {
     align-items: center;
     padding: 10px 0;
 }
-
 #count{
     display: flex;
     align-items: center;
 }
 
-
+/* 이미지부분 */
 .image-info {
     text-align: center;
     margin-bottom: 20px;
@@ -47,8 +50,8 @@ main {
     line-height: 1.5;
 }
 
+/* 상세보기 */
 .details-info {
-    background-color: #fff;
     padding: 20px;
 }
 .details-info tr{
@@ -57,6 +60,74 @@ main {
 .details-info th{
 	font-size: 20px;
 	width: 200px;
+}
+
+/* 지도 */
+#map-container{
+	display: flex;
+	justify-content: center;
+}
+#map{
+	width: 80%;
+	height: 400px;
+}
+
+/* 댓글 영역*/
+#reply-container {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	border-radius: 4px;
+}
+#reply-container thead{
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+#content {
+	width: 100%;
+	height: 100px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	resize: none;
+}
+.login-button {
+	float: right;
+	margin-top: 10px;
+	padding: 10px 20px;
+}
+#reply-container tbody tr{
+	border-bottom: 1px solid #ddd;
+	height: 100px;
+}
+#reply-container th {
+	text-align: left;
+	padding: 8px;
+	width: 50px;
+}
+#reply-container td {
+	vertical-align: top;
+	padding: 8px 16px;
+}
+#reply-container td div {
+	padding: 8px 0px;
+}
+#reply-container img{
+	width: 48px;
+	height: auto;
+}
+.user-id {
+	font-weight: bold;
+	margin-right: 10px;
+}
+.date {
+	color: #888;
+}
+.update{
+	float: right;
+	cursor: pointer;
+	color: #888;
 }
 </style>
 </head>
@@ -111,6 +182,7 @@ main {
 	    </table>
     </div>
     
+    <!-- 상세정보 가져오기 -->
     <script>
     	$(function(){
     		detailInfo();
@@ -198,6 +270,137 @@ main {
     		})
     	}
     </script>
+    
+    <br> <br> <hr> <br> <br> <br>
+    
+    <!-- 지도 API -->  
+    <h1 class="main-title">상세위치</h1>
+    <br> <br>
+    <div id="map-container">
+	    <div id="map"></div>
+    </div>  
+    
+    <!-- 지도 API -->
+    <script>
+    	var map = new naver.maps.Map('map', {
+		    center: new naver.maps.LatLng(${t.mapy}, ${t.mapx}),
+		    zoom: 15
+		});
+    	
+    	var marker = new naver.maps.Marker({
+    	    position: new naver.maps.LatLng(${t.mapy}, ${t.mapx}),
+    	    map: map
+    	});
+
+    </script>
+    
+    <br> <br> <hr> <br> <br> <br>
+    
+	<!-- 댓글 작성 -->
+	<h3 style="font-weight: 900;">댓글(<span id="rcount"></span>)</h3>
+    <table id="reply-container">
+        <thead>
+            <tr>
+                <th colspan="2">
+                    <c:choose>
+                        <c:when test="${empty loginUser}">
+                            <textarea class="form-control" id="content" cols="55" rows="2" readonly>로그인 후 이용해주세요</textarea>
+                        </c:when>
+                    	<c:otherwise>
+                                <textarea class="form-control" id="content" cols="55" rows="2" required></textarea>
+                                <button class="login-button" onclick="insertReply();">등록하기</button>
+                        </c:otherwise>
+                    </c:choose>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    
+    <script>
+    
+     	//댓글 리스트 불러오기
+    	$(function(){
+    		replyList();
+    	});
+    	
+    	function replyList(){
+    		
+    		var loginUser = "${loginUser.userId}";
+    		
+    		$.ajax({
+    			url : "replyList.tl",
+    			data: {
+    				contentId : ${t.contentId}
+    			},
+    			success : function(data){
+    				
+    				var str = ""
+    				
+    				for(var i in data){
+    					str += "<tr>";
+    					str += "<th><img src='resources/img/trip-board/user_profile.png'></th>";
+    					str += "<td>";
+    					str += "<span class='user-id'>"+data[i].userId+"</span>";
+    					str += "<span class='date'>"+data[i].createDate+"</span>";
+    					if(loginUser === data[i].userId){
+	    					str += "<span class='update'><a onclick='updateReply("+data[i].replyNo+");'>수정하기</a></span>"; 
+	    					str += "<span class='update'><font> &nbsp; / &nbsp;</font></span>";
+	    					str += "<span class='update'><a>삭제하기</a></span>";
+    					}
+    					str += "<div>"+data[i].replyContent+"<div>";
+    					str += "</td>";
+    					str += "</tr>";
+    				}
+    				
+    				$("#reply-container tbody").html(str);
+    				$("#rcount").text(data.length);
+    			},
+    			error: function(){
+    				console.log("통신오류");
+    			}
+    		});
+    	}
+
+     	//댓글 작성
+    	function insertReply(){
+    			
+	    	var contentId = ${t.contentId};
+	    	var userId = "${loginUser.userId}";
+	    	var replyContent = $("#content").val();
+    			
+    		$.ajax({
+    			url : "insertReply.tl",
+    			data : {
+    				contentId,
+    				userId,
+    				replyContent
+    			},
+    			success : function(result){
+    				if(result > 0){
+						alert("댓글 작성 성공!");
+						$("#content").val("");
+						replyList();
+    				}else{
+    					alert("댓글 작성 실패 ㅠㅠ");
+    				}
+    			},
+    			error : function(){
+    				console.log("통신 실패");
+    			}
+    		});
+    	}
+     	
+     	//댓글 수정
+     	function updateReply(replyNo){
+     		
+     		console.log(replyNo);
+     		
+     	} 
+    </script>
+    
 </main>
 <%@include file="/WEB-INF/views/common/footer.jsp" %>
 </body>

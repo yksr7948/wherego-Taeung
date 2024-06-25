@@ -123,7 +123,7 @@
 <body>
 	
 
-	<div class="content">
+		<div class="content">
 		<br> <br>
 		<div class="innerOuter">
 			<h2>회원가입</h2>
@@ -141,18 +141,15 @@
 						PASSWORD CHECK</label> <input type="password" id="pwdCheck"
 						class="form-control"> <br> <label for="userName">*
 						NAME</label> <input type="text" id="userName" name="userName"
-						class="form-control"> <br> 
-						<label for="userName">*
-						NICKNAME</label> <input type="text" id="userNickname" name="userNickname"
-						class="form-control"> <br><label for="email">
+						class="form-control"> <br> <label for="email">
 						&nbsp; EMAIL</label> <input type="email" id="email" name="email"
 						class="form-control"> <br> <label for="age">
 						&nbsp; AGE</label> <input type="number" id="age" name="age"
 						class="form-control"> <br> <label for="phone">
 						&nbsp; PHONE</label> <input type="tel" id="phone" name="phone"
-						class="form-control" placeholder="(-)없이 입력"> <br> 
+						class="form-control" placeholder="(-)없이 입력">  <br>
 
-						<label for=""> &nbsp; GENDER</label> &nbsp;&nbsp; <input
+					<label for=""> &nbsp; GENDER</label> &nbsp;&nbsp; <input
 						type="radio" id="male" value="M" name="gender" checked> <label
 						for="male">남자</label> &nbsp;&nbsp; <input type="radio" id="female"
 						value="F" name="gender"> <label for="female">여자</label>

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <!DOCTYPE html>
@@ -9,138 +9,136 @@
     <title>여행지도</title>
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=7whhnl24e7"></script>
     <style>
-		body {
-		    display: block;
-		    margin: 0;
-		    font-family: Arial, sans-serif;
-		    color: #333;
-		    background-color: #fff;
-		}
-		
-		#mapContainer {
-		    display: flex;
-		    width: 100%;
-		    height: calc(100vh - 60px);
-		}
-		
-		#map {
-		    width: 100%;
-		    height: 100%;
-		    transition: width 0.3s;
-		}
-		
-		#sidebar {
-		    width: 30%;
-		    height: 100%;
-		    overflow-y: auto;
-		    background-color: #f9f9f9;
-		    padding: 20px;
-		    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-		    display: none;
-		}
-		
-		#sidebar h2 {
-		    font-size: 24px;
-		    margin-bottom: 20px;
-		    border-bottom: 2px solid #333;
-		    padding-bottom: 10px;
-		}
-		
-		#sidebar p {
-		    margin: 10px 0;
-		    line-height: 1.6;
-		}
-		
-		#sidebar img {
-		    margin-top: 20px;
-		    border: 1px solid #ddd;
-		    border-radius: 4px;
-		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
-		
-		#searchAgainBtn {
-		    display: none;
-		    position: absolute;
-		    bottom: 20px;
-		    left: 50%;
-		    transform: translateX(-50%);
-		    z-index: 10;
-		    padding: 10px 20px;
-		    background-color: #333;
-		    color: #fff;
-		    border: none;
-		    border-radius: 5px;
-		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		    cursor: pointer;
-		    font-size: 16px;
-		}
-		
-		#searchAgainBtn:hover {
-		    background-color: #555;
-		}
-		
-		#searchForm {
-		    display: flex;
-		    justify-content: center;
-		    align-items: center;
-		    margin: 20px 0;
-		}
-		
-		#searchInput {
-		    width: 300px;
-		    padding: 10px;
-		    font-size: 16px;
-		    border: 1px solid #ddd;
-		    border-radius: 5px;
-		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		    transition: box-shadow 0.3s;
-		}
-		
-		#searchInput:focus {
-		    box-shadow: 0 2px 4px rgba(51, 51, 51, 0.5);
-		    border-color: #333;
-		    outline: none;
-		}
-		
-		#searchBtn {
-		    padding: 10px 20px;
-		    margin-left: 10px;
-		    background-color: #333;
-		    color: #fff;
-		    border: none;
-		    border-radius: 5px;
-		    cursor: pointer;
-		    font-size: 16px;
-		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		    transition: background-color 0.3s;
-		}
-		
-		#searchBtn:hover {
-		    background-color: #555;
-		}
-		
-		#suggestions {
-		    border: 1px solid #ddd;
-		    border-top: none;
-		    max-height: 200px;
-		    overflow-y: auto;
-		    position: absolute;
-		    width: 300px;
-		    background: #fff;
-		    z-index: 1000;
-		    display: none;
-		    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-		}
-		
-		#suggestions div {
-		    padding: 10px;
-		    cursor: pointer;
-		    transition: background-color 0.3s;
-		}
-		
-		#suggestions div:hover {
-		    background-color: #f1f1f1;
-		}
+        body {
+            display: block;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #fff;
+        }
+        #mapContainer {
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 60px);
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+            transition: width 0.3s;
+        }
+        #sidebar {
+            width: 30%;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        #sidebar h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+        #sidebar p {
+            margin: 10px 0;
+            line-height: 1.6;
+        }
+        #sidebar img {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #searchAgainBtn {
+            display: none;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #searchAgainBtn:hover {
+            background-color: #555;
+        }
+        #searchForm {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s;
+        }
+        #searchInput:focus {
+            box-shadow: 0 2px 4px rgba(51, 51, 51, 0.5);
+            border-color: #333;
+            outline: none;
+        }
+        #searchBtn {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+        #searchBtn:hover {
+            background-color: #555;
+        }
+        #suggestions {
+            border: 1px solid #ddd;
+            border-top: none;
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            width: 300px;
+            background: #fff;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #suggestions div {
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #suggestions div:hover {
+            background-color: #f1f1f1;
+        }
+        #viewDetailsLink {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        #viewDetailsLink:hover {
+            background-color: #555;
+        }
     </style>
 </head>
 <body>
@@ -157,6 +155,7 @@
             <p id="addr2Wrapper"><strong>상세 주소:</strong> <span id="addr2"></span></p>
             <p id="firstimageWrapper"><strong>대표 이미지:</strong></p>
             <img id="firstimage" src="" alt="대표 이미지" style="width:100%; height:auto;">
+            <a id="viewDetailsLink" href="#">관광지 자세히 보기</a>
         </div>
     </div>
     <button id="searchAgainBtn" onclick="searchAgain()">현위치에서 주변 관광지 검색하기</button>
@@ -172,8 +171,6 @@
         };
 
         var map = new naver.maps.Map('map', mapOptions);
-
-        // 관광 데이터 파싱 및 마커 추가
         var touristData = '${touristData}';
         var markers = [];
 
@@ -183,7 +180,7 @@
                 var items = parsedData.response.body.items.item;
 
                 if (items && items.length) {
-                	//검색어와 일치하는 관광지를 찾음
+                    // 검색어와 일치하는 관광지를 찾음
                     var matchedItem = items.find(function(location) {
                         return location.title === keyword;
                     });
@@ -230,7 +227,7 @@
                         map.setCenter(new naver.maps.LatLng(parseFloat(matchedItem.mapy), parseFloat(matchedItem.mapx)));
                         displaySidebar(matchedItem);
                     } else {
-                        //일치하는 관광지가 없을 경우, 모든 관광지 마커 추가
+                        // 일치하는 관광지가 없을 경우, 모든 관광지 마커 추가
                         var bounds = new naver.maps.LatLngBounds();
                         items.forEach(function(location) {
                             var marker = new naver.maps.Marker({
@@ -239,10 +236,10 @@
                                 title: location.title,
                                 icon: {
                                     url: 'https://navermaps.github.io/maps.js/docs/img/example/pin_default.png',
-                                    size: new naver.maps.Size(70, 70), // 마커 크기를 70x70으로 변경
+                                    size: new naver.maps.Size(70, 70),
                                     scaledSize: new naver.maps.Size(70, 70),
                                     origin: new naver.maps.Point(0, 0),
-                                    anchor: new naver.maps.Point(35, 70) // 앵커 포인트 조정
+                                    anchor: new naver.maps.Point(35, 70)
                                 }
                             });
 
@@ -265,9 +262,8 @@
                             markers.push(marker);
                             bounds.extend(new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)));
                         });
-                        //모든 마커를 포함하도록 지도 중심 조정 및 줌 레벨 조정
                         map.panToBounds(bounds);
-                        map.setZoom(map.getZoom() - 1);  // 여기에서 줌 레벨을 한 단계 축소
+                        map.setZoom(map.getZoom() - 1);
                     }
                 } else {
                     document.write("No items found in the response");
@@ -279,17 +275,14 @@
             document.write("No touristData available");
         }
 
-        // 지도 클릭 이벤트 처리 : 사이드 바 숨기기
         naver.maps.Event.addListener(map, 'click', function(e) {
             hideSidebar();
         });
 
-        // 지도 이동 이벤트 처리 : 다시 검색 버튼 표시
         naver.maps.Event.addListener(map, 'dragend', function() {
             document.getElementById('searchAgainBtn').style.display = 'block';
         });
 
-        // 현재 지도 중심에서 다시 검색
         function searchAgain() {
             var center = map.getCenter();
             var mapX = center.lng();
@@ -298,7 +291,6 @@
             window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + encodeURIComponent(mapX) + '&mapY=' + encodeURIComponent(mapY);
         }
 
-        //사이드바에 관광지 정보 표시
         function displaySidebar(location) {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -327,11 +319,12 @@
                 firstImageElement.style.display = 'none';
             }
 
+            document.getElementById('viewDetailsLink').href = '${pageContext.request.contextPath}/tripDetail.tl?contentId=' + location.contentid;
+
             sidebar.style.display = 'block';
             mapDiv.style.width = '70%';
         }
 
-        //사이드 바 숨기기
         function hideSidebar() {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -340,7 +333,6 @@
             mapDiv.style.width = '100%';
         }
 
-        // 검색 버튼 클릭 이벤트
         document.getElementById('searchBtn').addEventListener('click', function() {
             var keyword = document.getElementById('searchInput').value;
             if (keyword) {
@@ -348,7 +340,6 @@
             }
         });
 
-        // 검색 입력 이벤트 처리: 실시간 검색어 제안
         document.getElementById('searchInput').addEventListener('input', function() {
             var term = document.getElementById('searchInput').value;
             if (term.length >= 2) {
@@ -358,7 +349,6 @@
             }
         });
 
-        // 서버에서 관련 검색어 가져오기
         function fetchRelatedTerms(term) {
             fetch('${pageContext.request.contextPath}/relatedSearchTerms?term=' + encodeURIComponent(term))
                 .then(response => response.json())
@@ -367,7 +357,6 @@
                 });
         }
 
-        // 검색어 제안 표시
         function displaySuggestions(suggestions) {
             var suggestionsContainer = document.getElementById('suggestions');
             suggestionsContainer.innerHTML = '';

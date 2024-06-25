@@ -70,12 +70,20 @@ transition:background-color 0.3s,color 0.3s;
 background-color:dodgerblue;
 color:white;
 }
+.location-selected{
+background-color:dodgerblue;
+color:white;
+}
 .location-detail-btn{
 width:80px;
 background-color:lightblue;
 color:black;
 }
 .location-detail-btn:hover{
+background-color:mediumblue;
+color:white;
+}
+.location-detail-selected{
 background-color:mediumblue;
 color:white;
 }
@@ -155,6 +163,8 @@ color:white;
 		
 		$(".location-btn").click(function(){
 			getDetailLocation($(this).html());
+			$("button").removeClass("location-selected");
+			$(this).addClass("location-selected");
 		})
 		
 		$("#wLocation").on("click",".location-detail-btn",function(){
@@ -162,6 +172,8 @@ color:white;
 			showTemperature(area);
 			showWeather(area);
 			$("#area").html(area+"의 날씨");
+			$("button").removeClass("location-detail-selected");
+			$(this).addClass("location-detail-selected");
 		})
 	});
 	//시,도버튼 클릭시 상세지역 버튼 출력 함수
@@ -213,11 +225,13 @@ color:white;
 	
 	//기온 표시함수(처음실행 및 지역버튼 클릭시 실행)
 	function showTemperature(location){
+		var sido=$(".location-selected").html();
 		var area=location;
 		$.ajax({
 			url : "temperature.we",
 			data : {
-				location : area
+				location : area,
+				sido : sido
 			},
 			success : function(result){
 				var data=$(result).find('item');
@@ -240,10 +254,12 @@ color:white;
 	
 	//날씨 표시함수(처음 및 지역버튼 클릭시 실행)
 	function showWeather(location){
+		var sido=$(".location-selected").html();
 		$.ajax({
 			url : "weather.we",
 			data : {
-				location : location
+				location : location,
+				sido : sido
 			},
 			method : "post",
 			success : function(result){

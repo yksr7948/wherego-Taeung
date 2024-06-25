@@ -11,13 +11,13 @@ import com.go.wherego.weather.model.vo.Weather;
 public class WeatherDao {
 	
 	//기온코드 조회
-	public String selectTcode(SqlSessionTemplate sqlSession,String location) {
-		return sqlSession.selectOne("weatherMapper.selectTcode", location);
+	public String selectTcode(SqlSessionTemplate sqlSession,Weather we) {
+		return sqlSession.selectOne("weatherMapper.selectTcode", we);
 	}
 
 	//날씨코드 조회
-	public String selectWcode(SqlSessionTemplate sqlSession, String location) {
-		return sqlSession.selectOne("weatherMapper.selectWcode", location);
+	public String selectWcode(SqlSessionTemplate sqlSession, Weather we) {
+		return sqlSession.selectOne("weatherMapper.selectWcode", we);
 	}
 
 	public ArrayList<Weather> getLocation(SqlSessionTemplate sqlSession, String location) {

@@ -19,14 +19,14 @@ public class WeatherServiceImpl implements WeatherService{
 
 	
 	@Override
-	public String selectTcode(String location) {
-		return dao.selectTcode(sqlSession,location);
+	public String selectTcode(Weather we) {
+		return dao.selectTcode(sqlSession,we);
 	}
 
 
 	@Override
-	public String selectWcode(String location) {
-		return dao.selectWcode(sqlSession, location);
+	public String selectWcode(Weather we) {
+		return dao.selectWcode(sqlSession, we);
 	}
 
 

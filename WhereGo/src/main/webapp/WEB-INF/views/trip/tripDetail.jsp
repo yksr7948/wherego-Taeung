@@ -29,28 +29,9 @@ font{
     align-items: center;
     padding: 10px 0;
 }
-#count{
-    display: flex;
-    align-items: center;
+#title-heart{
+	color: #ff6b81;
 }
-
-/* 좋아요 버튼 */
-#likeButton {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
-    float: right;
-}
-
-#likeButton:hover {
-    transform: scale(1.1);
-}
-
-#likeButton:focus {
-    outline: none;
-}
-
 
 /* 이미지부분 */
 .image-info {
@@ -91,6 +72,29 @@ font{
 	height: 400px;
 }
 
+/* 좋아요 */
+#like-container{
+	display: flex;
+	justify-content: center;
+}
+.like-btn{ /* 버튼 클릭 안되었을때 */
+    background-color: white;
+    border: 2px solid #ff6b81;
+    border-radius: 25px;
+    padding: 10px 20px;
+    color: #ff6b81;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.like-btn:hover {
+    transform: scale(1.1);
+}
 
 /* 댓글 영역 */
 #reply-container {
@@ -103,7 +107,7 @@ font{
 	border: 1px solid #ddd;
 	border-radius: 4px;
 }
-#content, #update-content {
+#content {
 	width: 100%;
 	height: 100px;
 	padding: 10px;
@@ -154,22 +158,18 @@ font{
     <br> <br>
     
     <div class="data-info">
-    	<span id="date">제작일 : ${t.createdTime }<br>수정일 : ${t.modifiedTime} </span>
+    	<span id="date">
+    		제작일 : ${t.createdTime }
+    		<br>
+    		수정일 : ${t.modifiedTime} </span>
     	<span id="count">
+    		<b id="title-heart" class="far fa-heart"></b>&nbsp;<span id="likeCount">${t.likeCount }</span>
+    		<br>
     		<img alt="" src="resources/img/trip-board/eye-icon.png">&nbsp;${t.count } 
     	</span> 
     </div>
-    
-    <button id="likeButton" onclick="return like();">
-	<b id="heartIcon" class="far fa-heart" style="font-size: 30px; color: #ff5a5f;"></b>
-	</button>
 	
-	<br> <br>
-	
-    <hr> 
-    
-	
-    <br> <br> <br>
+	<hr> <br> <br> <br> <br>
 
     <div class="image-info">
         <img src="${t.firstImage1 }" alt="화계사">
@@ -316,7 +316,104 @@ font{
     <br> <br> <hr> <br> <br> <br>
     
     <!-- 좋아요 기능 -->
+	<div id="like-container">
+		<button class="like-btn" onclick="like();"><b id="heartIcon" class="far fa-heart"></b> 좋아요</button>
+	</div>
+	
+	<script>
+			
+	    // 유저 좋아요 여부
+	    var likeYN = false;
+	    var userId = "${loginUser.userId}";
+		var contentId = ${t.contentId};
+		var heart = document.getElementById("title-heart");
+		
+			
+		if(userId != ""){
+			$.ajax({
+				url : "likeYN.tl",
+				data : {
+					userId,
+					contentId
+				},
+				success : function(result){
+					
+					likeYN = result;
+					
+			    	if (likeYN) {
+				        $(".like-btn").css({"background-color":"#ff6b81","color":"white"});
+				        heart.classList.remove("far");
+	    	            heart.classList.add("fas");
+					} else {
+				        $(".like-btn").css({"background-color":"white","color":"#ff6b81"});
+				        heart.classList.remove("fas");
+	    	            heart.classList.add("far");
+				    }
+					
+				},
+				error : function(){
+					console.log("통신 오류");
+				}
+			});
+		}
+    	
+	    function like() {
+	        
+	    	if(userId == ""){
+	    		alert("로그인 후 사용 가능합니다.");
+	    	}else if (likeYN) {
+	        	
+	    		$.ajax({
+	    			url : "deleteLike.tl",
+	    			data : {
+	    				userId,
+	    				contentId
+	    			},
+	    			success : function(result){
+	    				
+	    				if(result >= 0){
+	    				$(".like-btn").css({"background-color":"white","color":"#ff6b81"});
+	    				heart.classList.remove("fas");
+		    	        heart.classList.add("far");
+	        	        likeYN = false;
+	        	        alert("좋아요를 취소하였습니다.");
+	        	        $("#likeCount").text(result);
+	    				}
+	    			},
+	    			error : function(){
+	    				console.log("통신 오류");
+	    			}
+	    			
+	    		});
+	        } else {
+	        	
+	        	$.ajax({
+	        		url : "insertLike.tl",
+	        		data : {
+	        			userId,
+	        			contentId
+	        		},
+	        		success : function(result){
+						if(result >= 0){
+		        	        $(".like-btn").css({"background-color":"#ff6b81","color":"white"});
+		        	        heart.classList.remove("far");
+		        	        heart.classList.add("fas"); // 채워진 하트로 변경
+		        	        likeYN = true;
+		        	        alert("좋아요!!");
+		        	        $("#likeCount").text(result);
+						}
+	        		},
+	        		error : function(){
+	        			console.log("통신 오류");
+	        		}
+	        	});
+	        	
 
+
+	        }
+    }
+
+	</script>
     
     <br> <br> <br> <br> <br> <br>
     
@@ -377,7 +474,7 @@ font{
      					}
    				 			str += "<div id='replyContent" + data[i].replyNo + "'>" + data[i].replyContent + "</div>";
    				 			str += "<div id='editContent" + data[i].replyNo + "'style='display:none;'>";
-   				 			str += "<textarea class='form-control' id='update-content" + data[i].replyNo + "' cols='55' rows='2' required>"+data[i].replyContent+"</textarea>";
+   				 			str += "<textarea class='form-control' id='update-content" + data[i].replyNo + "' cols='55' rows='2' style='resize: none' required>"+data[i].replyContent+"</textarea>";
    				 			str += "<button class='login-button' onclick='cancleBtn(" + data[i].replyNo + ");'>취소</button>"
    				 			str += "<button class='login-button' onclick='saveReply(" + data[i].replyNo + ");'>저장하기</button></div>"
 			   		        str += "</td>";

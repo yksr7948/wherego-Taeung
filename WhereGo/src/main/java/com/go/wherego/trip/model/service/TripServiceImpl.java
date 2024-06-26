@@ -75,6 +75,7 @@ public class TripServiceImpl implements TripService{
 	}
 	
 	//조회수 가져오기
+	@Override
 	public int selectCount(String contentId) {
 		
 		int count = tripDao.selectCount(sqlSession, contentId);
@@ -83,6 +84,7 @@ public class TripServiceImpl implements TripService{
 	}
 	
 	//댓글 리스트
+	@Override
 	public ArrayList<Reply> replyList(String contentId){
 		
 		ArrayList<Reply> rList = tripDao.replyList(sqlSession, contentId);
@@ -91,9 +93,28 @@ public class TripServiceImpl implements TripService{
 	}
 	
 	//댓글 작성
+	@Override
 	public int insertReply(Reply r) {
 		
 		int result = tripDao.insertReply(sqlSession, r);
+		
+		return result;
+	}
+	
+	//댓글 수정
+	@Override
+	public int updateReply(Reply r) {
+		
+		int result = tripDao.updateReply(sqlSession, r);
+		
+		return result;
+	}
+	
+	//댓글 삭제
+	@Override
+	public int deleteReply(int replyNo) {
+		
+		int result = tripDao.deleteReply(sqlSession, replyNo);
 		
 		return result;
 	}

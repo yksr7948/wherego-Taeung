@@ -346,5 +346,29 @@ public class TripController {
 		return result;
 	}
 	
+	//댓글 수정
+	@ResponseBody
+	@RequestMapping("updateReply.tl")
+	public int updateReply(String updateContent, int replyNo) {
+		
+		Reply r = new Reply();
+		r.setReplyContent(updateContent);
+		r.setReplyNo(replyNo);
+		
+		int result = tripService.updateReply(r);
+		
+		return result;
+	}
+	
+	//댓글 삭제
+	@ResponseBody
+	@RequestMapping("deleteReply.tl")
+	public int deleteReply(int replyNo) {
+		
+		int result = tripService.deleteReply(replyNo);
+		
+		return result;
+	}
+	
 }
 

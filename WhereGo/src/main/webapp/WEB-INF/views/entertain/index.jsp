@@ -1,41 +1,77 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>이상형월드컵</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="resources/opensc/style.css"> <!-- CSS 파일을 참조 -->
+<meta charset="UTF-8">
+<title>이상형 월드컵</title>
+<style>
+body {
+	font-family: Arial, sans-serif;
+	padding: 20px;
+}
+
+.option-selector {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	max-width: 300px;
+}
+
+img {
+	width: 500px;
+	height: 500px;
+	margin: 10px;
+}
+
+#imageContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#buttons {
+	display: none;
+	margin-top: 20px;
+}
+
+button {
+	margin: 5px;
+	padding: 10px 20px;
+	font-size: 16px;
+}
+</style>
 </head>
 <body>
-   
-    <h1>이상형 월드컵</h1>
-    <p id="cal"></p>
-    <p id="round"></p>
-    <div id="imageContainer">
-        <div>
-            <img id="image" onclick="handleImageSelection(0)">
-            <p id="imageText"></p>
-        </div>
-        <div>
-            <img id="images" onclick="handleImageSelection(1)">
-            <p id="imagesText"></p>
-        </div>
-    </div>
-    <!-- <script src="resources/opensc/script.js"></script> --> <!-- JavaScript 파일을 참조 -->
-    <script>
-    const imageNames = [
-        "고기볶음밥.jpg", "김밥.jpg", "비빔밥.jpg", "치킨.jpg", "삼겹살.jpg", 
-        "비빔밥2.jpg", "크림스파게티.jpg", "만두.jpg", "떡볶이.jpg", "짜장면.jpg", 
-        "짬뽕.jpg", "돈까스.jpg", "분짜.jpg", "뭔지안보임.jpg", "볶음밥.jpg", "피자.jpg"
-    ];
 
-    // 파일 이름 배열을 'image/' 폴더 경로가 붙은 배열로 변환하는 함수
-    function prependImagePath(imageNames) {
-        return imageNames.map(imageName => 'resources/image/${imageName}');
-    }
+	<h1>이상형 월드컵</h1>
+	<h1 id="round"></h1>
+	<p id="cal"></p>
+	<div class="option-selector">
+		<label> <input type="radio" name="option" value="16" checked onchange="handleRoundChange(this)"> 16강 </label>
+		<label> <input type="radio" name="option" value="32" onchange="handleRoundChange(this)"> 32강 </label>
+		<label> <input type="radio" name="option" value="64" onchange="handleRoundChange(this)"> 64강 </label>
+		<button id="start-worldcup" onclick="initializeIdealTypeWorldCup()">시작</button>
+	</div>
+	<div id="buttons">
+		<button id="confirmButton">확인</button>
+		<button onclick="restartWorldCup()">다시하기</button>
+	</div>
 
-    let images = prependImagePath(imageNames);
+	<div id="imageContainer">
+		<div>
+			<img id="image" onclick="handleImageSelection(0)">
+			<p id="imageText"></p>
+		</div>
+		<div>
+			<img id="images" onclick="handleImageSelection(1)">
+			<p id="imagesText"></p>
+		</div>
+	</div>
+
+	<script>
+    var jsonData = '${list}';
+    var images = JSON.parse(jsonData);
     let selectedImages = [];
     let currentPairIndex = 0;
     let round = 16;
@@ -46,13 +82,12 @@
 
     function displayCurrentImagePair() {
         if (currentPairIndex < images.length - 1) {
-            document.getElementById('image').src = images[currentPairIndex];
-            document.getElementById('images').src = images[currentPairIndex+1];
-            document.getElementById('imageText').innerText = images[currentPairIndex].split('/')[1].slice(0, -4);
-            document.getElementById('imagesText').innerText = images[currentPairIndex+1].split('/')[1].slice(0, -4);
+            document.getElementById('image').src = images[currentPairIndex].firstImage2;
+            document.getElementById('images').src = images[currentPairIndex + 1].firstImage2;
+            document.getElementById('imageText').innerText = images[currentPairIndex].title;
+            document.getElementById('imagesText').innerText = images[currentPairIndex + 1].title;
         }
     }
-
 
     function handleImageSelection(selectedImageIndex) {
         selectedImages.push(images[currentPairIndex + selectedImageIndex]);
@@ -62,33 +97,78 @@
             displayCurrentImagePair();
         } else if (selectedImages.length > 1) {
             images = selectedImages;
+            shuffleImages();
             selectedImages = [];
             currentPairIndex = 0;
             round = round / 2;
-            document.getElementById('round').innerText = round + "강 대전";
-            displayCurrentImagePair();
+            if (round == 2) {
+                document.getElementById('round').innerText = "결승전";
+                displayCurrentImagePair();
+            } else {
+                document.getElementById('round').innerText = round + "강 대전";
+                displayCurrentImagePair();
+            }
         } else {
-            // 우승자가 정해졌을 때
-            const winnerImageName = selectedImages[0].split('/')[1].slice(0, -4); // 'image/' 부분을 제거
-            document.getElementById('cal').innerText = "우승자는: " + winnerImageName;
-            document.getElementById('image').src = selectedImages[0];
+            const winnerImageName = selectedImages[0].title;
+            document.getElementById('image').src = selectedImages[0].firstImage2;
             document.getElementById('images').style.display = "none";
             document.getElementById('round').innerText = "우승!";
             document.getElementById('imageText').innerText = "";
             document.getElementById('imagesText').innerText = "";
+            ///document.getElementById('image').onclick = null;
+            //document.getElementById('buttons').style.display = 'block';
+            
+            //alert("우승자는: " + winnerImageName+"!");
+
+            // Show buttons and bind click event to confirm button
+            /* var confirmButton = document.getElementById('confirmButton');
+            confirmButton.onclick = function() {
+                $.ajax({
+                    url: "worldcupresult.en",
+                    type: "post",
+                    data: {
+                        winner: winnerImageName
+                    },
+                    success: function() {
+                        alert("우승자가 확인되었습니다!");
+                        // Additional actions on success if needed
+                    },
+                    error: function() {
+                        console.log("통신오류");
+                    }
+                });
+            }; */
         }
-        
     }
 
     function initializeIdealTypeWorldCup() {
-        shuffleImages();
+        round = parseInt(document.querySelector('input[name="option"]:checked').value); // 선택된 라디오 버튼 값 가져오기
         document.getElementById('round').innerText = round + "강 대전";
+        shuffleImages();
+        images = images.slice(0, round);
+        currentPairIndex = 0;
+        selectedImages = [];
+        /* document.getElementById('buttons').style.display = 'none'; // Hide buttons initially
+        document.getElementById('image').onclick = function() {
+            handleImageSelection(0);
+        }; // Enable image click event
+        document.getElementById('images').onclick = function() {
+            handleImageSelection(1);
+        }; // Enable images click event */
         displayCurrentImagePair();
     }
 
-    initializeIdealTypeWorldCup();
+    function handleRoundChange(radioButton) {
+        round = parseInt(radioButton.value);
+        initializeIdealTypeWorldCup();
+    }
 
-    </script>
+    function restartWorldCup() {
+        initializeIdealTypeWorldCup();
+    }
+
+    initializeIdealTypeWorldCup();
+	</script>
+
 </body>
 </html>
-    

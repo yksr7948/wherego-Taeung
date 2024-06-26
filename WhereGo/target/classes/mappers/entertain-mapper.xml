@@ -19,12 +19,7 @@
 
 	<select id="getTop100" resultMap="tripResultSet">
 		<![CDATA[SELECT CONTENT_ID
-		,CONTENT_TYPE_ID
 		,TITLE
-		,ADDR1
-		,ADDR2
-		,ZIP_CODE
-		,AREA_CODE
 		,FIRST_IMAGE2
 		,COUNT
 		,ROWNUM

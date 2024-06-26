@@ -2,6 +2,7 @@ package com.go.wherego.trip.model.service;
 
 import java.util.ArrayList;
 
+import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
 import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
@@ -28,6 +29,24 @@ public interface TripService {
 	
 	//조회수 조회
 	int selectCount(String contentId);
+	
+	//좋아요 count 조회
+	int selectLikeCount(String contentId);
+	
+	//좋아요 여부
+	boolean likeYN(Likes like);
+	
+	//좋아요 정보 추가
+	int insertLike(Likes like);
+	
+	//좋아요 count 증가
+	int increaseLike(Likes like);
+
+	//좋아요 count 감소
+	int decreaseLike(Likes like);
+	
+	//좋아요 정보 삭제
+	int deleteLike(Likes like);
 	
 	//댓글 리스트
 	ArrayList<Reply> replyList(String contentId);

@@ -14,6 +14,8 @@
 		<result column="ZIP_CODE" property="zipCode"/>
 		<result column="AREA_CODE" property="areaCode"/>
 		<result column="FIRST_IMAGE2" property="firstImage2"/>
+		<result column="COUNT" property="count"/>
+		<result column="LIKE_COUNT" property="likeCount"/>
 	</resultMap>
 	
 	<!-- Reply ResultMap -->
@@ -78,6 +80,7 @@
 			  ,AREA_CODE
 			  ,FIRST_IMAGE2
 			  ,COUNT
+			  ,LIKE_COUNT
 		FROM TRIP 
 		WHERE FIRST_IMAGE2 IS NOT NULL 
 		AND CONTENT_TYPE_ID='12'
@@ -94,6 +97,7 @@
 			  ,AREA_CODE
 			  ,FIRST_IMAGE2
 			  ,COUNT
+			  ,LIKE_COUNT
 		FROM TRIP 
 		WHERE FIRST_IMAGE2 IS NOT NULL 
 		AND CONTENT_TYPE_ID='12'
@@ -113,6 +117,52 @@
 		FROM TRIP
 		WHERE CONTENT_ID = #{contentId}
 	</select>
+	
+	<!-- 좋아요 count 조회 -->
+	<select id="selectLikeCount" parameterType="string" resultType="_int">
+		SELECT LIKE_COUNT
+		FROM TRIP
+		WHERE CONTENT_ID = #{contentId}
+	</select> 
+	
+	<!-- 좋아요 여부 -->
+	<select id="likeYN" parameterType="Likes" resultType="string">
+		SELECT USER_ID
+		FROM LIKES 
+		WHERE USER_ID= #{userId} 
+		AND CONTENT_ID= #{contentId}
+	</select>
+	
+	<!-- 좋아요 정보 추가 -->
+	<insert id="insertLike" parameterType="Likes">
+		INSERT INTO LIKES(LIKE_NO, 
+						  USER_ID, 
+						  CONTENT_ID)
+                  	VALUES(SEQ_LIKE.NEXTVAL,
+                  		   #{userId},
+                  		   #{contentId})
+	</insert>
+	
+	<!-- 좋아요 count 증가 -->
+	<update id="increaseLike" parameterType="Likes">
+		UPDATE TRIP 
+		SET LIKE_COUNT = LIKE_COUNT+1
+		WHERE CONTENT_ID = #{contentId}
+	</update>
+	
+	<!-- 좋아요 정보 삭제 -->
+	<delete id="deleteLike" parameterType="Likes">
+		DELETE FROM LIKES 
+		WHERE USER_ID= #{userId} 
+		AND CONTENT_ID= #{contentId}
+	</delete>
+	
+	<!-- 좋아요 count 감소 -->
+	<update id="decreaseLike" parameterType="Likes">
+		UPDATE TRIP 
+		SET LIKE_COUNT = LIKE_COUNT-1
+		WHERE CONTENT_ID = #{contentId}
+	</update>
 	
 	<!-- 댓글 리스트 -->
 	<select id="replyList" parameterType="string" resultMap="replyResultSet">

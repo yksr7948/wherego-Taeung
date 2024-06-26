@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.go.wherego.trip.model.dao.TripDao;
+import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
 import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
@@ -81,6 +82,58 @@ public class TripServiceImpl implements TripService{
 		int count = tripDao.selectCount(sqlSession, contentId);
 		
 		return count;
+	}
+	
+	//좋아요 count 조회
+	@Override
+	public int selectLikeCount(String contentId) {
+		
+		int likeCount = tripDao.selectLikeCount(sqlSession, contentId);
+		
+		return likeCount;
+	}
+	
+	//좋아요 여부
+	@Override
+	public boolean likeYN(Likes like) {
+		
+		boolean flag = tripDao.likeYN(sqlSession, like);
+		
+		return flag;
+	}
+	
+	//좋아요 정보 추가
+	@Override
+	public int insertLike(Likes like) {
+		
+		int result = tripDao.insertLike(sqlSession, like);
+		
+		return result;
+	}
+	
+	//좋아요 count 증가
+	public int increaseLike(Likes like) {
+		
+		int result = tripDao.increaseLike(sqlSession, like);
+		
+		return result;
+	}
+	
+	//좋아요 count 감소
+	public int decreaseLike(Likes like) {
+		
+		int result = tripDao.decreaseLike(sqlSession, like);
+		
+		return result;
+	}
+	
+	//좋아요 정보 삭제
+	@Override
+	public int deleteLike(Likes like) {
+		
+		int result = tripDao.deleteLike(sqlSession, like);
+		
+		return result;
 	}
 	
 	//댓글 리스트

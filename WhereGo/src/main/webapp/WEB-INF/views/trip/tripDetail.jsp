@@ -16,6 +16,7 @@ main {
 font{
 	cursor: auto;
 }
+
 /* 헤더부분 */
 .main-title {
 	font-size: 40px;
@@ -32,6 +33,24 @@ font{
     display: flex;
     align-items: center;
 }
+
+/* 좋아요 버튼 */
+#likeButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    float: right;
+}
+
+#likeButton:hover {
+    transform: scale(1.1);
+}
+
+#likeButton:focus {
+    outline: none;
+}
+
 
 /* 이미지부분 */
 .image-info {
@@ -72,7 +91,8 @@ font{
 	height: 400px;
 }
 
-/* 댓글 영역*/
+
+/* 댓글 영역 */
 #reply-container {
 	width: 100%;
 	border-collapse: collapse;
@@ -83,7 +103,7 @@ font{
 	border: 1px solid #ddd;
 	border-radius: 4px;
 }
-#content {
+#content, #update-content {
 	width: 100%;
 	height: 100px;
 	padding: 10px;
@@ -117,18 +137,12 @@ font{
 	width: 48px;
 	height: auto;
 }
-.user-id {
-	font-weight: bold;
-	margin-right: 10px;
-}
-.date {
-	color: #888;
-}
 .update{
 	float: right;
 	cursor: pointer;
 	color: #888;
 }
+
 </style>
 </head>
 <body>
@@ -143,13 +157,18 @@ font{
     	<span id="date">제작일 : ${t.createdTime }<br>수정일 : ${t.modifiedTime} </span>
     	<span id="count">
     		<img alt="" src="resources/img/trip-board/eye-icon.png">&nbsp;${t.count } 
-    		&nbsp; &nbsp;
-    		<img alt="" src="resources/img/trip-board/heart-icon.png">&nbsp;${t.likeCount }
     	</span> 
     </div>
     
+    <button id="likeButton" onclick="return like();">
+	<b id="heartIcon" class="far fa-heart" style="font-size: 30px; color: #ff5a5f;"></b>
+	</button>
+	
+	<br> <br>
+	
     <hr> 
     
+	
     <br> <br> <br>
 
     <div class="image-info">
@@ -296,6 +315,11 @@ font{
     
     <br> <br> <hr> <br> <br> <br>
     
+    <!-- 좋아요 기능 -->
+
+    
+    <br> <br> <br> <br> <br> <br>
+    
 	<!-- 댓글 작성 -->
 	<h3 style="font-weight: 900;">댓글(<span id="rcount"></span>)</h3>
     <table id="reply-container">
@@ -315,7 +339,7 @@ font{
             </tr>
         </thead>
         <tbody>
-            
+
         </tbody>
     </table>
     
@@ -330,38 +354,43 @@ font{
     		
     		var loginUser = "${loginUser.userId}";
     		
-    		$.ajax({
+     		$.ajax({
     			url : "replyList.tl",
-    			data: {
-    				contentId : ${t.contentId}
-    			},
-    			success : function(data){
+     			data: {
+     				contentId : ${t.contentId}
+     			},
+     			success : function(data){
     				
     				var str = ""
     				
     				for(var i in data){
-    					str += "<tr>";
+     					str += "<tr>";
     					str += "<th><img src='resources/img/trip-board/user_profile.png'></th>";
     					str += "<td>";
-    					str += "<span class='user-id'>"+data[i].userId+"</span>";
-    					str += "<span class='date'>"+data[i].createDate+"</span>";
-    					if(loginUser === data[i].userId){
-	    					str += "<span class='update'><a onclick='updateReply("+data[i].replyNo+");'>수정하기</a></span>"; 
-	    					str += "<span class='update'><font> &nbsp; / &nbsp;</font></span>";
-	    					str += "<span class='update'><a>삭제하기</a></span>";
-    					}
-    					str += "<div>"+data[i].replyContent+"<div>";
-    					str += "</td>";
-    					str += "</tr>";
-    				}
+   						str += "<span style='font-weight: bold; margin-right: 10px;'>"+data[i].userId+"</span>";
+   						
+     					str += "<span style='color:#888'>"+data[i].createDate+"</span>";
+   					if(loginUser === data[i].userId){
+ 	    					str += "<span class='update'><a onclick='deleteReply("+data[i].replyNo+")'>삭제하기</a></span>";
+ 	    					str += "<span class='update'><font> &nbsp; / &nbsp;</font></span>";
+ 	    					str += "<span class='update'><a onclick='updateBtn("+data[i].replyNo+");'>수정하기</a></span>"; 
+     					}
+   				 			str += "<div id='replyContent" + data[i].replyNo + "'>" + data[i].replyContent + "</div>";
+   				 			str += "<div id='editContent" + data[i].replyNo + "'style='display:none;'>";
+   				 			str += "<textarea class='form-control' id='update-content" + data[i].replyNo + "' cols='55' rows='2' required>"+data[i].replyContent+"</textarea>";
+   				 			str += "<button class='login-button' onclick='cancleBtn(" + data[i].replyNo + ");'>취소</button>"
+   				 			str += "<button class='login-button' onclick='saveReply(" + data[i].replyNo + ");'>저장하기</button></div>"
+			   		        str += "</td>";
+			   		        str += "</tr>";
+     				}
     				
-    				$("#reply-container tbody").html(str);
-    				$("#rcount").text(data.length);
-    			},
-    			error: function(){
-    				console.log("통신오류");
-    			}
-    		});
+     				$("#reply-container tbody").html(str);
+     				$("#rcount").text(data.length);
+     			},
+     			error: function(){
+     				console.log("통신오류");
+     			}
+     		});
     	}
 
      	//댓글 작성
@@ -392,13 +421,70 @@ font{
     			}
     		});
     	}
+  	
+     	//수정 버튼 클릭시
+     	function updateBtn(replyNo) {
+     		$("#replyContent"+replyNo).css({"display":"none"});
+     		$("#editContent"+replyNo).css({"display":"block"});
+		}
+		
+     	//취소 버튼 클릭시
+     	function cancleBtn(replyNo) {
+     		$("#replyContent"+replyNo).css({"display":"block"});
+     		$("#editContent"+replyNo).css({"display":"none"});
+		}
      	
-     	//댓글 수정
-     	function updateReply(replyNo){
+     	//저장 버튼 클릭시
+     	function saveReply(replyNo){
      		
-     		console.log(replyNo);
+     		var updateContent = $("#update-content"+replyNo).val();
      		
-     	} 
+     		$.ajax({
+     			url : "updateReply.tl",
+     			data : {
+     				updateContent,
+     				replyNo
+     			},
+     			success : function(result){
+     				
+     				alert("댓글 수정 성공!!");
+     	     		$("#replyContent"+replyNo).css({"display":"block"});
+     	     		$("#editContent"+replyNo).css({"display":"none"});
+     	     		replyList();
+     			},
+     			error : function(){
+     				console.log("통신오류");
+     			}
+     		});
+     	}
+     	
+     	//댓글 삭제
+     	function deleteReply(replyNo){
+     		
+     		var result = confirm("댓글을 삭제하시면 다시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?");
+     		
+     		if(result){
+     			$.ajax({
+     				url : "deleteReply.tl",
+     				data : {
+     					replyNo
+     				},
+     				success : function(data){
+     					if(data > 0){
+	     					alert("댓글 삭제 되었습니다.");
+	     					replyList();
+     					}else{
+     						alert("댓글 삭제 실패");
+     					}
+     				},
+     				error : function(){
+     					console.log("통신오류");
+     				}
+     			});
+     			
+     		}
+     		
+     	}
     </script>
     
 </main>

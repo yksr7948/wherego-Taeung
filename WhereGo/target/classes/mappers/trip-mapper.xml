@@ -139,4 +139,17 @@
                				   #{replyContent},
                				   SYSDATE)
 	</insert>
+	
+	<!-- 댓글 수정 -->
+	<update id="updateReply" parameterType="Reply">
+		UPDATE TRIP_REPLY 
+		SET REPLY_CONTENT = #{replyContent} 
+		WHERE REPLY_NO = #{replyNo}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="_int">
+		DELETE TRIP_REPLY 
+		WHERE REPLY_NO = #{replyNo}
+	</delete>
 </mapper>

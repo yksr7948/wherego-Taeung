@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
 import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
@@ -57,12 +58,60 @@ public class TripDao {
 	public int increaseCount(SqlSessionTemplate sqlSession, String contentId) {
 
 		return sqlSession.update("tripMapper.increaseCount", contentId);
+		
 	}
 	
 	//조회수 가져오기
 	public int selectCount(SqlSessionTemplate sqlSession, String contentId) {
 		
-		return sqlSession.selectOne("tripMapper.selectCount", contentId);
+		Integer count = sqlSession.selectOne("tripMapper.selectCount", contentId);
+	    return (count == null) ? 0 : count;
+	}
+	
+	//좋아요 count 조회
+	public int selectLikeCount(SqlSessionTemplate sqlSession, String contentId) {
+		
+		return sqlSession.selectOne("tripMapper.selectLikeCount", contentId);
+	}
+	
+	//좋아요 여부
+	public boolean likeYN(SqlSessionTemplate sqlSession, Likes like) {
+		
+		String userId = sqlSession.selectOne("tripMapper.likeYN", like);
+		
+		boolean flag = false;
+		
+		if(userId == null) {
+			flag = false;
+		}else {
+			flag = true;
+		}
+		
+		return flag;
+	}
+	
+	//좋아요 정보 추가
+	public int insertLike(SqlSessionTemplate sqlSession, Likes like) {
+		
+		return sqlSession.insert("tripMapper.insertLike", like);
+	}
+	
+	//좋아요 count 증가
+	public int increaseLike(SqlSessionTemplate sqlSession, Likes like) {
+		
+		return sqlSession.update("tripMapper.increaseLike", like);
+	}
+	
+	//좋아요 count 감소
+	public int decreaseLike(SqlSessionTemplate sqlSession, Likes like) {
+		
+		return sqlSession.update("tripMapper.decreaseLike", like);
+	}
+	
+	//좋아요 정보 삭제
+	public int deleteLike(SqlSessionTemplate sqlSession, Likes like) {
+		
+		return sqlSession.delete("tripMapper.deleteLike", like);
 	}
 	
 	//댓글 리스트

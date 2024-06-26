@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.trip.model.service.TripService;
+import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
 import com.go.wherego.trip.model.vo.Reply;
 import com.go.wherego.trip.model.vo.Trip;
@@ -74,7 +75,6 @@ public class TripController {
 		br.close();
 		urlCon.disconnect();
 		
-		System.out.println(str);
 		//json 문자열 형태이기때문에 그대로 반납하여도 json화되어서 넘어감 
 		
 		return str;
@@ -251,7 +251,12 @@ public class TripController {
 		JsonObject items = body.getAsJsonObject("items");
 		JsonArray item = items.getAsJsonArray("item");
 		
+		if (item == null || item.size() == 0) {
+			return "map/tripDetailNotFound"; // Redirect to Not Found page
+		}
+		
 		JsonObject it = item.get(0).getAsJsonObject();
+		
 		
 		// 날짜 형식 지정
 		DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
@@ -269,6 +274,7 @@ public class TripController {
 		tripService.increaseCount(contentId);
 		//조회수 가져오기
 		int count = tripService.selectCount(contentId);
+		int likeCount = tripService.selectLikeCount(contentId);
 		
 		Trip t = new Trip();
 		
@@ -287,6 +293,7 @@ public class TripController {
 		t.setMapx(it.get("mapx").getAsString());
 		t.setMapy(it.get("mapy").getAsString());
 		t.setCount(count);
+		t.setLikeCount(likeCount);
 
 		br.close();
 		urlCon.disconnect();
@@ -324,6 +331,70 @@ public class TripController {
 		}
 		
 		return responseStr;
+	}
+	
+	//좋아요 여부
+	@ResponseBody
+	@RequestMapping(value="likeYN.tl", produces="application/json;charset=UTF-8")
+	public boolean likeYN(Likes like) {
+		
+		boolean flag = tripService.likeYN(like); 
+		
+		return flag;
+	}
+	
+	//좋아요 정보 추가
+	@ResponseBody
+	@RequestMapping("insertLike.tl")
+	public int insertLike(String userId, String contentId) {
+		
+		Likes like = new Likes();
+		like.setUserId(userId);
+		like.setContentId(contentId);
+		
+		int result = tripService.insertLike(like);
+		
+		
+		//좋아요 정보 추가되면 좋아요 count 증가
+		if(result > 0) {
+			int result2 = tripService.increaseLike(like);
+			
+			//좋아요 증가되면 좋아요 수 가져오기
+			if(result2 > 0) {
+				int likeCount = tripService.selectLikeCount(contentId);
+				
+				return likeCount;
+			}
+		}
+		
+		return 0;
+	}
+	
+	//좋아요 정보 삭제
+	@ResponseBody
+	@RequestMapping("deleteLike.tl")
+	public int deleteLike(String userId, String contentId) {
+		
+		Likes like = new Likes();
+		
+		like.setUserId(userId);
+		like.setContentId(contentId);
+		
+		int result = tripService.deleteLike(like);
+		
+		//좋아요 정보 삭제되면 좋아요 count 감소
+		if(result > 0) {
+			int result2 = tripService.decreaseLike(like);
+			
+			//좋아요 감소되면 좋아요 수 가져오기
+			if(result2 > 0) {
+				int likeCount = tripService.selectLikeCount(contentId);
+				
+				return likeCount;
+			}
+		}
+		
+		return 0;
 	}
 	
 	//댓글 리스트

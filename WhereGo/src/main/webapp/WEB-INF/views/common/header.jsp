@@ -213,6 +213,14 @@
                 </ul>
               </div>
             </li>
+            <li><a href="">놀이</a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="worldcup.en">여행지 월드컵</a></li>
+                  <li><a href="#">룰렛</a></li>
+                </ul>
+              </div>
+            </li>
           </ul>
         </div>
         <div class="search-bar">

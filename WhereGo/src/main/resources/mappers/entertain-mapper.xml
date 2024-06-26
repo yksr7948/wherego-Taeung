@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="entertainMapper">
+
+	<!-- Trip ResultMap -->
+	<resultMap type="Trip" id="tripResultSet">
+		<result column="CONTENT_ID" property="contentId" />
+		<result column="CONTENT_TYPE_ID" property="contentTypeId" />
+		<result column="TITLE" property="title" />
+		<result column="ADDR1" property="addr1" />
+		<result column="ADDR2" property="addr2" />
+		<result column="ZIP_CODE" property="zipCode" />
+		<result column="AREA_CODE" property="areaCode" />
+		<result column="FIRST_IMAGE2" property="firstImage2" />
+	</resultMap>
+
+
+	<select id="getTop100" resultMap="tripResultSet">
+		<![CDATA[SELECT CONTENT_ID
+		,TITLE
+		,FIRST_IMAGE2
+		,COUNT
+		,ROWNUM
+		FROM (
+		SELECT *
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		AND CONTENT_TYPE_ID = '12'
+		ORDER BY COUNT DESC
+		)	
+		WHERE ROWNUM <=]]> 100	
+
+	</select>
+
+
+
+
+	<!-- 지역별 데이터 저장 -->
+	<insert id="saveArea" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="Trip">
+			INTO TRIP(CONTENT_ID
+			,CONTENT_TYPE_ID
+			,TITLE
+			,ADDR1
+			,ADDR2
+			,ZIP_CODE
+			,AREA_CODE
+			,FIRST_IMAGE2)
+			VALUES(#{Trip.contentId}
+			,#{Trip.contentTypeId}
+			,#{Trip.title}
+			,#{Trip.addr1}
+			,#{Trip.addr2}
+			,#{Trip.zipCode}
+			,#{Trip.areaCode}
+			,#{Trip.firstImage2})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+
+	<!-- 여행지 총 개수 -->
+	<select id="listCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		AND CONTENT_TYPE_ID='12'
+	</select>
+
+	<!-- 지역별 여행지 총 개수 -->
+	<select id="areaListCount" parameterType="string"
+		resultType="_int">
+		SELECT COUNT(*)
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		AND CONTENT_TYPE_ID='12'
+		AND AREA_CODE = #{areaCode}
+	</select>
+
+	<!-- 여행지 목록 조회 -->
+	<select id="selectList" resultMap="tripResultSet">
+		SELECT CONTENT_ID
+		,CONTENT_TYPE_ID
+		,TITLE
+		,ADDR1
+		,ADDR2
+		,ZIP_CODE
+		,AREA_CODE
+		,FIRST_IMAGE2
+		,COUNT
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		AND CONTENT_TYPE_ID='12'
+	</select>
+
+	<!-- 지역별 여행지 목록 조회 -->
+	<select id="selectAreaList" resultMap="tripResultSet">
+		SELECT CONTENT_ID
+		,CONTENT_TYPE_ID
+		,TITLE
+		,ADDR1
+		,ADDR2
+		,ZIP_CODE
+		,AREA_CODE
+		,FIRST_IMAGE2
+		,COUNT
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		AND CONTENT_TYPE_ID='12'
+		AND AREA_CODE = ${areaCode}
+	</select>
+
+	<!-- 조회수 증가 -->
+	<update id="increaseCount" parameterType="string">
+		UPDATE TRIP
+		SET COUNT = COUNT +1
+		WHERE CONTENT_ID = #{contentId}
+	</update>
+
+	<!-- 조회수 가져오기 -->
+	<select id="selectCount" parameterType="string"
+		resultType="_int">
+		SELECT COUNT
+		FROM TRIP
+		WHERE CONTENT_ID = #{contentId}
+	</select>
+
+	
+
+
+</mapper>

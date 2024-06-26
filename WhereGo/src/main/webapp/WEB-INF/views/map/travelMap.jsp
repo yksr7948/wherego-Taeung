@@ -105,26 +105,6 @@
         #searchBtn:hover {
             background-color: #555;
         }
-        #suggestions {
-            border: 1px solid #ddd;
-            border-top: none;
-            max-height: 200px;
-            overflow-y: auto;
-            position: absolute;
-            width: 300px;
-            background: #fff;
-            z-index: 1000;
-            display: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        #suggestions div {
-            padding: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        #suggestions div:hover {
-            background-color: #f1f1f1;
-        }
         #viewDetailsLink {
             display: block;
             margin-top: 20px;
@@ -145,7 +125,6 @@
     <div id="searchForm">
         <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
         <button id="searchBtn">검색</button>
-        <div id="suggestions"></div>
     </div>
     <div id="mapContainer">
         <div id="map"></div>
@@ -339,43 +318,6 @@
                 window.location.href = '${pageContext.request.contextPath}/travelMap?keyword=' + encodeURIComponent(keyword);
             }
         });
-
-        document.getElementById('searchInput').addEventListener('input', function() {
-            var term = document.getElementById('searchInput').value;
-            if (term.length >= 2) {
-                fetchRelatedTerms(term);
-            } else {
-                document.getElementById('suggestions').style.display = 'none';
-            }
-        });
-
-        function fetchRelatedTerms(term) {
-            fetch('${pageContext.request.contextPath}/relatedSearchTerms?term=' + encodeURIComponent(term))
-                .then(response => response.json())
-                .then(data => {
-                    displaySuggestions(data);
-                });
-        }
-
-        function displaySuggestions(suggestions) {
-            var suggestionsContainer = document.getElementById('suggestions');
-            suggestionsContainer.innerHTML = '';
-
-            if (suggestions.length > 0) {
-                suggestions.forEach(term => {
-                    var suggestionDiv = document.createElement('div');
-                    suggestionDiv.textContent = term;
-                    suggestionDiv.addEventListener('click', function() {
-                        document.getElementById('searchInput').value = term;
-                        suggestionsContainer.style.display = 'none';
-                    });
-                    suggestionsContainer.appendChild(suggestionDiv);
-                });
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        }
     </script>
 </body>
 </html>

@@ -20,11 +20,30 @@
             display: flex;
             width: 100%;
             height: calc(100vh - 60px);
+            position: relative;
         }
         #map {
             width: 100%;
             height: 100%;
             transition: width 0.3s;
+        }
+        /* '내 위치로 이동하기' 버튼 스타일 */
+        #currentLocationBtn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 16px;
+        }
+        #currentLocationBtn:hover {
+            background-color: #555;
         }
         #sidebar {
             width: 30%;
@@ -127,6 +146,7 @@
         <button id="searchBtn">검색</button>
     </div>
     <div id="mapContainer">
+        <button id="currentLocationBtn" onclick="getCurrentLocation()">내 위치로 이동하기</button>
         <div id="map"></div>
         <div id="sidebar">
             <h2 id="title"></h2>
@@ -153,25 +173,23 @@
         var touristData = '${touristData}';
         var markers = [];
 
+        // 초기 관광지 데이터가 있을 경우 처리
         if (touristData) {
             try {
                 var parsedData = JSON.parse(touristData);
                 var items = parsedData.response.body.items.item;
 
                 if (items && items.length) {
-                    // 검색어와 일치하는 관광지를 찾음
                     var matchedItem = items.find(function(location) {
                         return location.title === keyword;
                     });
 
                     if (matchedItem) {
-                        // 기존 마커들을 모두 제거
                         markers.forEach(function(marker) {
                             marker.setMap(null);
                         });
                         markers = [];
 
-                        // 일치하는 관광지의 마커 추가
                         var marker = new naver.maps.Marker({
                             position: new naver.maps.LatLng(parseFloat(matchedItem.mapy), parseFloat(matchedItem.mapx)),
                             map: map,
@@ -206,7 +224,6 @@
                         map.setCenter(new naver.maps.LatLng(parseFloat(matchedItem.mapy), parseFloat(matchedItem.mapx)));
                         displaySidebar(matchedItem);
                     } else {
-                        // 일치하는 관광지가 없을 경우, 모든 관광지 마커 추가
                         var bounds = new naver.maps.LatLngBounds();
                         items.forEach(function(location) {
                             var marker = new naver.maps.Marker({
@@ -254,14 +271,17 @@
             document.write("No touristData available");
         }
 
+        // 지도 클릭 시 사이드바 숨기기
         naver.maps.Event.addListener(map, 'click', function(e) {
             hideSidebar();
         });
 
+        // 지도 드래그 종료 시 검색 버튼 표시
         naver.maps.Event.addListener(map, 'dragend', function() {
             document.getElementById('searchAgainBtn').style.display = 'block';
         });
 
+        // 현재 위치에서 관광지를 다시 검색하는 함수
         function searchAgain() {
             var center = map.getCenter();
             var mapX = center.lng();
@@ -270,6 +290,7 @@
             window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + encodeURIComponent(mapX) + '&mapY=' + encodeURIComponent(mapY);
         }
 
+        // 사이드바에 관광지 정보 표시
         function displaySidebar(location) {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -304,6 +325,7 @@
             mapDiv.style.width = '70%';
         }
 
+        // 사이드바 숨기기
         function hideSidebar() {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -312,12 +334,115 @@
             mapDiv.style.width = '100%';
         }
 
+        // 검색 버튼 클릭 시 검색 기능 수행
         document.getElementById('searchBtn').addEventListener('click', function() {
             var keyword = document.getElementById('searchInput').value;
             if (keyword) {
                 window.location.href = '${pageContext.request.contextPath}/travelMap?keyword=' + encodeURIComponent(keyword);
             }
         });
+
+        // 내 위치로 이동하고 주변 관광지를 검색하는 함수
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var mapX = position.coords.longitude;
+                    var mapY = position.coords.latitude;
+
+                    // 사용자의 현재 위치로 지도를 이동시키는 코드
+                    var userLocation = new naver.maps.LatLng(mapY, mapX);
+                    map.setCenter(userLocation);
+
+                    // 사용자의 현재 위치에 마커 추가
+                    var marker = new naver.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: "내 위치",
+                        icon: {
+                            url: 'https://navermaps.github.io/maps.js/docs/img/example/pin_spot.png',
+                            size: new naver.maps.Size(24, 37),
+                            anchor: new naver.maps.Point(12, 37)
+                        }
+                    });
+
+                    var infowindow = new naver.maps.InfoWindow({
+                        content: '<div style="width:150px;text-align:center;padding:10px;">내 위치</div>'
+                    });
+
+                    naver.maps.Event.addListener(marker, "mouseover", function(e) {
+                        infowindow.open(map, marker);
+                    });
+
+                    naver.maps.Event.addListener(marker, "mouseout", function(e) {
+                        infowindow.close();
+                    });
+
+                    // 주변 관광지들을 가져와서 표시
+                    fetchNearbyTouristData(mapX, mapY);
+
+                }, function(error) {
+                    alert("Error occurred. Error code: " + error.code);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        // 현재 위치 기반 주변 관광지 데이터를 가져오는 함수
+        function fetchNearbyTouristData(mapX, mapY) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '${pageContext.request.contextPath}/travelMap?mapX=' + mapX + '&mapY=' + mapY, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var touristData = xhr.responseText;
+                    var parsedData = JSON.parse(touristData);
+                    var items = parsedData.response.body.items.item;
+
+                    if (items && items.length) {
+                        markers.forEach(function(marker) {
+                            marker.setMap(null);
+                        });
+                        markers = [];
+
+                        items.forEach(function(location) {
+                            var marker = new naver.maps.Marker({
+                                position: new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)),
+                                map: map,
+                                title: location.title,
+                                icon: {
+                                    url: 'https://navermaps.github.io/maps.js/docs/img/example/pin_default.png',
+                                    size: new naver.maps.Size(70, 70),
+                                    scaledSize: new naver.maps.Size(70, 70),
+                                    origin: new naver.maps.Point(0, 0),
+                                    anchor: new naver.maps.Point(35, 70)
+                                }
+                            });
+
+                            var infowindow = new naver.maps.InfoWindow({
+                                content: '<div style="width:150px;text-align:center;padding:10px;">' + location.title + '</div>'
+                            });
+
+                            naver.maps.Event.addListener(marker, "mouseover", function(e) {
+                                infowindow.open(map, marker);
+                            });
+
+                            naver.maps.Event.addListener(marker, "mouseout", function(e) {
+                                infowindow.close();
+                            });
+
+                            naver.maps.Event.addListener(marker, "click", function(e) {
+                                displaySidebar(location);
+                            });
+
+                            markers.push(marker);
+                        });
+                    } else {
+                        alert("No nearby tourist data found.");
+                    }
+                }
+            };
+            xhr.send();
+        }
     </script>
 </body>
 </html>

@@ -69,10 +69,10 @@ public class TripDao {
 	}
 	
 	//좋아요 count 조회
-	public int selectLikeCount(SqlSessionTemplate sqlSession, String contentId) {
-		
-		return sqlSession.selectOne("tripMapper.selectLikeCount", contentId);
-	}
+    public int selectLikeCount(SqlSessionTemplate sqlSession, String contentId) {
+        Integer count = sqlSession.selectOne("tripMapper.selectLikeCount", contentId);
+        return (count == null) ? 0 : count;
+    }
 	
 	//좋아요 여부
 	public boolean likeYN(SqlSessionTemplate sqlSession, Likes like) {

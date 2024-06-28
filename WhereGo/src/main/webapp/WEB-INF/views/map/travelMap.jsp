@@ -27,7 +27,6 @@
             height: 100%;
             transition: width 0.3s;
         }
-        /* '내 위치로 이동하기' 버튼 스타일 */
         #currentLocationBtn {
             position: absolute;
             top: 10px;
@@ -138,16 +137,47 @@
         #viewDetailsLink:hover {
             background-color: #555;
         }
+        #loadingContainer {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        #loadingContainer.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #loadingAnimation {
+            width: 500px;
+            height: 500px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            transition: background-image 0.5s ease;
+        }
     </style>
 </head>
 <body>
+    <!-- 검색 폼 -->
     <div id="searchForm">
         <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
         <button id="searchBtn">검색</button>
     </div>
+    <!-- 지도와 사이드바를 포함하는 컨테이너 -->
     <div id="mapContainer">
+        <!-- 현재 위치로 이동 버튼 -->
         <button id="currentLocationBtn" onclick="getCurrentLocation()">내 위치로 이동하기</button>
+        <!-- 지도 영역 -->
         <div id="map"></div>
+        <!-- 사이드바 -->
         <div id="sidebar">
             <h2 id="title"></h2>
             <p id="addr1Wrapper"><strong>주소:</strong> <span id="addr1"></span></p>
@@ -157,7 +187,13 @@
             <a id="viewDetailsLink" href="#">관광지 자세히 보기</a>
         </div>
     </div>
+    <!-- 현위치에서 주변 관광지 검색 버튼 -->
     <button id="searchAgainBtn" onclick="searchAgain()">현위치에서 주변 관광지 검색하기</button>
+
+    <!-- 로딩 애니메이션 -->
+    <div id="loadingContainer">
+        <div id="loadingAnimation"></div>
+    </div>
 
     <script>
         var mapX = ${mapX};
@@ -166,14 +202,13 @@
 
         var mapOptions = {
             center: new naver.maps.LatLng(mapY, mapX),
-            zoom: 14  // 줌 레벨
+            zoom: 14
         };
 
         var map = new naver.maps.Map('map', mapOptions);
         var touristData = '${touristData}';
         var markers = [];
 
-        // 초기 관광지 데이터가 있을 경우 처리
         if (touristData) {
             try {
                 var parsedData = JSON.parse(touristData);
@@ -262,26 +297,23 @@
                         map.setZoom(map.getZoom() - 1);
                     }
                 } else {
-                    document.write("No items found in the response");
+                    alert("응답을 찾을 수 없습니다");
                 }
             } catch (e) {
-                document.write("Error parsing JSON data: " + e);
+                alert("JSON 데이터 분석 오류: " + e);
             }
         } else {
-            document.write("No touristData available");
+            alert("관광 데이터가 없습니다");
         }
 
-        // 지도 클릭 시 사이드바 숨기기
         naver.maps.Event.addListener(map, 'click', function(e) {
             hideSidebar();
         });
 
-        // 지도 드래그 종료 시 검색 버튼 표시
         naver.maps.Event.addListener(map, 'dragend', function() {
             document.getElementById('searchAgainBtn').style.display = 'block';
         });
 
-        // 현재 위치에서 관광지를 다시 검색하는 함수
         function searchAgain() {
             var center = map.getCenter();
             var mapX = center.lng();
@@ -290,7 +322,6 @@
             window.location.href = '${pageContext.request.contextPath}/travelMap?mapX=' + encodeURIComponent(mapX) + '&mapY=' + encodeURIComponent(mapY);
         }
 
-        // 사이드바에 관광지 정보 표시
         function displaySidebar(location) {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -325,7 +356,6 @@
             mapDiv.style.width = '70%';
         }
 
-        // 사이드바 숨기기
         function hideSidebar() {
             var sidebar = document.getElementById('sidebar');
             var mapDiv = document.getElementById('map');
@@ -334,7 +364,6 @@
             mapDiv.style.width = '100%';
         }
 
-        // 검색 버튼 클릭 시 검색 기능 수행
         document.getElementById('searchBtn').addEventListener('click', function() {
             var keyword = document.getElementById('searchInput').value;
             if (keyword) {
@@ -342,18 +371,22 @@
             }
         });
 
-        // 내 위치로 이동하고 주변 관광지를 검색하는 함수
+        document.getElementById('searchInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
         function getCurrentLocation() {
             if (navigator.geolocation) {
+                showLoading();
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var mapX = position.coords.longitude;
                     var mapY = position.coords.latitude;
 
-                    // 사용자의 현재 위치로 지도를 이동시키는 코드
                     var userLocation = new naver.maps.LatLng(mapY, mapX);
                     map.setCenter(userLocation);
 
-                    // 사용자의 현재 위치에 마커 추가
                     var marker = new naver.maps.Marker({
                         position: userLocation,
                         map: map,
@@ -377,18 +410,18 @@
                         infowindow.close();
                     });
 
-                    // 주변 관광지들을 가져와서 표시
+                    hideLoading();
                     fetchNearbyTouristData(mapX, mapY);
 
                 }, function(error) {
-                    alert("Error occurred. Error code: " + error.code);
+                    hideLoading();
+                    alert("오류가 발생했습니다. 오류 코드: " + error.code);
                 });
             } else {
-                alert("Geolocation is not supported by this browser.");
+                alert("이 브라우저에서는 위치를 지원하지 않습니다.");
             }
         }
 
-        // 현재 위치 기반 주변 관광지 데이터를 가져오는 함수
         function fetchNearbyTouristData(mapX, mapY) {
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '${pageContext.request.contextPath}/travelMap?mapX=' + mapX + '&mapY=' + mapY, true);
@@ -437,14 +470,50 @@
                             markers.push(marker);
                         });
                     } else {
-                        alert("No nearby tourist data found.");
+                        alert("주변 관광 데이터가 없습니다.");
                     }
+                } else {
+                    alert("관광 데이터를 가져오지 못했습니다.");
                 }
+            };
+            xhr.onerror = function() {
+                alert("관광 데이터를 가져오는 동안 오류가 발생했습니다.");
             };
             xhr.send();
         }
+
+        var loadingInterval;
+        var loadingVisible = false;
+
+        function showLoading() {
+            var loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.classList.add('show');
+            var loadingAnimation = document.getElementById('loadingAnimation');
+            var imageIndex = 1;
+
+            loadingInterval = setInterval(function() {
+                imageIndex = (imageIndex % 5) + 1;
+                loadingAnimation.style.backgroundImage = 'url("<c:url value="/resources/image/loading/load' + imageIndex + '.png" />")';
+            }, 250);
+            loadingVisible = true;
+        }
+
+        function hideLoading() {
+            var loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.classList.remove('show');
+            clearInterval(loadingInterval);
+            loadingVisible = false;
+        }
+
+        function loadData() {
+            showLoading();
+            setTimeout(function() {
+                hideLoading();
+            }, 2000);
+        }
+
+        loadData();
     </script>
-    <!-- 왜 머지 안돼 -->
-    <!-- 아니 이거 또 푸시가안됨 -->
+
 </body>
 </html>

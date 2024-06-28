@@ -367,6 +367,7 @@
 
         function getCurrentLocation() {
             if (navigator.geolocation) {
+                showLoading();
                 navigator.geolocation.getCurrentPosition(function(position) {
                     var mapX = position.coords.longitude;
                     var mapY = position.coords.latitude;
@@ -397,9 +398,11 @@
                         infowindow.close();
                     });
 
+                    hideLoading();
                     fetchNearbyTouristData(mapX, mapY);
 
                 }, function(error) {
+                    hideLoading();
                     alert("Error occurred. Error code: " + error.code);
                 });
             } else {
@@ -408,11 +411,9 @@
         }
 
         function fetchNearbyTouristData(mapX, mapY) {
-            showLoading();
             var xhr = new XMLHttpRequest();
             xhr.open('GET', '${pageContext.request.contextPath}/travelMap?mapX=' + mapX + '&mapY=' + mapY, true);
             xhr.onload = function() {
-                hideLoading();
                 if (xhr.status === 200) {
                     var touristData = xhr.responseText;
                     var parsedData = JSON.parse(touristData);
@@ -459,7 +460,12 @@
                     } else {
                         alert("No nearby tourist data found.");
                     }
+                } else {
+                    alert("Failed to fetch tourist data.");
                 }
+            };
+            xhr.onerror = function() {
+                alert("An error occurred while fetching tourist data.");
             };
             xhr.send();
         }
@@ -468,27 +474,23 @@
         var loadingVisible = false;
 
         function showLoading() {
-            if (!loadingVisible) {
-                var loadingContainer = document.getElementById('loadingContainer');
-                loadingContainer.classList.add('show');
-                var loadingAnimation = document.getElementById('loadingAnimation');
-                var imageIndex = 1;
+            var loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.classList.add('show');
+            var loadingAnimation = document.getElementById('loadingAnimation');
+            var imageIndex = 1;
 
-                loadingInterval = setInterval(function() {
-                    imageIndex = (imageIndex % 5) + 1;
-                    loadingAnimation.style.backgroundImage = 'url("<c:url value="/resources/image/loading/load' + imageIndex + '.png" />")';
-                }, 500);
-                loadingVisible = true;
-            }
+            loadingInterval = setInterval(function() {
+                imageIndex = (imageIndex % 5) + 1;
+                loadingAnimation.style.backgroundImage = 'url("<c:url value="/resources/image/loading/load' + imageIndex + '.png" />")';
+            }, 250);
+            loadingVisible = true;
         }
 
         function hideLoading() {
-            if (loadingVisible) {
-                var loadingContainer = document.getElementById('loadingContainer');
-                loadingContainer.classList.remove('show');
-                clearInterval(loadingInterval);
-                loadingVisible = false;
-            }
+            var loadingContainer = document.getElementById('loadingContainer');
+            loadingContainer.classList.remove('show');
+            clearInterval(loadingInterval);
+            loadingVisible = false;
         }
 
         function loadData() {
@@ -503,4 +505,3 @@
 
 </body>
 </html>
-

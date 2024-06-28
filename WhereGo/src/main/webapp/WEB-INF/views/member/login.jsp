@@ -111,6 +111,8 @@ body {
 				type="password" id="userPwd" name="userPwd" required>
 			<button type="submit">로그인하기</button>
 		</form>
+		<button id="findId" onclick="location.href='findId.en';">아이디 찾기</button>
+		<button id="findPwd" onclick="location.href='findPwd.en;">비밀번호 찾기</button>
 	</div>
 	<div class="social-login-buttons">
 	<a href="naverlogin"><img class="naver-login-img" alt="네이버로그인" src="resources/img/naver_login.png"></a>

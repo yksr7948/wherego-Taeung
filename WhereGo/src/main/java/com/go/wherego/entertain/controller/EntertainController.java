@@ -93,7 +93,7 @@ public class EntertainController {
 			System.out.println("결승전 끝, 우승자는 : "+winnerName+" check : "+check+" 다시하기");
 			ArrayList<Trip>  list = entertainService.getTop100();
 			model.addAttribute("list",new Gson().toJson(list));
-			return "entertain/index";
+			return "entertain/worldcup";
 		}else {
 			System.out.println("결승전 끝, 우승자는 : "+winnerName+" check : "+check+" 랭킹보기");
 			return "entertain/ranking";

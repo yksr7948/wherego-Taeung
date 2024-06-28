@@ -166,13 +166,18 @@
     </style>
 </head>
 <body>
+    <!-- 검색 폼 -->
     <div id="searchForm">
         <input type="text" id="searchInput" placeholder="검색어를 입력하세요">
         <button id="searchBtn">검색</button>
     </div>
+    <!-- 지도와 사이드바를 포함하는 컨테이너 -->
     <div id="mapContainer">
+        <!-- 현재 위치로 이동 버튼 -->
         <button id="currentLocationBtn" onclick="getCurrentLocation()">내 위치로 이동하기</button>
+        <!-- 지도 영역 -->
         <div id="map"></div>
+        <!-- 사이드바 -->
         <div id="sidebar">
             <h2 id="title"></h2>
             <p id="addr1Wrapper"><strong>주소:</strong> <span id="addr1"></span></p>
@@ -182,9 +187,10 @@
             <a id="viewDetailsLink" href="#">관광지 자세히 보기</a>
         </div>
     </div>
+    <!-- 현위치에서 주변 관광지 검색 버튼 -->
     <button id="searchAgainBtn" onclick="searchAgain()">현위치에서 주변 관광지 검색하기</button>
 
-    <!-- Loading Animation -->
+    <!-- 로딩 애니메이션 -->
     <div id="loadingContainer">
         <div id="loadingAnimation"></div>
     </div>
@@ -291,13 +297,13 @@
                         map.setZoom(map.getZoom() - 1);
                     }
                 } else {
-                    alert("No items found in the response");
+                    alert("응답을 찾을 수 없습니다");
                 }
             } catch (e) {
-                alert("Error parsing JSON data: " + e);
+                alert("JSON 데이터 분석 오류: " + e);
             }
         } else {
-            alert("No touristData available");
+            alert("관광 데이터가 없습니다");
         }
 
         naver.maps.Event.addListener(map, 'click', function(e) {
@@ -365,6 +371,12 @@
             }
         });
 
+        document.getElementById('searchInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
         function getCurrentLocation() {
             if (navigator.geolocation) {
                 showLoading();
@@ -403,10 +415,10 @@
 
                 }, function(error) {
                     hideLoading();
-                    alert("Error occurred. Error code: " + error.code);
+                    alert("오류가 발생했습니다. 오류 코드: " + error.code);
                 });
             } else {
-                alert("Geolocation is not supported by this browser.");
+                alert("이 브라우저에서는 위치를 지원하지 않습니다.");
             }
         }
 
@@ -458,14 +470,14 @@
                             markers.push(marker);
                         });
                     } else {
-                        alert("No nearby tourist data found.");
+                        alert("주변 관광 데이터가 없습니다.");
                     }
                 } else {
-                    alert("Failed to fetch tourist data.");
+                    alert("관광 데이터를 가져오지 못했습니다.");
                 }
             };
             xhr.onerror = function() {
-                alert("An error occurred while fetching tourist data.");
+                alert("관광 데이터를 가져오는 동안 오류가 발생했습니다.");
             };
             xhr.send();
         }

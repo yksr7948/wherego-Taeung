@@ -101,7 +101,7 @@
 
     #menu {
       font: bold 20px "malgun gothic";
-      width: 700px;
+      width: 780px;
       height: 50px;
       color: #333;
       line-height: 50px;
@@ -111,10 +111,9 @@
     }
     #menu > ul > li {
       float: left;
-      width: 140px;
+      width: 130px;
       position: relative;
     }
-
     #menu > ul > li > a {
       color: #333;
       transition: color 0.3s;
@@ -134,6 +133,7 @@
       left: 0; 
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      z-index:1;
     }
     .submenu li {
       margin-top: 10px;

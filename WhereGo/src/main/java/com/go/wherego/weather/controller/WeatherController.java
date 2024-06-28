@@ -190,6 +190,9 @@ public class WeatherController {
 	public ModelAndView search(ModelAndView mv,
 							String keyword) {
 		//System.out.println(keyword+"로 검색한 결과페이지 이동하기");
+		//생각하고 있는 기능 : 키워드에 맞는 검색결과를 여행지 / 지도 / 게시판별로 보여주기
+		//여행지의 경우 조회수나 좋아요 수 순서 / 지도는 해당 키워드로 검색한 결과 지도API로 띄우기 / 게시판은 글제목이나 내용별로 구분해서
+		//여행지 찾기(여행지 이름검색)
 		
 		mv.addObject("keyword", keyword);
 		mv.setViewName("common/searchResult");

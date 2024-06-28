@@ -85,7 +85,7 @@
       margin: 0 20px;
     }
     .search-bar input {
-      width: 250px;
+      width: 200px;
       max-width: 400px;
       padding: 10px;
       border: none;
@@ -101,7 +101,7 @@
 
     #menu {
       font: bold 20px "malgun gothic";
-      width: 780px;
+      width: 840px;
       height: 50px;
       color: #333;
       line-height: 50px;
@@ -111,7 +111,7 @@
     }
     #menu > ul > li {
       float: left;
-      width: 130px;
+      width: 140px;
       position: relative;
     }
     #menu > ul > li > a {
@@ -123,7 +123,7 @@
     }
 
     .submenu {
-      width: 140px;
+      width: 150px;
       opacity: 0;
       visibility: hidden;
       transform: translateY(-20px);

@@ -13,6 +13,7 @@
  		<typeAlias type="com.go.wherego.weather.model.vo.Weather" alias="Weather"/>
  		<typeAlias type="com.go.wherego.trip.model.vo.Reply" alias="Reply"/>
  		<typeAlias type="com.go.wherego.trip.model.vo.Likes" alias="Likes"/>
+ 		<typeAlias type="com.go.wherego.entertain.model.vo.WC" alias="WC"/>
  	</typeAliases>
  	
  

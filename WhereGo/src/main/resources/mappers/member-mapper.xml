@@ -12,6 +12,8 @@
 		<result column="EMAIL" property="email"/>
 		<result column="GENDER" property="gender"/>
 		<result column="AGE" property="age"/>
+		<result column="MBTI" property="MBTI"/>
+		<result column="TAG_WORD" property="tagWords"/>
 		<result column="PHONE" property="phone"/>
 		<result column="ENROLL_DATE" property="enrollDate"/>
 		<result column="MODIFY_DATE" property="modifyDate"/>
@@ -123,6 +125,8 @@
 		    ,ENROLL_DATE
 		    ,MODIFY_DATE
 		    ,STATUS
+		    ,TAG_WORD
+		    ,MBTI
 		FROM MEMBER
 		WHERE USER_ID = #{userId}
 		AND STATUS='Y'

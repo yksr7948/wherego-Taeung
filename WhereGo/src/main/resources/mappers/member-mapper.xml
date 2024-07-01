@@ -131,6 +131,14 @@
 		WHERE USER_ID = #{userId}
 		AND STATUS='Y'
 	</select>
+	
+	<select id="findIdByEmail" parameterType="String" resultType="String">
+		SELECT USER_ID
+		FROM MEMBER
+		WHERE EMAIL=#{byEmail}
+		AND STATUS='Y'
+	</select>
+	
 	<update id="insertMBTI" parameterType="Member">
 		UPDATE MEMBER SET MBTI=#{MBTI}
 		WHERE USER_ID=#{userId}
@@ -141,10 +149,7 @@
 		WHERE USER_ID=#{userId}
 	</update>
 	
-	
-	
-	
-	
+
 	<update id="updateMember" parameterType="Member">
 		UPDATE MEMBER
 		SET USER_NAME = #{userName}
@@ -156,6 +161,15 @@
 		WHERE USER_ID = #{userId}
 		AND STATUS = 'Y'
 	</update>
+	
+	<update id="updatePwd" parameterType="Member">
+		UPDATE MEMBER
+		SET USER_PWD=#{userPwd}
+		WHERE USER_ID=#{userId}
+		AND STATUS='Y'
+	</update>
+	
+	
 	
 	<update id="deleteMember" parameterType="string">
 		UPDATE MEMBER

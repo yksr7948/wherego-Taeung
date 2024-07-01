@@ -30,6 +30,10 @@ public interface MemberService {
 	void insertMBTI(Member m);
 
 	void insertWords(Member m);
+
+	String findIdByEmail(String byEmail);
+
+	int updatePwd(Member m);
 	
 
 	

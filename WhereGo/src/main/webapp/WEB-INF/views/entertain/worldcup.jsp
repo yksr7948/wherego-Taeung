@@ -138,8 +138,8 @@ img {
 
 	function displayCurrentImagePair() {
 		if (currentPairIndex < images.length - 1) {
-			document.getElementById('image').src = images[currentPairIndex].firstImage2;
-			document.getElementById('images').src = images[currentPairIndex + 1].firstImage2;
+			document.getElementById('image').src = images[currentPairIndex].firstImage1;
+			document.getElementById('images').src = images[currentPairIndex + 1].firstImage1;
 			document.getElementById('imageText').innerText = images[currentPairIndex].title;
 			document.getElementById('imagesText').innerText = images[currentPairIndex + 1].title;
 		}
@@ -166,7 +166,7 @@ img {
 			}
 		} else {
 			const winnerImageName = selectedImages[0].title;
-			document.getElementById('image').src = selectedImages[0].firstImage2;
+			document.getElementById('image').src = selectedImages[0].firstImage1;
 			document.getElementById('images').style.display = "none";
 			document.getElementById('round').innerText = winnerImageName + " 우승!";
 			document.getElementById('winnerName').innerText = winnerImageName;

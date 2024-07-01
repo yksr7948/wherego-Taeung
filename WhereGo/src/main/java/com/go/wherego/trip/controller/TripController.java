@@ -137,6 +137,7 @@ public class TripController {
 		for(int i=0;i<item.size();i++) {
 
 			JsonObject it = item.get(i).getAsJsonObject();
+			
 
 			list.add(new Trip(it.get("contentid").getAsString()
 							  ,it.get("contenttypeid").getAsString()
@@ -145,6 +146,7 @@ public class TripController {
 							  ,it.get("addr2").getAsString()
 							  ,it.get("zipcode").getAsString()
 							  ,it.get("areacode").getAsString()
+							  ,it.get("firstimage").getAsString()
 							  ,it.get("firstimage2").getAsString()
 						));
 			
@@ -167,27 +169,39 @@ public class TripController {
 	
 	//여행지리스트 페이지로 이동
 	@RequestMapping("tripList.tl")
-	public String tripList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model) {
+	public String tripList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, Model model, String contentTypeId) {
 		
-		int listCount = tripService.listCount();
+		int listCount = tripService.listCount(contentTypeId);
 		int pageLimit = 5;
 		int boardLimit = 12;
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		
-		ArrayList<Trip> tList = tripService.selectList(pi);
+		String type = "";
+		
+		switch (contentTypeId) {
+		case "12": type = "관광지"; break;
+		case "14": type = "문화시설"; break;
+		case "15": type = "축제공연행사"; break;
+		case "32": type = "숙박"; break;
+		case "39": type = "음식점"; break;
+	}
+		
+		ArrayList<Trip> tList = tripService.selectList(pi, contentTypeId);
 		
 		model.addAttribute("pi",pi);
 		model.addAttribute("tList",tList);
+		model.addAttribute("type",type);
 		
 		return "trip/tripList";
 	}
 	
 	//지역별리스트 페이지로 이동
 	@RequestMapping("areaList.tl")
-	public String areaList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String areaCode, Model model) {
+	public String areaList(@RequestParam(value="currentPage", defaultValue="1") int currentPage, String contentTypeId, String areaCode, Model model) {
 		
 		String location = "";
+		String type = "";
 		
 		switch (areaCode) {
 			case "1": location = "서울"; break;
@@ -202,18 +216,30 @@ public class TripController {
 			default: location = "제주"; break;
 		}
 		
-		int areaListCount = tripService.areaListCount(areaCode); 
+		switch (contentTypeId) {
+		case "12": type = "관광지"; break;
+		case "14": type = "문화시설"; break;
+		case "15": type = "축제공연행사"; break;
+		case "32": type = "숙박"; break;
+		case "39": type = "음식점"; break;
+		}
+		
+		Trip t = new Trip();
+		t.setAreaCode(areaCode);
+		t.setContentTypeId(contentTypeId);
+		
+		int areaListCount = tripService.areaListCount(t); 
 		int pageLimit = 5;
 		int boardLimit = 12;
 		
 		PageInfo pi = Pagination.getPageInfo(areaListCount, currentPage, pageLimit, boardLimit);
 		
-		ArrayList<Trip> aList = tripService.selectAreaList(pi, areaCode);
+		ArrayList<Trip> aList = tripService.selectAreaList(pi, t);
 		
 		model.addAttribute("pi",pi);
 		model.addAttribute("aList",aList);
 		model.addAttribute("location",location);
-		model.addAttribute("areaCode",areaCode);
+		model.addAttribute("type",type);
 		
 		return "trip/areaList";
 	}

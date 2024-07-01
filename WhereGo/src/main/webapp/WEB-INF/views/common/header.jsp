@@ -235,7 +235,11 @@
     	$(function(){
     		$("#serach-icon").click(function(){
     			var keyword=$("#search-keyword").val();
-    			location.href="search.wherego?keyword="+keyword;
+    			if(keyword==""){
+    				alert("검색어가 입력되지 않았습니다.");
+    			} else {
+    				location.href="search.wherego?keyword="+keyword;
+    			}
     		})
     	});
     	var input= document.getElementById("search-keyword");

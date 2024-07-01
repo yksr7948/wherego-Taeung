@@ -146,6 +146,7 @@ public class TripDao {
 		return sqlSession.delete("tripMapper.deleteReply", replyNo);
 	}
 	
+	//키워드에 맞는 여행지 조회
 	public ArrayList<Trip> searchTrip(SqlSessionTemplate sqlSession, HashMap map, PageInfo pi) {
 
 		int limit = pi.getBoardLimit();
@@ -156,6 +157,7 @@ public class TripDao {
 		return tList;
 	}
 
+	//키워드에 맞는 여행지 개수
 	public int count(SqlSessionTemplate sqlSession, HashMap map) {
 		return sqlSession.selectOne("tripMapper.countByKeyword", map);
 	}

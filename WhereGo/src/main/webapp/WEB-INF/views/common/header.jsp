@@ -219,7 +219,7 @@ li {
               <div class="submenu">
                 <ul>
                   <li><a href="worldcup.en">여행지월드컵</a></li>
-                  <li><a href="#">룰렛</a></li>
+                  <li><a href="rullet.en">룰렛</a></li>
                 </ul>
               </div>
             </li>

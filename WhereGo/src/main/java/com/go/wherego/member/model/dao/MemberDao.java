@@ -71,6 +71,13 @@ public class MemberDao {
 		sqlSession.update("memberMapper.insertWords",m);
 		
 	}
+	public String findIdByEmail(SqlSessionTemplate sqlSession, String byEmail) {
+		return sqlSession.selectOne("memberMapper.findIdByEmail",byEmail);
+		
+	}
+	public int updatePwd(SqlSessionTemplate sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updatePwd",m);
+	}
 
 
 }

@@ -106,6 +106,17 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+	@Override
+	public String findIdByEmail(String byEmail) {
+		return memberDao.findIdByEmail(sqlSession, byEmail);
+		
+	}
+
+	@Override
+	public int updatePwd(Member m) {
+		return memberDao.updatePwd(sqlSession,m);
+	}
+
 
 
 

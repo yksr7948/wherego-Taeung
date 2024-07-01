@@ -259,12 +259,6 @@
 			<artifactId>scribejava-apis</artifactId>
 			<version>3.3.0</version>
 		</dependency>
-		<!-- 이메일 인증: https://mvnrepository.com/artifact/javax.mail/mail -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
 		<dependency>
@@ -272,6 +266,33 @@
 			<artifactId>spring-context-support</artifactId>
 			<version>5.2.0.RELEASE</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz-jobs -->
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz-jobs</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+		
+		
+		<!-- 이메일 인증을 위한 Spring Context Support -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
+		<!-- 이메일 인증을 위한 javax.mail -->
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+		
+		
 	</dependencies>
 	<build>
 		<plugins>

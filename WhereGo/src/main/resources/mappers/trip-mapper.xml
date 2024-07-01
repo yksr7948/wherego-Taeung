@@ -28,6 +28,14 @@
 		<result column="CREATE_DATE" property="createDate"/>
 	</resultMap>
 	
+	<!-- 여행지 Top5 조회 -->
+	<select id="selectTripTopList" resultMap="tripResultSet">
+		SELECT *
+		FROM(SELECT *
+		     FROM TRIP
+		     ORDER BY LIKE_COUNT DESC, COUNT DESC)
+		WHERE ROWNUM BETWEEN 1  AND 5 
+	</select>
 	
 	<!-- 지역별 데이터 저장 -->
 	<insert id="saveArea" parameterType="arraylist">
@@ -205,4 +213,33 @@
 		DELETE TRIP_REPLY 
 		WHERE REPLY_NO = #{replyNo}
 	</delete>
+	
+	<!-- 검색기능 -->
+	<select id="searchTrip" parameterType="hashmap" resultMap="tripResultSet">
+		SELECT CONTENT_ID
+			  ,CONTENT_TYPE_ID
+			  ,TITLE
+			  ,ADDR1
+			  ,ADDR2
+			  ,ZIP_CODE
+			  ,AREA_CODE
+			  ,FIRST_IMAGE2
+			  ,COUNT
+		FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		<if test="id != 0">
+		AND CONTENT_TYPE_ID=#{id}
+		</if>
+		AND TITLE LIKE '%'||#{keyword}||'%'
+		ORDER BY COUNT DESC
+	</select>
+	
+	<select id="countByKeyword" parameterType="hashmap" resultType="_int">
+		SELECT COUNT(*) FROM TRIP
+		WHERE FIRST_IMAGE2 IS NOT NULL
+		<if test="id != 0">
+		AND CONTENT_TYPE_ID=#{id}
+		</if>
+		AND TITLE LIKE '%'||#{keyword}||'%'
+	</select>
 </mapper>

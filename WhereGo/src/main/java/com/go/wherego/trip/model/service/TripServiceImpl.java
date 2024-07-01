@@ -1,6 +1,7 @@
 package com.go.wherego.trip.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,15 @@ public class TripServiceImpl implements TripService{
 		ArrayList<Trip> aList = tripDao.selectAreaList(sqlSession, pi, t);
 			
 		return aList;
+	}
+	
+	//여행지 Top5
+	@Override
+	public ArrayList<Trip> selectTripTopList(){
+		
+		ArrayList<Trip> tripTopList = tripDao.selectTripTopList(sqlSession);
+		
+		return tripTopList;
 	}
 	
 	//조회수 증가
@@ -170,5 +180,15 @@ public class TripServiceImpl implements TripService{
 		int result = tripDao.deleteReply(sqlSession, replyNo);
 		
 		return result;
+	}
+
+	@Override
+	public ArrayList<Trip> searchTrip(HashMap map, PageInfo pi) {
+		return tripDao.searchTrip(sqlSession, map, pi);
+	}
+
+	@Override
+	public int count(HashMap map) {
+		return tripDao.count(sqlSession, map);
 	}
 }

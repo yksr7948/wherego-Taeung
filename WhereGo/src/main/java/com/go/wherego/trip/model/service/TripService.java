@@ -1,6 +1,7 @@
 package com.go.wherego.trip.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
@@ -23,6 +24,9 @@ public interface TripService {
 	
 	//목록별 지역별 조회
 	ArrayList<Trip> selectAreaList(PageInfo pi, Trip t);
+	
+	//여행지 Top5 조회
+	ArrayList<Trip> selectTripTopList();
 
 	//조회수 증가
 	int increaseCount(String contentId);
@@ -59,5 +63,9 @@ public interface TripService {
 	
 	//댓글  삭제
 	int deleteReply(int replyNo);
+	
+	ArrayList<Trip> searchTrip(HashMap map, PageInfo pi);
+
+	int count(HashMap map);
 	
 }

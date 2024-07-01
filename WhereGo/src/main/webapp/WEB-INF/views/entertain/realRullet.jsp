@@ -7,7 +7,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
         @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css");
@@ -72,7 +71,6 @@ canvas {
       <script>
         const $c = document.querySelector("canvas");
 const ctx = $c.getContext('2d');
-const menuAdd = document.querySelector('#menuAdd');
 const product = ["햄버거", "순대국", "정식당", "중국집", "구내식당"];
 const colors = [];
 
@@ -144,7 +142,7 @@ function add(){
     let b = Math.floor(Math.random() * 256);
     colors.push("rgb(" + r + "," + g + "," + b + ")");
     newMake();
-    menuAdd.value="";
+    menuAdd.value="";	
   }
   else{
     alert("메뉴를 입력한 후 버튼을 클릭 해 주세요");

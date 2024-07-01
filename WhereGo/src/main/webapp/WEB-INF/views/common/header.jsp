@@ -17,165 +17,171 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+ <style>
+ /* 전체설정 */
+* {
+	margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    a {
-      text-decoration: none;
-    }
-    li {
-      list-style-type: none;
-    }
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+a {
+    text-decoration: none;
+}
+li {
+    list-style-type: none;
+}
 
-    .hbody {
-      background-color: #fff;
-      width: 100%;
-      height: 150px;
-      box-shadow: 0 2px 4px rgba
-    }
-    .nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px 50px;
-      color: #333;
-    }
-    .title {
-      display: flex;
-      align-items: center;
-    }
+/* 헤더 */
+.hbody {
+    background-color: #fff;
+    width: 100%;
+    height: 150px;
+    box-shadow: 0 2px 4px rgba
+}
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    color: #333;
+}
 
+/* 제목 */
+.title {
+    display: flex;
+    align-items: center;
+}
+.title img {
+    width: 100px;
+    height: auto;
+    margin-left: 10px;
+}
 
-    .title img {
-      width: 100px;
-      height: auto;
-      margin-left: 10px;
-    }
-    .login-button {
-      background-color: white;
-      text-align: center;
-      color: black;
-      padding: 10px 20px;
-      margin-left: 20px;
-      border: 2px solid black;
-      border-radius: 5px;
-      font-size: 16px;
-      font-weight: 900;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .login-button:hover {
-      background-color: black;
-      color: white;
-    }
+/* 메뉴 */
+#menu {
+	font: bold 20px "malgun gothic";
+    width: 900px;
+    height: 50px;
+    color: #333;
+    line-height: 50px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+#menu > ul > li {
+    float: left;
+    width: 140px;
+    position: relative;
+}
+#menu > ul > li > a {
+    color: #333;
+    transition: color 0.3s;
+}
+#menu > ul > li > a:hover {
+    color: #8B4513;
+}
 
-    .search-bar {
-      flex-grow: 0.3;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin: 0 20px;
-    }
-    .search-bar input {
-      width: 250px;
-      max-width: 400px;
-      padding: 10px;
-      border: none;
-      border-bottom: 1px solid black;
-      font-size: 16px;
-      outline: none;
-    }
-    #serach-icon{
-        width: 32px;
-        height: auto;
-        cursor: pointer;
-    }
+/* 슬라이드 위치를 아래로 이동 */
+#menu > ul > li:hover .submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0); 
+}
 
-    #menu {
-      font: bold 20px "malgun gothic";
-      width: 700px;
-      height: 50px;
-      color: #333;
-      line-height: 50px;
-      margin: 0 auto;
-      text-align: center;
-      position: relative;
-    }
-    #menu > ul > li {
-      float: left;
-      width: 140px;
-      position: relative;
-    }
+/* 서브메뉴 */
+.submenu {
+    width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: opacity 1s ease, visibility 1s ease, transform 1s ease; 
+    position: absolute;
+    top: 50px; 
+    left: 0; 
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.submenu li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.submenu li a {
+    color: #333;
+    padding: 10px;
+    display: block;
+    transition: background-color 0.3s, color 0.3s;
+}
+.submenu li a:hover {
+    background-color: #f4f4f9;
+    color: #8B4513;
+}
 
-    #menu > ul > li > a {
-      color: #333;
-      transition: color 0.3s;
-    }
-    #menu > ul > li > a:hover {
-      color: #8B4513;
-    }
+/* 검색바 */
+.search-bar {
+    flex-grow: 0.3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.search-bar input {
+    width: 250px;
+    max-width: 400px;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid black;
+    font-size: 16px;
+    outline: none;
+}
+#serach-icon{
+    width: 32px;
+    height: auto;
+	cursor: pointer;
+}
 
-    .submenu {
-      width: 140px;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-20px);
-      transition: opacity 1s ease, visibility 1s ease, transform 1s ease; 
-      position: absolute;
-      top: 50px; 
-      left: 0; 
-      background-color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .submenu li {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-    .submenu li a {
-      color: #333;
-      padding: 10px;
-      display: block;
-      transition: background-color 0.3s, color 0.3s;
-    }
-    .submenu li a:hover {
-      background-color: #f4f4f9;
-      color: #8B4513;
-    }
+/* 로그인 버튼 */
+.login-button {
+    background-color: white;
+    text-align: center;
+    color: black;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+.login-button:hover {
+    background-color: black;
+    color: white;
+}
 
-    #menu > ul > li:hover .submenu {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0); /* 슬라이드 위치를 아래로 이동 */
-    }
-
-    /*화면 크기 1300이상*/
-    @media screen and (min-width: 1300px) {
-      #menu {
-        display: flex;
-      }
-      #menu > li {
-        padding: 20px 30px;
-        font-size: 20px;
-      }
-    }
+/*화면 크기 1300이상*/
+@media screen and (min-width: 1300px) {
+	#menu {
+		display: flex;
+	}
+	#menu > li {
+		padding: 20px 30px;
+		font-size: 20px;
+	}
+}
     
-    /*화면 크기 1300이하*/
-    @media screen and (max-width: 1300px) {
-      .nav {
-        padding: 30px 40px;
-      }
-      #menu {
-        display: none;
-      }
-    }
+/*화면 크기 1300이하*/
+@media screen and (max-width: 1300px) {
+	.nav {
+	padding: 30px 40px;
+	}
+	#menu {
+	display: none;
+	}
+}
   </style>
 </head>
 <body>
@@ -191,11 +197,11 @@
             <li><a href="">여행지</a>
               <div class="submenu">
                 <ul>
-                  <li><a href="tripList.tl">관광지</a></li>
-                  <li><a href="#">축제공연행사</a></li>
-                  <li><a href="#">문화시설</a></li>
-                  <li><a href="#">숙박</a></li>
-                  <li><a href="#">음식점</a></li>
+                  <li><a href="tripList.tl?contentTypeId=12">관광지</a></li>
+                  <li><a href="tripList.tl?contentTypeId=14">문화시설</a></li>
+                  <li><a href="tripList.tl?contentTypeId=15">축제공연행사</a></li>
+                  <li><a href="tripList.tl?contentTypeId=32">숙박</a></li>
+                  <li><a href="tripList.tl?contentTypeId=39">음식점</a></li>
                 </ul>
               </div>
             </li>
@@ -212,8 +218,8 @@
             <li><a href="">놀이</a>
               <div class="submenu">
                 <ul>
-                  <li><a href="worldcup.en">여행지 월드컵</a></li>
-                  <li><a href="rullet.en">룰렛</a></li>
+                  <li><a href="worldcup.en">여행지월드컵</a></li>
+                  <li><a href="#">룰렛</a></li>
                 </ul>
               </div>
             </li>
@@ -245,7 +251,6 @@
       </article>
     </section>
   </header>
-  <hr>
 </body>
 </html>
 

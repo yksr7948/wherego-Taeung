@@ -22,7 +22,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.go.wherego.member.model.service.MemberService;
 import com.go.wherego.member.model.vo.Member;
-import com.kh.reMerge.user.model.vo.User;
 
 
 
@@ -151,65 +150,70 @@ public class MemberController {
 			return "main";
 		}
 		
-		
-		
-		@RequestMapping("sendMail")
-		public String sendMail() {
-			Map map = new HashMap();
-	        
-			Member m  = new Member();
-			u.setEmail(pwForEmail);
-			u.setUserId(userId);
-			
-			int result =userService.accEmail(u);
-			
-			
-			if(result >0) { //아이디 및 이메일이 일치 할때
-				
-				//session.removeAttribute("numAcc");
-				Random r = new Random();
-		        int numE = r.nextInt(9999);
-		        //session.setAttribute("numAcc", num);
-		        //model.addAttribute("numAcc", num);
-		        
-		        mailCheckNum = numE;
-		        
-				StringBuilder sb = new StringBuilder();
-				
-				
-				String setFrom = "skwjdalssk@naver.com";//발신자 이메일
-				String tomail = pwForEmail;//수신자 이메일
-				String title = "[Re:merge] 비밀번호 변경 인증 이메일입니다.";
-				sb.append(String.format("안녕하세요 %s님\n", userId));
-				sb.append(String.format("Re:merge 비밀번호 찾기(변경) 인증번호는 %d입니다.", numE));
-				String content = sb.toString();
-				
-				try {
-					//보낼 이메일 주소 선언후 작성
-					MimeMessage mm = mailSenderNaver.createMimeMessage();
-					MimeMessageHelper mh = new MimeMessageHelper(mm,true,"UTF-8");
-					mh.setFrom(setFrom);
-					mh.setTo(tomail);
-					mh.setSubject(title);
-					mh.setText(content);
-					
-					mailSenderNaver.send(mm);
-					
-				} catch (MessagingException e) {
-					//e.printStackTrace();
-					//System.out.println(e.getMessage());
-					
-				}
-				map.put("status", true);
-				map.put("num", numE);
-				map.put("m_idx",userId );
-				return map;
-				
-			}else { //아이디 및 이메일이 일치 하지 않았을때
-				//session.removeAttribute("numAcc");
-				return map;
-			} 
+		@RequestMapping("findId")
+		public String findId() {
+			return "findId";
 		}
+		
+		
+		
+//		@RequestMapping("sendMail")
+//		public String sendMail() {
+//			Map map = new HashMap();
+//	        
+//			Member m  = new Member();
+//			u.setEmail(pwForEmail);
+//			u.setUserId(userId);
+//			
+//			int result =userService.accEmail(u);
+//			
+//			
+//			if(result >0) { //아이디 및 이메일이 일치 할때
+//				
+//				//session.removeAttribute("numAcc");
+//				Random r = new Random();
+//		        int numE = r.nextInt(9999);
+//		        //session.setAttribute("numAcc", num);
+//		        //model.addAttribute("numAcc", num);
+//		        
+//		        mailCheckNum = numE;
+//		        
+//				StringBuilder sb = new StringBuilder();
+//				
+//				
+//				String setFrom = "skwjdalssk@naver.com";//발신자 이메일
+//				String tomail = pwForEmail;//수신자 이메일
+//				String title = "[Re:merge] 비밀번호 변경 인증 이메일입니다.";
+//				sb.append(String.format("안녕하세요 %s님\n", userId));
+//				sb.append(String.format("Re:merge 비밀번호 찾기(변경) 인증번호는 %d입니다.", numE));
+//				String content = sb.toString();
+//				
+//				try {
+//					//보낼 이메일 주소 선언후 작성
+//					MimeMessage mm = mailSenderNaver.createMimeMessage();
+//					MimeMessageHelper mh = new MimeMessageHelper(mm,true,"UTF-8");
+//					mh.setFrom(setFrom);
+//					mh.setTo(tomail);
+//					mh.setSubject(title);
+//					mh.setText(content);
+//					
+//					mailSenderNaver.send(mm);
+//					
+//				} catch (MessagingException e) {
+//					//e.printStackTrace();
+//					//System.out.println(e.getMessage());
+//					
+//				}
+//				map.put("status", true);
+//				map.put("num", numE);
+//				map.put("m_idx",userId );
+//				return map;
+//				
+//			}else { //아이디 및 이메일이 일치 하지 않았을때
+//				//session.removeAttribute("numAcc");
+//				return map;
+//			} 
+//		}
 		
 		
 		

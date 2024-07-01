@@ -118,6 +118,12 @@ a {
             <a href="googlelogin"><img class="google-login-img" alt="구글로그인" src="resources/img/google_login.png"></a>
         </div>
     </div>
+    	<c:if test="${not empty errorMsg}">
+		<script>
+			alert("${errorMsg}");
+		</script>
+		<c:remove var="errorMsg" />
+	</c:if>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 </body>
 </html>

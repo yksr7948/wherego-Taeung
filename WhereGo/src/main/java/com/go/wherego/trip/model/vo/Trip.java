@@ -28,7 +28,7 @@ public class Trip {
 	private int likeCount;
 	
 	public Trip(String contentId, String contentTypeId, String title, String addr1, 
-				String addr2, String zipCode, String areaCode, String firstImage2) {
+				String addr2, String zipCode, String areaCode, String firstImage1, String firstImage2) {
 		
 		super();
 		this.contentId = contentId;
@@ -38,11 +38,12 @@ public class Trip {
 		this.addr2 = addr2;
 		this.zipCode = zipCode;
 		this.areaCode = areaCode;
+		this.firstImage1 = firstImage1;
 		this.firstImage2 = firstImage2;
 	}
 	
 	public Trip(String contentId, String contentTypeId, String title, String addr1, 
-			String addr2, String zipCode, String areaCode, String firstImage2, int count, int likeCount) {
+			String addr2, String zipCode, String areaCode, String firstImage1, String firstImage2, int count, int likeCount) {
 	
 		super();
 		this.contentId = contentId;
@@ -52,10 +53,12 @@ public class Trip {
 		this.addr2 = addr2;
 		this.zipCode = zipCode;
 		this.areaCode = areaCode;
+		this.firstImage1 = firstImage1;
 		this.firstImage2 = firstImage2;
 		this.count = count;
 		this.likeCount = likeCount;
 	}
+	
 }
 
 	

@@ -85,7 +85,7 @@
       margin: 0 20px;
     }
     .search-bar input {
-      width: 200px;
+      width: 250px;
       max-width: 400px;
       padding: 10px;
       border: none;
@@ -101,7 +101,7 @@
 
     #menu {
       font: bold 20px "malgun gothic";
-      width: 840px;
+      width: 700px;
       height: 50px;
       color: #333;
       line-height: 50px;
@@ -114,6 +114,7 @@
       width: 140px;
       position: relative;
     }
+
     #menu > ul > li > a {
       color: #333;
       transition: color 0.3s;
@@ -123,7 +124,7 @@
     }
 
     .submenu {
-      width: 150px;
+      width: 140px;
       opacity: 0;
       visibility: hidden;
       transform: translateY(-20px);
@@ -133,7 +134,6 @@
       left: 0; 
       background-color: white;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      z-index:1;
     }
     .submenu li {
       margin-top: 10px;
@@ -209,19 +209,11 @@
                 </ul>
               </div>
             </li>
-            <li><a href="">놀이</a>
-              <div class="submenu">
-                <ul>
-                  <li><a href="worldcup.en">여행지 월드컵</a></li>
-                  <li><a href="rullet.en">룰렛</a></li>
-                </ul>
-              </div>
-            </li>
           </ul>
         </div>
         <div class="search-bar">
             <form action="">
-                <input type="text" placeholder="검색어를 입력하세요...">
+                <input type="text" id="search-keyword"  placeholder="검색어를 입력하세요...">
                 <img id="serach-icon" src="resources/img/search-icon.png" alt="">
             </form>
         </div>
@@ -240,7 +232,19 @@
 					</c:otherwise>
 				</c:choose>
         <script>
-        	
+    	$(function(){
+    		$("#serach-icon").click(function(){
+    			var keyword=$("#search-keyword").val();
+    			location.href="search.wherego?keyword="+keyword;
+    		})
+    	});
+    	var input= document.getElementById("search-keyword");
+    	input.addEventListener("keypress",function(event){
+    		if(event.keyCode==13){
+    			event.preventDefault();
+    			document.getElementById("serach-icon").click();
+    		}
+    	});
         </script>
       </article>
     </section>

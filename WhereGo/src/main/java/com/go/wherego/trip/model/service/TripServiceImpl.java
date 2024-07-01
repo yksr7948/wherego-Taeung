@@ -30,38 +30,38 @@ public class TripServiceImpl implements TripService{
 		return result;
 	}
 	
-	//여행지 총 개수
+	//목록별 전체 개수
 	@Override
-	public int listCount() {
+	public int listCount(String contentTypeId) {
 		
-		int listCount = tripDao.listCount(sqlSession);
+		int listCount = tripDao.listCount(sqlSession, contentTypeId);
 		
 		return listCount;
 	}
 	
-	//지역별 여행지 총 개수
+	//목록별 지역별 개수
 	@Override
-	public int areaListCount(String areaCode) {
+	public int areaListCount(Trip t) {
 			
-		int listCount = tripDao.areaListCount(sqlSession, areaCode);
+		int listCount = tripDao.areaListCount(sqlSession, t);
 			
 		return listCount;
 	}
 	
-	//여행지 목록 조회
+	//목록별 전체 조회
 	@Override
-	public ArrayList<Trip> selectList(PageInfo pi){
+	public ArrayList<Trip> selectList(PageInfo pi, String contentTypeId){
 		
-		ArrayList<Trip> tList = tripDao.selectList(sqlSession, pi);
+		ArrayList<Trip> tList = tripDao.selectList(sqlSession, pi, contentTypeId);
 		
 		return tList;
 	}
 	
-	//지역별 여행지 목록 조회
+	//목록별 지역별 조회
 	@Override
-	public ArrayList<Trip> selectAreaList(PageInfo pi, String areaCode){
+	public ArrayList<Trip> selectAreaList(PageInfo pi, Trip t){
 			
-		ArrayList<Trip> aList = tripDao.selectAreaList(sqlSession, pi, areaCode);
+		ArrayList<Trip> aList = tripDao.selectAreaList(sqlSession, pi, t);
 			
 		return aList;
 	}

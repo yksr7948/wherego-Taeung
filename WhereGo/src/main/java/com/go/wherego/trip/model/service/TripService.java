@@ -12,17 +12,17 @@ public interface TripService {
 	//지역별 데이터 저장
 	int saveArea(ArrayList<Trip> list);
 	
-	//여행지 전체 개수
-	int listCount();
+	//목록별 전체 개수
+	int listCount(String ContentTypeId);
 	
-	//지역별 여행지 전체 개수
-	int areaListCount(String areaCode);
+	//목록별 지역별 개수
+	int areaListCount(Trip t);
 	
-	//여행지 목록 조회
-	ArrayList<Trip> selectList(PageInfo pi);
+	//목록별 전체 조회
+	ArrayList<Trip> selectList(PageInfo pi, String contentTypeId);
 	
-	//지역 별 목록 조회
-	ArrayList<Trip> selectAreaList(PageInfo pi, String areaCode);
+	//목록별 지역별 조회
+	ArrayList<Trip> selectAreaList(PageInfo pi, Trip t);
 
 	//조회수 증가
 	int increaseCount(String contentId);

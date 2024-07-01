@@ -29,7 +29,7 @@ public class EntertainController {
 	@RequestMapping("worldcup.en")
 	public String startWorldCup(Model model) {
 		ArrayList<Trip> list = entertainService.getTop100();
-		  System.out.println("처 음"+list); 
+		  //System.out.println("처 음"+list); 
 		  model.addAttribute("list",new Gson().toJson(list));
 		return "entertain/worldcup";
 	}

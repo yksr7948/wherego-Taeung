@@ -64,8 +64,10 @@ public interface TripService {
 	//댓글  삭제
 	int deleteReply(int replyNo);
 	
+	//키워드 조회
 	ArrayList<Trip> searchTrip(HashMap map, PageInfo pi);
 
+	//키워드에 맞는 여행지 개수
 	int count(HashMap map);
 	
 }

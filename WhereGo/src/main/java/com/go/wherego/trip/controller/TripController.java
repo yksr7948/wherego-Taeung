@@ -483,7 +483,7 @@ public class TripController {
 		return result;
 	}
 	
-	//통합검색 메소드(임시)->나중에 작성위치 변경 필요할수 있음
+	//통합검색 메소드
 	@GetMapping("search.wherego")
 	public ModelAndView search(ModelAndView mv, String keyword) {
 		
@@ -516,6 +516,7 @@ public class TripController {
 		return mv;
 	}
 		
+	//키워드로 검색된 모든 여행지 보기
 	@GetMapping("searchDetail.wherego")
 	public ModelAndView searchDetail(ModelAndView mv, String keyword,
 			@RequestParam(defaultValue = "0") int contentTypeId, @RequestParam(defaultValue = "1") int currentPage) {

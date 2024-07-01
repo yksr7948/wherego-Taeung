@@ -20,38 +20,38 @@ public class TripDao {
 		return sqlSession.insert("tripMapper.saveArea",list);
 	}
 		
-	//여행지 총 개수
-	public int listCount(SqlSessionTemplate sqlSession) {
+	//목록별 전체 개수
+	public int listCount(SqlSessionTemplate sqlSession, String contentTypeId) {
 			
-		return sqlSession.selectOne("tripMapper.listCount");
+		return sqlSession.selectOne("tripMapper.listCount", contentTypeId);
 	}
 	
-	//지역별 여행지 총 개수
-	public int areaListCount(SqlSessionTemplate sqlSession, String areaCode) {
+	//목록별 지역별 개수
+	public int areaListCount(SqlSessionTemplate sqlSession, Trip t) {
 
-		return sqlSession.selectOne("tripMapper.areaListCount",areaCode); 
+		return sqlSession.selectOne("tripMapper.areaListCount", t); 
 	}
 		
-	//여행지 목록 조회
-	public ArrayList<Trip> selectList(SqlSessionTemplate sqlSession,PageInfo pi){
+	//목록별 전체 조회
+	public ArrayList<Trip> selectList(SqlSessionTemplate sqlSession, PageInfo pi, String contentTypeId){
 			
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage()-1)*limit;
 			
 		RowBounds rowBounds = new RowBounds(offset,limit);
 			
-		return (ArrayList)sqlSession.selectList("tripMapper.selectList", null, rowBounds);
+		return (ArrayList)sqlSession.selectList("tripMapper.selectList", contentTypeId, rowBounds);
 	}
 	
-	//지역별 여행지 목록 조회
-	public ArrayList<Trip> selectAreaList(SqlSessionTemplate sqlSession, PageInfo pi, String areaCode){
+	//목록별 지역별 조회
+	public ArrayList<Trip> selectAreaList(SqlSessionTemplate sqlSession, PageInfo pi, Trip t){
 		
 		int limit = pi.getBoardLimit();
 		int offset = (pi.getCurrentPage()-1)*limit;
 			
 		RowBounds rowBounds = new RowBounds(offset,limit);
 			
-		return (ArrayList)sqlSession.selectList("tripMapper.selectAreaList", areaCode, rowBounds);
+		return (ArrayList)sqlSession.selectList("tripMapper.selectAreaList", t, rowBounds);
 	}
 
 	//조회수 증가
@@ -69,10 +69,11 @@ public class TripDao {
 	}
 	
 	//좋아요 count 조회
-    public int selectLikeCount(SqlSessionTemplate sqlSession, String contentId) {
-        Integer count = sqlSession.selectOne("tripMapper.selectLikeCount", contentId);
-        return (count == null) ? 0 : count;
-    }
+	public int selectLikeCount(SqlSessionTemplate sqlSession, String contentId) {
+		
+		Integer likeCount = sqlSession.selectOne("tripMapper.selectLikeCount", contentId);
+	    return (likeCount == null) ? 0 : likeCount;
+	}
 	
 	//좋아요 여부
 	public boolean likeYN(SqlSessionTemplate sqlSession, Likes like) {

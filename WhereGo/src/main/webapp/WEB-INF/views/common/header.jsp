@@ -227,7 +227,7 @@ li {
         </div>
         <div class="search-bar">
             <form action="">
-                <input type="text" placeholder="검색어를 입력하세요...">
+                <input type="text" id="search-keyword" placeholder="검색어를 입력하세요...">
                 <img id="serach-icon" src="resources/img/search-icon.png" alt="">
             </form>
         </div>
@@ -246,7 +246,23 @@ li {
 					</c:otherwise>
 				</c:choose>
         <script>
-        	
+    	$(function(){
+    		$("#serach-icon").click(function(){
+    			var keyword=$("#search-keyword").val();
+    			if(keyword==""){
+    				alert("검색어가 입력되지 않았습니다.");
+    			} else {
+    				location.href="search.wherego?keyword="+keyword;
+    			}	
+    		})
+    	});
+    	var input= document.getElementById("search-keyword");
+    	input.addEventListener("keypress",function(event){
+    		if(event.keyCode==13){ /*검색창 포커스 상태에서 엔터키 클릭시 검색실행 */
+    			event.preventDefault();
+    			document.getElementById("serach-icon").click();
+    		}
+    	});
         </script>
       </article>
     </section>

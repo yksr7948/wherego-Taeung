@@ -8,14 +8,19 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
+import com.go.wherego.map.model.service.TravelMapService;
 import com.go.wherego.trip.model.service.TripService;
 import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
@@ -35,6 +40,17 @@ public class TripController {
 	
 	@Autowired
 	private TripService tripService;
+	
+	//메인 페이지로 이동
+	@RequestMapping("main")
+	public String selectTripTopList(Model model){
+		
+		//TripTop5 
+		ArrayList<Trip> tripTopList = tripService.selectTripTopList();
+		
+		model.addAttribute("tripTopList",tripTopList);
+		return "main";
+	}
 	
 	//여행지저장 페이지로 이동
 	@RequestMapping("tripSave.do")
@@ -465,6 +481,72 @@ public class TripController {
 		int result = tripService.deleteReply(replyNo);
 		
 		return result;
+	}
+	
+	//통합검색 메소드
+	@GetMapping("search.wherego")
+	public ModelAndView search(ModelAndView mv, String keyword) {
+		
+		//System.out.println(keyword+"로 검색한 결과페이지 이동하기");
+		//생각하고 있는 기능 : 키워드에 맞는 검색결과를 여행지 / 지도 / 게시판별로 보여주기
+		//여행지의 경우 조회수나 좋아요 수 순서 / 지도는 해당 키워드로 검색한 결과 지도API로 띄우기 / 게시판은 글제목이나 내용별로 구분해서
+		//여행지
+		HashMap map=new HashMap();
+		map.put("keyword", keyword);
+		map.put("id", 12);
+		int count = tripService.count(map);
+		int pageLimit = 5;
+		int boardLimit = 12;
+			
+		PageInfo pi = Pagination.getPageInfo(count, 1, pageLimit, boardLimit);
+		ArrayList<Trip> tList= tripService.searchTrip(map,pi);
+			
+	    double mapXDouble = 126.981611;
+	    double mapYDouble = 37.568477;
+	    String touristData;
+	    touristData = new TravelMapService().getTouristDataByKeyword(keyword);
+			
+		mv.addObject("touristData", touristData);
+		mv.addObject("mapX", mapXDouble);
+		mv.addObject("mapY", mapYDouble);
+		mv.addObject("tList", tList);
+		mv.addObject("tSize", tList.size());
+		mv.addObject("keyword", keyword);
+		mv.setViewName("common/searchResult");
+		return mv;
+	}
+		
+	//키워드로 검색된 모든 여행지 보기
+	@GetMapping("searchDetail.wherego")
+	public ModelAndView searchDetail(ModelAndView mv, String keyword,
+			@RequestParam(defaultValue = "0") int contentTypeId, @RequestParam(defaultValue = "1") int currentPage) {
+
+		HashMap map = new HashMap();
+		map.put("keyword", keyword);
+		map.put("id", contentTypeId);
+
+		int count = tripService.count(map);
+		int pageLimit = 5;
+		int boardLimit = 12;
+
+		PageInfo pi = Pagination.getPageInfo(count, currentPage, pageLimit, boardLimit);
+
+		ArrayList<Trip> tList = tripService.searchTrip(map, pi);
+
+		HashMap<String, String> contentType = new HashMap<>();
+		contentType.put("관광지", "12");
+		contentType.put("문화시설", "14");
+		contentType.put("축제공연행사", "15");
+		contentType.put("숙박", "32");
+		contentType.put("음식점", "39");
+
+		mv.addObject("pi", pi);
+		mv.addObject("keyword", keyword);
+		mv.addObject("id", contentTypeId);
+		mv.addObject("tList", tList);
+		mv.addObject("contentType", contentType);
+		mv.setViewName("common/searchDetail");
+		return mv;
 	}
 	
 }

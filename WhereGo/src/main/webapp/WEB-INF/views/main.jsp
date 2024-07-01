@@ -242,28 +242,40 @@ button.trip-next {
 		<div class="trip-slideshow-container">
 			<button class="trip-prev" onclick="changeTripSlide(-1)">&#10094;</button>
 			<div class="trip-slides" id="trip-slides">
-				<div class="trip-slide">
-					<div class="trip-description">
-						<span class="rank">1등</span>
-						<br> <br> <br>
-						<h1>가락몰 빵축제 전국빵지자랑</h1>
-						<img alt="" src="resources/img/trip-board/eye-icon.png"> <span>0</span>
-						&nbsp; &nbsp; 
-						<img src="resources/img/trip-board/heart-icon.png"> <span>0</span>
-						<br>
-						<button class="login-button">자세히 보기</button>
+				<c:forEach items="${tripTopList }" var="topList" varStatus="loop">
+					<div class="trip-slide">
+						<div class="trip-description">
+							<span class="rank">${loop.index + 1}등</span>
+							<br> <br> <br>
+							<input type="hidden" value=${topList.contentId }>
+							<h1>${topList.title }</h1>
+							<img alt="" src="resources/img/trip-board/eye-icon.png"> <span>${topList.count }</span>
+							&nbsp; &nbsp; 
+							<img src="resources/img/trip-board/heart-icon.png"> <span>${topList.likeCount }</span>
+							<br>
+							<button class="login-button" onclick="detailBtn(${topList.contentId});">자세히 보기</button>
+						</div>
+						<div class="trip-image">
+							<img src=${topList.firstImage1 }>
+						</div>
 					</div>
-					<div class="trip-image">
-						<img src="http://tong.visitkorea.or.kr/cms/resource/84/2791384_image2_1.jpg" alt="Trip 1">
-					</div>
-				</div>
-				<button class="trip-next" onclick="changeTripSlide(1)">&#10095;</button>
+				</c:forEach>
 			</div>
+			<button class="trip-next" onclick="changeTripSlide(1)">&#10095;</button>
+			
 		</div>
 	</div>
 
 	<!-- 여행지 TOP 5 슬라이드 기능 -->
 	<script>
+		
+	 	<!-- 상세보기 페이지로 이동 -->
+		function detailBtn(contentId){
+			
+			location.href="tripDetail.tl?contentId="+contentId;			
+		}
+	
+		<!-- 슬라이드 기능 -->
 		let tripSlideIndex = 0;
 		const tripSlides = document.getElementById('trip-slides');
 

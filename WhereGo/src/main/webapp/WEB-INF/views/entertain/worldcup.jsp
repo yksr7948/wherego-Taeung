@@ -9,7 +9,6 @@
 <style>
 body {
 	font-family: Arial, sans-serif;
-	padding: 20px;
 }
 
 .option-selector {

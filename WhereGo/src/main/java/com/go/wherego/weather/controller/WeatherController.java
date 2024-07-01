@@ -21,8 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.go.wherego.weather.model.service.WeatherServiceImpl;
 import com.go.wherego.weather.model.vo.Weather;
 
-import lombok.extern.slf4j.Slf4j;
-
 
 
 @Controller
@@ -53,8 +51,18 @@ public class WeatherController {
 		cal.add(cal.DATE, 3);
 		for(int i=0;i<5;i++) {
 			String date=dFormat.format(cal.getTime());
+			switch(cal.get(cal.DAY_OF_WEEK)) {
+			case 1: date +="(일)"; break;
+			case 2: date +="(월)"; break;
+			case 3: date +="(화)"; break;
+			case 4: date +="(수)"; break;
+			case 5: date +="(목)"; break;
+			case 6: date +="(금)"; break;
+			case 7: date +="(토)"; break;
+			}
 			dList.add(date);
 			cal.add(cal.DATE, 1);
+			
 		}
 		cal.add(cal.DATE, -8);
 		return dList;
@@ -170,5 +178,25 @@ public class WeatherController {
 		SimpleDateFormat dFormat=new SimpleDateFormat("yyyyMMdd");
 		time=dFormat.format(cal.getTime())+"0600";
 	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

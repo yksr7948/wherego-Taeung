@@ -1,6 +1,7 @@
 package com.go.wherego.trip.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -52,6 +53,12 @@ public class TripDao {
 		RowBounds rowBounds = new RowBounds(offset,limit);
 			
 		return (ArrayList)sqlSession.selectList("tripMapper.selectAreaList", t, rowBounds);
+	}
+	
+	//여행지 Top5 조회
+	public ArrayList<Trip> selectTripTopList(SqlSessionTemplate sqlSession){
+		
+		return (ArrayList)sqlSession.selectList("tripMapper.selectTripTopList");
 	}
 
 	//조회수 증가
@@ -137,6 +144,22 @@ public class TripDao {
 	public int deleteReply(SqlSessionTemplate sqlSession, int replyNo) {
 		
 		return sqlSession.delete("tripMapper.deleteReply", replyNo);
+	}
+	
+	//키워드에 맞는 여행지 조회
+	public ArrayList<Trip> searchTrip(SqlSessionTemplate sqlSession, HashMap map, PageInfo pi) {
+
+		int limit = pi.getBoardLimit();
+		int offset = (pi.getCurrentPage() - 1) * limit;
+
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		ArrayList<Trip> tList = (ArrayList) sqlSession.selectList("tripMapper.searchTrip", map, rowBounds);
+		return tList;
+	}
+
+	//키워드에 맞는 여행지 개수
+	public int count(SqlSessionTemplate sqlSession, HashMap map) {
+		return sqlSession.selectOne("tripMapper.countByKeyword", map);
 	}
 
 }

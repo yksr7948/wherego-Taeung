@@ -28,6 +28,7 @@ border-right: 2px solid black;
 background-color:aliceblue;
 }
 .weather-container button{
+	border: 2px solid #333;
     padding: 10px 20px;
     border-radius: 5px;
     font-size: 16px;
@@ -38,6 +39,9 @@ background-color:aliceblue;
 }
 .weather-info th{
 background-color:beige;
+}
+#wArea{
+	height:70px;
 }
 #wLocation{
 background-color:skyblue;
@@ -80,12 +84,15 @@ background-color:lightblue;
 color:black;
 }
 .location-detail-btn:hover{
-background-color:mediumblue;
+background-color:#3333ff;
 color:white;
 }
 .location-detail-selected{
-background-color:mediumblue;
+background-color:#3333ff;
 color:white;
+}
+#notice{
+font-size:26px;
 }
 </style>
 </head>
@@ -94,7 +101,7 @@ color:white;
 	<main>
 	<div class="weather-area">
 		<table class="weather-container">
-			<tr>
+			<tr id="wArea">
 				<td><button class="location-btn">광역시</button></td>
 				<td><button class="location-btn">경기도</button></td>
 				<td><button class="location-btn">강원도</button></td>
@@ -153,6 +160,7 @@ color:white;
 			</tr>
 		</tbody>
 	</table>
+		<div id="notice"></div>
 	</div>
 	</main>
 	<script>
@@ -213,7 +221,13 @@ color:white;
 			success : function(list){
 				var str="<th rowspan='2'>날짜</th>"
 				for(var i=0;i<list.length;i++){
-					str +="<td colspan='2'>"+list[i]+"</td>";
+					switch(list[i].substring(6,7)){
+					case "토" : str +="<td colspan='2' style='color:blue'>"+list[i]+"</td>"; break;
+					case "일" : str +="<td colspan='2' style='color:red'>"+list[i]+"</td>";break;
+					default:
+						str +="<td colspan='2'>"+list[i]+"</td>";
+					}
+					
 				}
 				$("#wDate").html(str);
 			},
@@ -235,13 +249,37 @@ color:white;
 			},
 			success : function(result){
 				var data=$(result).find('item');
+				var hotFlag=false;
+				var coldFlag=false;
+				var changeFlag=false;
 				var str="<th> 최저 / 최고기온 </th>";
-					str +="<td colspan='2'>"+$(data).find("taMin3").text()+"℃ / "+$(data).find("taMax3").text()+"℃ </td>"
-						+"<td colspan='2'>"+$(data).find("taMin4").text()+"℃ / "+$(data).find("taMax4").text()+"℃ </td>"
-						+"<td colspan='2'>"+$(data).find("taMin5").text()+"℃ / "+$(data).find("taMax5").text()+"℃ </td>"
-						+"<td colspan='2'>"+$(data).find("taMin6").text()+"℃ / "+$(data).find("taMax6").text()+"℃ </td>"
-						+"<td colspan='2'>"+$(data).find("taMin7").text()+"℃ / "+$(data).find("taMax7").text()+"℃ </td>";
+					for(var i=3;i<8;i++) {
+						var min="taMin"+i;
+						var max="taMax"+i;
+						var minTemp=$(data).find(min).text();
+						var maxTemp=$(data).find(max).text();
+						str +="<td colspan='2'><span style='color:blue'>"+minTemp+"℃</span> / <span style='color:red'>"+maxTemp+"℃ </span></td>"
+						if(maxTemp>=35){
+							hotFlag=true;
+						} else if(minTemp<-5) {
+							coldFlag=true;
+						}
+						if((maxTemp-minTemp)>10){
+							changeFlag=true;
+						}
+					}
 				$("#wTemp").html(str);
+				var notice="";
+				if(hotFlag) {
+					notice +="해당 지역의 날씨가 매우 더울 것으로 예상되므로 여행 계획을 짤 때 주의하시기 바랍니다.<br>";
+				}
+				if(coldFlag) {
+					notice +="해당 지역의 날씨가 매우 추울 것으로 예상되므로 여행 계획을 짤 때 주의하시기 바랍니다.<br>";
+				}
+				if(changeFlag) {
+					notice +="해당 지역의 일교차가 매우 심할 것으로 예상되므로 여행 계획을 짤 때 주의하시기 바랍니다.<br>";
+				}
+				$("#notice").html(notice);
 			},
 			error : function(){
 				console.log("정보 가져오기 실패");
@@ -265,51 +303,35 @@ color:white;
 			success : function(result){
 				var data=$(result).find('item');
 				var str1="<th> 강수확률(%) </th>"
-						+"<td>"+$(data).find("rnSt3Am").text()+"</td>"
-						+"<td>"+$(data).find("rnSt3Pm").text()+"</td>"
-						+"<td>"+$(data).find("rnSt4Am").text()+"</td>"
-						+"<td>"+$(data).find("rnSt4Pm").text()+"</td>"
-						+"<td>"+$(data).find("rnSt5Am").text()+"</td>"
-						+"<td>"+$(data).find("rnSt5Pm").text()+"</td>"
-						+"<td>"+$(data).find("rnSt6Am").text()+"</td>"
-						+"<td>"+$(data).find("rnSt6Pm").text()+"</td>"
-						+"<td>"+$(data).find("rnSt7Am").text()+"</td>"
-						+"<td>"+$(data).find("rnSt7Pm").text()+"</td>";
+				for(var i=3;i<8;i++) {
+					var am="rnSt"+i+"Am";
+					var pm="rnSt"+i+"Pm";
+					var rainAm=$(data).find(am).text();
+					var rainPm=$(data).find(pm).text();
+					str1 +="<td>"+rainAm+"</td>"
+						  +"<td>"+rainPm+"</td>";
+				}
 				$("#wRain").html(str1);
 				
 				let arr=new Array();
+				var str2="<th> 날씨 상태 </th>";
 				for(var i=3;i<8;i++){
 					var am="wf"+i+"Am";
 					var pm="wf"+i+"Pm";
 					arr.push($(data).find(am).text());
 					arr.push($(data).find(pm).text());
 				}
-				var str2="<th> 날씨 상태 </th>";
 				for(var i=0;i<arr.length;i++){
-					var keyword="wf"+Math.floor(3+i/2);
-					if(i%2==0){
-						keyword+="Am";
-					} else {
-						keyword+="Pm";
-					}
+					var weather="";
 					switch(arr[i]){
-					case "맑음":
-						str2 +="<td><img src='resources/img/weather/sun.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
-						break;
-					case "구름많음":
-						str2 +="<td><img src='resources/img/weather/sun_cloudy.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
-						break;
-					case "흐림":
-						str2 +="<td><img src='resources/img/weather/cloud.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
-						break;
-					case "흐리고 비":
-						str2 +="<td><img src='resources/img/weather/rain.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
-						break;
-					case "흐리고 눈":
-						str2 +="<td><img src='resources/img/weather/snow.png' width='60' height='60' alt=''><br>"+$(data).find(keyword).text()+"</td>";
-						break;
+					case "맑음": weather="sun"; break;
+					case "구름많음": weather="sun_cloudy"; break;
+					case "흐림": weather="cloud";	 break;
+					case "흐리고 비": weather="rain"; break;
+					case "흐리고 눈": weather="snow"; break;
 					}
-				}
+					str2 +="<td><img src='resources/img/weather/"+weather+".png' width='60' height='60' alt=''><br>"+arr[i]+"</td>";
+				} 
 				$("#wWeather").html(str2);
 			},
 			error : function(){

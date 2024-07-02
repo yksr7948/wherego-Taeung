@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+      
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
@@ -64,15 +65,23 @@ canvas {
     </style>
 </head>
 <body>
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
     <div id="part">
         <canvas width="600" height='600'></canvas>  
         <button  id="rotateButton" onclick="rotate()">돌려돌려 돌림판</button>
       </div>
       <script>
-        const $c = document.querySelector("canvas");
+      var jsonData = '${list}';
+      var product = JSON.parse(jsonData);
+      const $c = document.querySelector("canvas");
 const ctx = $c.getContext('2d');
-const product = ["햄버거", "순대국", "정식당", "중국집", "구내식당"];
+//const product = ["햄버거", "순대국", "정식당", "중국집", "구내식당"];
 const colors = [];
+
+function shuffleImages() {
+	images.sort(() => 0.5 - Math.random());
+}
+
 
 const newMake = () => {
   const [cw, ch] = [$c.width / 2, $c.height / 2];
@@ -110,28 +119,46 @@ const newMake = () => {
 
     ctx.rotate(angle + Math.PI / 2);
 
-    product[i].split(" ").forEach((text, j) => {
-      ctx.fillText(text, 0, 30 * j);
-    });
+     product[i].title.split(" ").forEach((text, j) => {
+        ctx.fillText(text, 0, 30 * j);
+      }); 
 
     ctx.restore();
   }
 }
 
 const rotate = () => {
+	  $c.style.transform = `initial`;
+	  $c.style.transition = `initial`;
+	  
+	  setTimeout(() => {
+	    
+	    const ran = Math.floor(Math.random() * product.length);
+
+	    const arc = 360 / product.length;
+	    const rotate = (ran * arc) + 3600 + (arc * 3) - (arc/4);
+	    
+	    $c.style.transform = "rotate(-"+rotate+"deg)";
+	    $c.style.transition = `2s`;
+	    
+	    setTimeout(() => alert( product[ran-1].title), 2000);
+	  }, 1);
+	};
+/* const rotate = () => {
   $c.style.transform = 'initial';
   $c.style.transition = 'initial';
   const alpha = Math.floor(Math.random()*100);
 
   setTimeout(() => {    
+	resultIndex = Math.floor(Math.random() * product.length); // 결과값 저장
     const ran = Math.floor(Math.random() * product.length);
     const arc = 360 / product.length;
     const rotate = (ran * arc) + 3600 + (arc * 3) - (arc/4) + alpha;
-    $c.style.transform = `rotate(-${rotate}deg)`;
+//     $c.style.transform = `rotate(-${rotate}deg)`;
+    $c.style.transform = "rotate(-"+rotate+"deg)";
     $c.style.transition = '2s';
-    
   }, 1);
-};
+}; */
 
 
 function add(){
@@ -151,5 +178,6 @@ function add(){
 
 newMake();
       </script>
+      <%@ include file="/WEB-INF/views/common/footer.jsp"%>
 </body>
 </html>

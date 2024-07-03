@@ -143,7 +143,9 @@
 						NAME</label> <input type="text" id="userName" name="userName"
 						class="form-control"> <br> <label for="email">
 						&nbsp; EMAIL</label> <input type="email" id="email" name="email"
-						class="form-control"> <br> <label for="age">
+						class="form-control"> <br> 
+						<div id="checkEmailResult" style='font-size: 0.8em;'></div>
+						<label for="age">
 						&nbsp; AGE</label> <input type="number" id="age" name="age"
 						class="form-control"> <br> <label for="phone">
 						&nbsp; PHONE</label> <input type="tel" id="phone" name="phone"
@@ -173,6 +175,7 @@
 
 					//아이디 입력 인풋상자 요소 
 					var inputId = $("#enrollUserId");
+					var inputEmail = $("#email");
 
 					inputId.keyup(function() {
 
@@ -195,6 +198,37 @@
 									$("#checkResult").show();
 									$("#checkResult").css("color", "green")
 											.text("사용가능한 아이디입니다.");
+									//사용가능시 회원가입 버튼 활성화
+									$("button[type=submit]").attr("disabled",
+											false);
+								}
+
+							},
+							error : function() {
+								console.log("통신 오류");
+							}
+						});
+						
+						
+						$.ajax({
+							url : "checkEmailExist.me",
+							data : {
+								checkEmail : $(inputEmail).val()
+							},
+							success : function(result) {
+
+								if (result == 'NNNNN') {//중복
+									$("#checkEmailResult").show();
+									$("#checkEmailResult").css("color", "red").text(
+											"사용불가능한 이메일입니다.");
+
+									//중복시 회원가입 버튼 비활성화
+									$("button[type=submit]").attr("disabled",
+											true);
+								} else { //사용가능
+									$("#checkEmailResult").show();
+									$("#checkEmailResult").css("color", "green")
+											.text("사용가능한 이메일입니다.");
 									//사용가능시 회원가입 버튼 활성화
 									$("button[type=submit]").attr("disabled",
 											false);

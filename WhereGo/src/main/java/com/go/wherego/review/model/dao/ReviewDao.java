@@ -53,4 +53,6 @@ public class ReviewDao {
 	public ArrayList<Review> selectTopList(SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("reviewMapper.selectTopList");
 	}
+	
+
 }

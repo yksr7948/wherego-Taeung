@@ -78,6 +78,10 @@ public class MemberDao {
 	public int updatePwd(SqlSessionTemplate sqlSession, Member m) {
 		return sqlSession.update("memberMapper.updatePwd",m);
 	}
+	public int checkEmail(SqlSessionTemplate sqlSession, String checkEmail) {
+		// TODO Auto-generated method stub
+		 return sqlSession.selectOne("memberMapper.checkEmail",checkEmail);
+	}
 
 
 }

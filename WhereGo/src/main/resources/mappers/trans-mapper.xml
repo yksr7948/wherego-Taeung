@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="transMapper">
+
+
+	<resultMap type="GTerminal" id="GterminalResultSet">
+		<result column="TERMINALID" property="terminalId" />
+		<result column="TERMINALNM" property="terminalNm" />
+	</resultMap>
+	
+	<resultMap type="STerminal" id="SterminalResultSet">
+		<result column="TERMINALID" property="terminalId" />
+		<result column="TERMINALNM" property="terminalNm" />
+		<result column="CITYNAME" property="cityName" />
+	</resultMap>
+
+	<insert id="saveGTerminalInfo" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="GTerminal">
+			INTO GTERMINALCODE(TERMINALID
+					 ,TERMINALNM)
+			VALUES(#{GTerminal.terminalId}
+				  ,#{GTerminal.terminalNm})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	
+	<select id="getGTerminalCode" parameterType="String" resultType="String">
+		SELECT TERMINALID 
+		FROM GTERMINALCODE
+		WHERE TERMINALNM=#{terminalNm}
+	</select>
+	
+	
+	<insert id="saveSTerminalInfo" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="STerminal">
+			INTO STERMINALCODE(TERMINALID
+					 ,TERMINALNM
+					 ,CITYNAME)
+			VALUES(#{STerminal.terminalId}
+				  ,#{STerminal.terminalNm}
+				  ,#{STerminal.cityName})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	
+	
+	
+	<select id="getSTerminalCode" parameterType="String" resultType="String">
+		SELECT TERMINALID 
+		FROM STERMINALCODE
+		WHERE TERMINALNM=#{terminalNm}
+	</select>
+	
+</mapper>

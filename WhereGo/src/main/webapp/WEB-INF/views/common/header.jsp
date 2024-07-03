@@ -224,6 +224,18 @@ li {
                 <ul>
                   <li><a href="worldcup.en">여행지월드컵</a></li>
                   <li><a href="rullet.en">룰렛</a></li>
+                  <li><a href="TerminalInfo.tr">교통</a></li>
+                  <li><a href="ardp.tr">출발지 도착지</a></li>
+                </ul>
+              </div>
+            </li>
+            <li><a href="">교통</a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="GTerminalInfo.tr">고속버스 터미널 코드 저장</a></li>
+                  <li><a href="Gardp.tr">고속버스 출발지 도착지</a></li>
+                  <li><a href="STerminalInfo.tr">시외버스 터미널 코드 저장</a></li>
+                  <li><a href="Sardp.tr">시외버스 출발지 도착지</a></li>
                 </ul>
               </div>
             </li>

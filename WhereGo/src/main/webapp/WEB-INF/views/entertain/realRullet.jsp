@@ -62,12 +62,35 @@ canvas {
   transform: translateX(-50%);
   z-index: 22;
 }
+
+#resultButton {
+            display: none;
+            background-color: white;
+            text-align: center;
+            color: black;
+            padding: 10px 20px;
+            border: 2px solid black;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+            position: absolute;
+            top: calc(50% + 50px); /* canvas의 중심에서 상대적인 위치 계산 */
+            left: calc(50% + 550px); /* canvas의 중심에서 상대적인 위치 계산 */
+            transform: translate(-50%, -50%);
+        }
+
+#resultButton:hover{
+	background-color: black;
+    color: white;
+}
     </style>
 </head>
 <body>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
     <div id="part">
-        <canvas width="600" height='600'></canvas>  
+        <canvas width="600" height='600'></canvas>  <button id="resultButton" onclick="goToSearch()"></button>
         <button  id="rotateButton" onclick="rotate()">돌려돌려 돌림판</button>
       </div>
       <script>
@@ -77,6 +100,7 @@ canvas {
 const ctx = $c.getContext('2d');
 //const product = ["햄버거", "순대국", "정식당", "중국집", "구내식당"];
 const colors = [];
+let result="";
 
 function shuffleImages() {
 	images.sort(() => 0.5 - Math.random());
@@ -141,40 +165,28 @@ const rotate = () => {
 	    $c.style.transform = "rotate(-"+rotate+"deg)";
 	    $c.style.transition = `2s`;
 	    
-	    setTimeout(() => alert( product[ran-1].title), 2000);
+	    /* setTimeout(() => alert( product[ran-1].title), 2000);
+	    result=product[ran-1].title;
+	    createResultButton(result); */
+	    setTimeout(() => {
+            result=product[ran-1].title;
+            createResultButton(result);
+        }, 2000);
+	    
 	  }, 1);
 	};
-/* const rotate = () => {
-  $c.style.transform = 'initial';
-  $c.style.transition = 'initial';
-  const alpha = Math.floor(Math.random()*100);
-
-  setTimeout(() => {    
-	resultIndex = Math.floor(Math.random() * product.length); // 결과값 저장
-    const ran = Math.floor(Math.random() * product.length);
-    const arc = 360 / product.length;
-    const rotate = (ran * arc) + 3600 + (arc * 3) - (arc/4) + alpha;
-//     $c.style.transform = `rotate(-${rotate}deg)`;
-    $c.style.transform = "rotate(-"+rotate+"deg)";
-    $c.style.transition = '2s';
-  }, 1);
-}; */
-
-
-function add(){
-  if(menuAdd.value != undefined && menuAdd.value != ""){
-    product.push(menuAdd.value);
-    let r = Math.floor(Math.random() * 256);
-    let g = Math.floor(Math.random() * 256);
-    let b = Math.floor(Math.random() * 256);
-    colors.push("rgb(" + r + "," + g + "," + b + ")");
-    newMake();
-    menuAdd.value="";	
-  }
-  else{
-    alert("메뉴를 입력한 후 버튼을 클릭 해 주세요");
-  }
-}
+	
+	
+	const createResultButton = (title) => {
+	    const resultButton = document.getElementById('resultButton');
+	    resultButton.innerText = title+" 구경하기";
+	    resultButton.style.display = 'block';
+	};
+	
+	const goToSearch = () => {
+        const keyword = encodeURIComponent(result);
+        window.location.href = "search.wherego?keyword="+keyword;
+    };
 
 newMake();
       </script>

@@ -14,6 +14,10 @@
  		<typeAlias type="com.go.wherego.trip.model.vo.Reply" alias="Reply"/>
  		<typeAlias type="com.go.wherego.trip.model.vo.Likes" alias="Likes"/>
  		<typeAlias type="com.go.wherego.entertain.model.vo.WC" alias="WC"/>
+ 		<typeAlias type="com.go.wherego.review.model.vo.Review" alias="Review"/>
+ 		<typeAlias type="com.go.wherego.review.model.vo.ReviewReply" alias="ReviewReply"/> 
+ 		<typeAlias type="com.go.wherego.trans.model.vo.GTerminal" alias="GTerminal"/>
+ 		<typeAlias type="com.go.wherego.trans.model.vo.STerminal" alias="STerminal"/>
  	</typeAliases>
  	
  

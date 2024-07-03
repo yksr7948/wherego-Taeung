@@ -129,6 +129,24 @@ public class MemberController {
 			return result;
 		}
 		
+		@ResponseBody
+		@RequestMapping("checkEmailExist.me")
+		public String checkEmailExist(String checkEmail) {
+			System.out.println("checkEmail : "+checkEmail);
+			int count = memberService.checkEmail(checkEmail);
+			System.out.println(count);
+			String result = "";
+			
+			if(count>0) {//중복
+				result = "NNNNN";
+			}else {//중복아님(사용가능)
+				result = "NNNNY";
+			}
+			//System.out.println(result);
+			return result;
+		}
+		
+		
 		
 		@RequestMapping("goAdditional.me")
 		public String goAdditional(String rollingUserId,Model model,String userId){

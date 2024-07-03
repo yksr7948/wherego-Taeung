@@ -16,12 +16,7 @@ public class Planner {
 	private String userId;
 	private String title;
 	private String description;
-	
-
 	private Date startDate;
-	
-
 	private Date endDate;
-	
 	private Date createDate;
 }

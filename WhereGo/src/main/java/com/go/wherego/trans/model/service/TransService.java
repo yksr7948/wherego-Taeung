@@ -2,14 +2,19 @@ package com.go.wherego.trans.model.service;
 
 import java.util.ArrayList;
 
-import com.go.wherego.trans.model.vo.Terminal;
+import com.go.wherego.trans.model.vo.GTerminal;
+import com.go.wherego.trans.model.vo.STerminal;
 
 
 
 public interface TransService {
 
-	int saveTerminalInfo(ArrayList<Terminal> list);
+	int saveGTerminalInfo(ArrayList<GTerminal> list);
 
-	String getTerminalCode(String termianlNm);
+	String getGTerminalCode(String GtermianlNm);
+
+	int saveSTerminalInfo(ArrayList<STerminal> list);
+
+	String getSTerminalCode(String SterminalNm);
 
 }

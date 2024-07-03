@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.trans.model.service.TransService;
-import com.go.wherego.trans.model.vo.Terminal;
+import com.go.wherego.trans.model.vo.GTerminal;
+import com.go.wherego.trans.model.vo.STerminal;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,8 +30,8 @@ public class TransController {
 	private TransService transService;
 	
 	
-	
-	@RequestMapping("TerminalInfo.tr")
+	//////////////////////////////////////////고속버스 ///////////////////////////////////////////////////////////////////////
+	@RequestMapping("GTerminalInfo.tr")
 	public String trans() {
 		
 		return "trans/saveBus";
@@ -38,8 +39,8 @@ public class TransController {
 	
 	//고속버스 시간표 가져오기 
 	@ResponseBody
-	@RequestMapping(value="bus.tr",produces = "application/json;charset=UTF-8")
-	public String areaPollution(String location) throws IOException {
+	@RequestMapping(value="GBus.tr",produces = "application/json;charset=UTF-8")
+	public String getGBusInfo() throws IOException {
 		
 		
 		String url = "https://apis.data.go.kr/1613000/ExpBusInfoService/getExpBusTrminlList";
@@ -71,8 +72,8 @@ public class TransController {
 	
 	//고속버스 시간표 저장
 		@ResponseBody
-		@RequestMapping(value="saveTerminalInfo.tr", produces ="application/text;charset=UTF-8")
-		public String areaSave(String location) throws IOException {
+		@RequestMapping(value="saveGTerminalInfo.tr", produces ="application/text;charset=UTF-8")
+		public String saveGBusInfo() throws IOException {
 			
 			String url = "https://apis.data.go.kr/1613000/ExpBusInfoService/getExpBusTrminlList";
 			url+="?serviceKey="+SERVICEKEY;
@@ -104,14 +105,14 @@ public class TransController {
 			JsonArray item = items.getAsJsonArray("item");
 			
 			
-			ArrayList<Terminal> list = new ArrayList<>(); 
+			ArrayList<GTerminal> list = new ArrayList<>(); 
 			
 			for(int i=0;i<item.size();i++) {
 
 				JsonObject it = item.get(i).getAsJsonObject();
 				
 
-				list.add(new Terminal(it.get("terminalId").getAsString()
+				list.add(new GTerminal(it.get("terminalId").getAsString()
 								  ,it.get("terminalNm").getAsString()
 							));
 				
@@ -121,7 +122,7 @@ public class TransController {
 			br.close(); //버퍼리더반납
 			urlCon.disconnect(); // 연결해제
 			
-			int result = transService.saveTerminalInfo(list);
+			int result = transService.saveGTerminalInfo(list);
 			
 			if(result>0) {
 				return "저장성공";
@@ -132,17 +133,17 @@ public class TransController {
 		}
 		
 		//사용자가 찾는 고속버스 시간표 출력
-		@RequestMapping("ardp.tr")
-		public String ardp() {
+		@RequestMapping("Gardp.tr")
+		public String Gardp() {
 			return "trans/ardp";
 		}
 		
 		@ResponseBody
-		@RequestMapping(value="getArdp.tr", produces ="application/json;charset=UTF-8")
-		public String getArdp(String date, String departure, String arrival)throws IOException {
+		@RequestMapping(value="getGArdp.tr", produces ="application/json;charset=UTF-8")
+		public String getGArdp(String date, String departure, String arrival)throws IOException {
 			
-			String departureCode = transService.getTerminalCode(departure);
-			String arrivalCode = transService.getTerminalCode(arrival);
+			String departureCode = transService.getGTerminalCode(departure);
+			String arrivalCode = transService.getGTerminalCode(arrival);
 			System.out.println(departureCode);
 			System.out.println(arrivalCode);
 			System.out.println(date);
@@ -195,6 +196,177 @@ public class TransController {
 			}
 			
 		}
+		
+		
+		////////////////////////////// 여기서부터는 시외버스  ////////////////////////////////////////////////////
+		
+		
+		@RequestMapping("STerminalInfo.tr")
+		public String Strans() {
+			
+			return "trans/saveSBus";
+		}
+		
+		//시외버스 시간표 가져오기 
+		@ResponseBody
+		@RequestMapping(value="SBus.tr",produces = "application/json;charset=UTF-8")
+		public String getSBusInfo(String location) throws IOException {
+			
+			
+			String url = "https://apis.data.go.kr/1613000/SuburbsBusInfoService/getSuberbsBusTrminlList";
+			url+="?serviceKey="+SERVICEKEY;
+			url+="&numOfRows=2117";
+			url+="&_type=json";
+			
+			URL requestUrl = new URL(url);
+			
+			HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+			urlCon.setRequestMethod("GET");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+			
+			String str = "";
+			
+			String line;
+			while((line=br.readLine()) != null) {
+				str+=line;
+			}
+			
+			br.close();
+			urlCon.disconnect();
+			
+			//json 문자열 형태이기때문에 그대로 반납하여도 json화되어서 넘어감 
+			System.out.println(str);
+			return str;
+		}
+		
+		//고속버스 시간표 저장
+			@ResponseBody
+			@RequestMapping(value="saveSTerminalInfo.tr", produces ="application/text;charset=UTF-8")
+			public String saveSBusInfo() throws IOException {
+				
+				String url = "https://apis.data.go.kr/1613000/SuburbsBusInfoService/getSuberbsBusTrminlList";
+				url+="?serviceKey="+SERVICEKEY;
+				url+="&numOfRows=2117";
+				url+="&_type=json";
+				
+				
+				
+				URL requestUrl = new URL(url); //요청 url을 넣어서 객체 준비
+				
+				HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+				
+				urlCon.setRequestMethod("GET");//get방식 요청 설정
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+				
+				String responseStr = "";
+				String line;
+				while((line = br.readLine())!=null) {
+					responseStr+=line;
+				}
+				
+				JsonObject jobj = JsonParser.parseString(responseStr).getAsJsonObject();
+				
+				JsonObject response = jobj.getAsJsonObject("response");
+				
+				JsonObject body = response.getAsJsonObject("body");
+				JsonObject items = body.getAsJsonObject("items");
+				JsonArray item = items.getAsJsonArray("item");
+				
+				
+				ArrayList<STerminal> list = new ArrayList<>(); 
+				
+				for(int i=0;i<item.size();i++) {
+
+					JsonObject it = item.get(i).getAsJsonObject();
+					
+
+					list.add(new STerminal(it.get("terminalId").getAsString()
+									  ,it.get("terminalNm").getAsString()
+									  ,it.get("cityName").getAsString()
+								));
+					
+				}
+
+				//작업 끝 자원반납
+				br.close(); //버퍼리더반납
+				urlCon.disconnect(); // 연결해제
+				
+				int result = transService.saveSTerminalInfo(list);
+				
+				if(result>0) {
+					return "저장성공";
+				}else {
+					return "저장실패";
+				}
+				
+			}
+			
+			//사용자가 찾는 고속버스 시간표 출력
+			@RequestMapping("Sardp.tr")
+			public String Sardp() {
+				return "trans/sardp";
+			}
+			
+			@ResponseBody
+			@RequestMapping(value="getSArdp.tr", produces ="application/json;charset=UTF-8")
+			public String getSArdp(String date, String departure, String arrival)throws IOException {
+				
+				String departureCode = transService.getSTerminalCode(departure);
+				String arrivalCode = transService.getSTerminalCode(arrival);
+				System.out.println(departureCode);
+				System.out.println(arrivalCode);
+				System.out.println(date);
+				
+				
+				
+				String url = "https://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo";
+				url+="?serviceKey="+SERVICEKEY;
+				url+="&numOfRows=20";
+				url+="&_type=json";
+				url+="&depTerminalId="+departureCode;
+				url+="&arrTerminalId="+arrivalCode;
+				url+="&depPlandTime="+date;
+				
+				URL requestUrl = new URL(url);
+				
+				HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+				urlCon.setRequestMethod("GET");
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+				
+				String str = "";
+				
+				String line;
+				while((line=br.readLine()) != null) {
+					str+=line;
+				}
+
+				JsonObject jobj = JsonParser.parseString(str).getAsJsonObject();
+				
+				JsonObject response = jobj.getAsJsonObject("response");
+				
+				JsonObject body = response.getAsJsonObject("body");
+				int totalCount = body.get("totalCount").getAsInt();
+				
+				System.out.println("totalCount : "+totalCount);
+				
+				if(totalCount==0) {
+					br.close();
+					urlCon.disconnect();
+					System.out.println("str : "+str);
+					return str;
+				}else {
+					br.close();
+					urlCon.disconnect();
+					
+					//json 문자열 형태이기때문에 그대로 반납하여도 json화되어서 넘어감 
+					System.out.println(str);
+					return str;
+				}
+				
+			}
 		
 		
 		

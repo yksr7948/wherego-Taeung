@@ -21,23 +21,7 @@
 	<div class="content" align="center">
 		<h1>국토교통부-시외버스</h1>
 		<br> <br>
-		
-		
-		<!-- 
-		<select id="departure">
-			<option value="1">서울</option>
-			<option value="2">인천</option>
-			<option value="3">대전</option>
-			<option value="4">대구</option>
-			<option value="5">광주</option>
-			<option value="6">부산</option>
-			<option value="7">울산</option>
-			<option value="31">경기</option>
-			<option value="32">강원</option>
-			<option value="39">제주</option>
-		</select>  -->
-		
-		
+
 		<button id="areaBtn">확인</button>
 		<button id="saveBtn">저장하기</button>
 	
@@ -53,6 +37,7 @@
 				<tr>
 					<th>터미널ID</th>
 					<th>터미널NAME</th>
+					<th>도시</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -67,7 +52,7 @@
 					function() {
 					
 						$.ajax({
-							url : "bus.tr",
+							url : "SBus.tr",
 							
 							success : function(data) {
 
@@ -82,7 +67,8 @@
 
 									str += "<tr>" 
 										+ "<td>"+item.terminalId+"</td>" 
-										+ "<td>"+item.terminalNm+"</td>"  
+										+ "<td>"+item.terminalNm+"</td>"
+										+ "<td>"+item.cityName+"</td>"  
 										+ "</tr>";
 								}
 
@@ -100,7 +86,7 @@
 					function() {
 						
 						$.ajax({
-							url : "saveTerminalInfo.tr",
+							url : "saveSTerminalInfo.tr",
 							
 							success : function(data) {
 								$("#save-result>h3").text(data + "지역 저장성공");

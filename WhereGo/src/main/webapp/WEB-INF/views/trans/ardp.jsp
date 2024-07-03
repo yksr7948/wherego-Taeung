@@ -41,7 +41,7 @@ $(function() {
 			function() {
 			
 				$.ajax({
-					url : "getArdp.tr",
+					url : "getGArdp.tr",
 					data : {
 						date : $("#selectDate").val().replace(/-/g, ""),
 						departure : $("#departure").val(),

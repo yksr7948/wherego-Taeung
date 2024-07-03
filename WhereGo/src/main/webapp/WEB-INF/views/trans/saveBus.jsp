@@ -67,7 +67,7 @@
 					function() {
 					
 						$.ajax({
-							url : "bus.tr",
+							url : "GBus.tr",
 							
 							success : function(data) {
 
@@ -100,7 +100,7 @@
 					function() {
 						
 						$.ajax({
-							url : "saveTerminalInfo.tr",
+							url : "saveGTerminalInfo.tr",
 							
 							success : function(data) {
 								$("#save-result>h3").text(data + "지역 저장성공");

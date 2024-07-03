@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Terminal {
+public class GTerminal {
 	String terminalId;
 	String terminalNm;
 }

@@ -184,6 +184,12 @@
 		WHERE USER_ID = #{checkId}
 	</select>
 	
+	<select id="checkEmail" parameterType="string" resultType="_int">
+		SELECT COUNT(*)
+		FROM MEMBER
+		WHERE EMAIL = #{checkEmail}
+	</select>
+	
 	
 	
 	

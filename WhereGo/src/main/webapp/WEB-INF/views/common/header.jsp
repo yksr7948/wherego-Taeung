@@ -228,6 +228,16 @@ li {
                 </ul>
               </div>
             </li>
+            <li><a href="">교통</a>
+              <div class="submenu">
+                <ul>
+                  <li><a href="GTerminalInfo.tr">고속버스 터미널 코드 저장</a></li>
+                  <li><a href="Gardp.tr">고속버스 출발지 도착지</a></li>
+                  <li><a href="STerminalInfo.tr">시외버스 터미널 코드 저장</a></li>
+                  <li><a href="Sardp.tr">시외버스 출발지 도착지</a></li>
+                </ul>
+              </div>
+            </li>
             <li><a href="planner.pl">플래너</a>
           </ul>
         </div>

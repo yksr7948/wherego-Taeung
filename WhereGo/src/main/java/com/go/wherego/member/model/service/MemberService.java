@@ -34,6 +34,8 @@ public interface MemberService {
 	String findIdByEmail(String byEmail);
 
 	int updatePwd(Member m);
+
+	int checkEmail(String checkEmail);
 	
 
 	

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="transMapper">
+
+
+	<resultMap type="Terminal" id="terminalResultSet">
+		<result column="TERMINALID" property="terminalId" />
+		<result column="TERMINALNM" property="terminalNm" />
+	</resultMap>
+
+	<insert id="saveTerminalInfo" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="Terminal">
+			INTO TERMINALCODE(TERMINALID
+					 ,TERMINALNM)
+			VALUES(#{Terminal.terminalId}
+				  ,#{Terminal.terminalNm})
+		</foreach>
+		SELECT * FROM DUAL
+	</insert>
+	
+	<select id="getTerminalCode" parameterType="String" resultType="String">
+		SELECT TERMINALID 
+		FROM TERMINALCODE
+		WHERE TERMINALNM=#{terminalNm}
+	</select>
+</mapper>

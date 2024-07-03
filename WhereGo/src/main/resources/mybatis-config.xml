@@ -16,6 +16,7 @@
  		<typeAlias type="com.go.wherego.entertain.model.vo.WC" alias="WC"/>
  		<typeAlias type="com.go.wherego.review.model.vo.Review" alias="Review"/>
  		<typeAlias type="com.go.wherego.review.model.vo.ReviewReply" alias="ReviewReply"/> 
+ 		<typeAlias type="com.go.wherego.trans.model.vo.Terminal" alias="Terminal"/>
  	</typeAliases>
  	
  

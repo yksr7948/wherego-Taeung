@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewMapper">
+	<resultMap type="Review" id="reviewResultSet">
+		<result column="BOARD_NO" property="boardNo"/>
+		<result column="BOARD_TITLE" property="boardTitle"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="BOARD_WRITER" property="boardWriter"/>		
+		<result column="COUNT" property="count"/>
+		<result column="COUNTRY" property="country"/>
+		<result column="BOARD_DATE" property="boardDate"/>
+		<result column="STATUS" property="status"/>
+		<result column="BOARD_IMG" property="boardImg"/>
+	</resultMap>
+		
+	<resultMap type="ReviewReply" id="rvreplyResultSet">
+		<result column="REPLY_NO" property="replyNo"/>
+		<result column="REPLY_CONTENT" property="replyDate"/>
+		<result column="REPLY_BNO" property="replyBno"/>
+		<result column="REPLY_WRITER" property="replyWriter"/>		
+		<result column="REPLY_DATE" property="replyDate"/>
+		<result column="STATUS" property="status"/>
+	</resultMap> 
+			
+	<select id="listCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM REVIEW
+		WHERE STATUS='Y'
+	</select>
+	
+	<select id="selectList" resultMap="reviewResultSet">
+		SELECT BOARD_NO
+		      ,BOARD_TITLE
+		      ,BOARD_WRITER
+		      ,COUNT
+		      ,BOARD_DATE
+		      ,BOARD_IMG
+		FROM REVIEW
+		WHERE STATUS='Y'
+		ORDER BY BOARD_DATE DESC	
+	</select>
+	
+	<update id="increaseCount" parameterType="_int">
+		UPDATE REVIEW
+		SET COUNT = COUNT+1
+		WHERE BOARD_NO = #{boardNo}
+		AND STATUS = 'Y'
+	</update>
+	
+	<select id="selectReview" parameterType="_int" resultMap="reviewResultSet">
+		SELECT BOARD_NO
+			  ,BOARD_TITLE
+			  ,BOARD_CONTENT
+			  ,BOARD_WRITER
+			  ,BOARD_DATE
+			  ,BOARD_IMG
+			  ,COUNT
+		FROM REVIEW 
+		WHERE BOARD_NO = #{boardNo}
+		AND STATUS = 'Y'
+	</select>
+		
+ 	<insert id="insertReview" parameterType="Review">
+		INSERT INTO REVIEW(BOARD_NO
+		                 ,BOARD_TITLE
+		                 ,BOARD_WRITER
+		                 ,BOARD_CONTENT
+		                 ,BOARD_IMG
+		                 )
+        		VALUES (SEQ_BNO.NEXTVAL
+               			,#{boardTitle}
+               			,#{boardWriter}
+               			,#{boardContent}
+               			,#{boardImg})
+	
+	</insert>
+	
+	<update id="updateReview" parameterType="Review">
+		UPDATE REVIEW
+		SET	BOARD_TITLE = #{boardTitle}
+		   ,BOARD_CONTENT = #{boardContent}
+		   ,BOARD_IMG = #{boardImg}
+		WHERE BOARD_NO = #{boardNo}
+		AND STATUS = 'Y'
+	</update>
+	
+	<delete id="deleteReview" parameterType="_int">
+		DELETE FROM REVIEW 
+		WHERE BOARD_NO = #{boardNo}
+		AND STATUS='Y'
+	</delete>
+	
+	<select id="replyList" resultType="ReviewReply" parameterType="_int">
+		SELECT REPLY_NO replyNo
+		      ,REPLY_CONTENT replyContent
+		      ,REPLY_WRITER replyWriter
+		      ,REPLY_DATE replyDate
+		FROM REPLY
+		WHERE REPLY_BNO = #{boardNo}
+		AND STATUS ='Y'
+		ORDER BY REPLY_DATE DESC
+	</select>
+	
+	<insert id="insertReply" parameterType="ReviewReply">
+		INSERT INTO REPLY (REPLY_NO
+						  ,REPLY_CONTENT
+						  ,REPLY_BNO
+						  ,REPLY_WRITER)
+           			 VALUES (SEQ_RNO.NEXTVAL
+           			 		,#{replyContent}
+           			 		,#{refBno}
+           			 		,#{replyWriter})
+	</insert>
+	
+	<select id="selectTopList" resultMap="reviewResultSet">
+	<![CDATA[SELECT * 
+		FROM (SELECT BOARD_NO
+		          ,BOARD_TITLE
+		          ,BOARD_WRITER
+		          ,COUNT
+		          ,BOARD_DATE
+		          ,BOARD_IMG
+		    FROM REVIEW
+		    WHERE STATUS='Y'
+		    ORDER BY COUNT DESC)
+		WHERE ROWNUM <=]]> 5
+	</select>
+</mapper>

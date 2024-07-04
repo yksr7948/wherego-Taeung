@@ -95,6 +95,9 @@
 	display: block;
 	margin-bottom: 15px;
 }
+.plan-box input{
+	width: 170px;
+}
 
 /* search-box(검색) */
 .search-box {
@@ -102,12 +105,14 @@
 	background-color: #f4f4f9;
 	border: 2px solid lightgray;
 }
+
 .search-box input {
 	width: 60%;
 	height: 30px;
 	border-radius: 5px;
 	font-size: 16px;
 }
+
 .search-box button {
 	margin-left: 10px;
 	width: 80px;
@@ -122,42 +127,44 @@
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 }
-.search-box-list{
-	border-bottom:2px solid lightgray;
+
+.search-box-list {
+	border-bottom: 2px solid lightgray;
 	min-height: 100px;
-	height: auto;
+	display: flex;
+	align-items: center;
+	padding: 10px;
+}
+
+.search-box-list img {
+	width: 12%;
+}
+
+.list-content {
+	width: 80%;
+	display: flex;
+	flex-direction: column;
 	text-align: center;
+}
+
+.list-title {
+	font-size: 21px;
+	font-weight: 900;
+}
+
+.list-addr {
+	color: grey;
+}
+.search-box-list button {
+	width: 8%;
+	margin-left: auto;
+	display: flex;
 	justify-content: center;
 	align-items: center;
-	flex-direction: column;
 }
-.search-box-list img{
-	width: 48px;
-	float: left;
-	margin-left: 10px;
-	margin-top: 10px;
-}
-.search-box-list span{
-	display: block;
-	margin-top: 5px;
-	margin-bottom: 5px;
-}
-.list-title{
-	font-weight: 900;
-	font-size: 18px;
-}
-.list-addr{
-	font-size: 16px;
-}
-.search-box-list button{
-	width: 36px;
-	height: auto;
-	float: center;
-	text-align: center;
-}
-.search-box-list button:hover{
+.search-box-list button:hover {
 	background-color: black;
-    color: white;
+	color: white;
 }
 
 /* map(맵) */
@@ -169,10 +176,10 @@
 /* 버튼 */
 .save-button {
 	display: flex;
-	justify-content: center;
-	padding: 10px;
+	justify-content: center; padding : 10px;
 	margin-left: -15px;
 	margin-bottom: 50px;
+	padding: 10px;
 }
 </style>
 </head>
@@ -201,12 +208,6 @@
         	<c:forEach items="${days }" var="day" varStatus="status">
 	            <div class="plans-box" data-date="<fmt:formatDate value="${day }" pattern="yyyy-MM-dd"/>">
 	                <div class="plans-box-title">DAY${status.count } | <fmt:formatDate value="${day }" pattern="MM.dd E요일"/></div>
-	                <div class="plan-box">
-	                	<span class="plan-img"></span>
-	                	<span class="plan-title">${status.count }. 로우앤슬로우</span>
-	                	<span>시간 : <input type="time"></span>
-	                	<span>메모 : <input type="text"></span>
-	                </div>
 	            </div>
         	</c:forEach>
         	
@@ -238,6 +239,9 @@
         
         <!-- search js -->
         <script>
+	        var markers = [];
+	        var paths = [];
+            
         	function searchPlace(){
         		
         		$(".search-box-list").remove();
@@ -256,21 +260,73 @@
         				for(var i=0;i<items.length;i++){
         					
         					var item = items[i];
+        					var itemStr = JSON.stringify(item);
         					
         					str += "<div class='search-box-list'>"
-        						+ "<span><img src='resources/img/plan/location-icon.png'></span>"
+        						+ "<img src='resources/img/plan/location-icon.png'>"
+        						+ "<span class='list-content'>"
         						+ "<span class='list-title'>"+item.title+"</span>"
         						+ "<span class='list-addr'>"+item.addr1+item.addr2+"</span>"
-        						+ "<button>+</button>"
+        						+ "</span>"
+        						+ "<button class='add-plan-button' data-item='" + itemStr + "'>+</button>"
         						+ "</div>";
         				}
- 						$(".search-box").append(str);		
+ 						$(".search-box").append(str);	
+ 						
+ 			        	$(".add-plan-button").on("click",function(){
+ 			        		var item = $(this).data("item");
+ 			        		addPlan(item);
+ 			        	});
         			},
         			error : function(){
         				console.log("통신오류");
         			}
         		});
+        	}
+        	
+        	function addPlan(item){
+        		
+        		 var parent =  $('.plans-box[style*="display: block"]');
+        	     var data_date = parent.attr('data-date');
+        	     var num = parent.children().length; // 하위 엘리먼트기에 일정 - 제목 (DAY) 부분도 포함됨
+        	     
+        	     var latlng = new naver.maps.LatLng(item.mapy, item.mapx);
+                 var marker = new naver.maps.Marker({
+                     position: latlng,
+                     map: map,
+                     title: item.title // 타이틀 추가
+                 });
+                 
+                 markers.push(marker);
+                 map.setCenter(latlng);
+                 
+              // 마커 사이에 선 긋기
+                 if (markers.length > 1) {
+                     var path = new naver.maps.Polyline({
+                         map: map,
+                         path: [markers[markers.length - 2].getPosition(), marker.getPosition()],
+                         strokeColor: '#5347AA',
+                         strokeWeight: 2
+                     });
+                     paths.push(path);
+                 }
+		
+        	    if(num<6){ // 일정은 5개까지만 추가 가능
+        	        parent.append(getHtml(item.title, item.mapx, item.mapy, num, data_date));
+        	    }else{
+        	        alert("한번에 5개의 관광지를 선택 할 수 있습니다.");
+        	    }
+        	}
+        	
+        	function getHtml(title, mapx, mapy, num, data_date){
+        	   
+        		var div = '<div class="plan-box" data-date="' + data_date + '" data-y = "' + mapy + '" data-x = "' + mapx + '" data-place = "' + title + '" data-planNo="">';
+					div += '<span class="plan-title">' + num + " . "+ title + '</span>'
+					div += '<span>시간 : <input type="time"></span>'
+					div += '<span>메모 : <input type="text"></span>'
+					div += '</div>';
 
+        	    return div;
         	}
         </script>
 

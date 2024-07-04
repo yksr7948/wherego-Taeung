@@ -145,7 +145,9 @@
                 </div>
             </div>
             <div class="planner-item">
-                <img src="resources/img/main/3.png" alt="Map 3">
+            	<div class="planner-map">
+                	<img src="resources/img/main/3.png" alt="Map 3">
+            	</div>
                 <div class="planner-info">
                     <p>2021-09-23</p>
                     <p>친구들과 서울 여행</p>

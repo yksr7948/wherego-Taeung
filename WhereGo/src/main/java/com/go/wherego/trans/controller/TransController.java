@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.trans.model.service.TransService;
 import com.go.wherego.trans.model.vo.GTerminal;
+import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -131,6 +133,93 @@ public class TransController {
 			}
 			
 		}
+		
+		//출발지 like검색
+		@ResponseBody
+		@RequestMapping("searchDp.tr")
+		public ArrayList<String> searchDp(String searchDp, String date) throws IOException{
+
+			ArrayList<String> dlist = transService.likeSearch(searchDp);
+			System.out.println(dlist);	
+			
+			return dlist;
+			
+		}
+		
+		//도착지 like검색
+		@ResponseBody
+		@RequestMapping("searchAr.tr")
+		public ArrayList<String> searchAr(String searchDp,String searchAr,String date) throws IOException{
+			
+			String departureCode = transService.getGTerminalCode(searchDp);
+			
+			String url = "https://apis.data.go.kr/1613000/ExpBusInfoService/getStrtpntAlocFndExpbusInfo";
+			url+="?serviceKey="+SERVICEKEY;
+			url+="&pageNo=1";
+			url+="&numOfRows=1000";
+			url+="&_type=json";
+			url+="&depTerminalId="+departureCode;
+			url+="&depPlandTime="+date;
+			
+			URL requestUrl = new URL(url);
+			
+			HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+			urlCon.setRequestMethod("GET");
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+			
+			
+			String str = "";
+			
+			String line;
+			while((line=br.readLine()) != null) {
+				str+=line;
+			}
+			JsonObject jobj = JsonParser.parseString(str).getAsJsonObject();
+			
+			JsonObject response = jobj.getAsJsonObject("response");
+			
+			JsonObject body = response.getAsJsonObject("body");
+			JsonObject items = body.getAsJsonObject("items");
+			JsonArray item = items.getAsJsonArray("item");
+			
+			ArrayList<Instant> list = new ArrayList<>(); 
+			
+			for(int i=0;i<item.size();i++) {
+
+				JsonObject it = item.get(i).getAsJsonObject();
+				
+				list.add(new Instant(it.get("arrPlaceNm").getAsString()));
+			}
+			
+			// HashSet을 사용하여 중복을 제거
+			HashSet<Instant> set = new HashSet<>(list);
+
+			// HashSet을 다시 ArrayList로 변환
+			list.clear();
+			list.addAll(set);
+			
+			System.out.println("db에 넣을 리스트 : "+list);
+			
+			int insertResult = transService.insertInstant(list); // 해당 출발지에 대한 도착지 LIST 저장
+			 
+			
+			
+			ArrayList<String> arrivalList = transService.arriavlLikeSearch(searchAr); // 위에 instant 테이블에 저장한 도착지 리스트에서 
+																				//사용자가 검색한 단어로 like검색 
+			
+			HashSet<String> arrivalSet = new HashSet<String>(arrivalList);
+			
+			arrivalList.clear();
+			arrivalList.addAll(arrivalSet);
+			
+			System.out.println("like 검색 결과"+arrivalList);
+			transService.deleteInstant();
+			return arrivalList;
+			
+		}
+		
+		
 		
 		//사용자가 찾는 고속버스 시간표 출력
 		@RequestMapping("Gardp.tr")

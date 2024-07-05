@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,153 +16,138 @@
 <!-- Latest compiled JavaScript -->
 <script
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css" rel="stylesheet">
-
+<script
+	src="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/alertify.min.js"></script>
+<link
+	href="https://cdn.jsdelivr.net/npm/alertifyjs@1.14.0/build/css/alertify.min.css"
+	rel="stylesheet">
 <style>
-	div{
-		box-sizing:border-box;
-	}
-	#header{
-		width:80%;
-		height:100px;
-		padding-top:20px;
-		margin:auto;
-	}
-	#header>div{
-		width:100%;
-		margin-bottom:10px;
-	}
-	#header_1{
-		height : 40%;
-	}
-	#header_2{
-		height : 60%;
-	}
-	#header_1>div{
-		height : 100%;
-		float : left;
-	}
-	#header_1_left {
-		width:30%;
-		position:relative;
-	}
-	#header_1_center {
-		width:40%;
-	}
-	#header_1_right{
-		width:30%;
-	}
-	#header_1_left>img{
-		height : 80%;
-		position : absolute;
-		margin:auto;
-		top:0px;
-		bottom:0px;
-		right:0px;
-		left:0px;
-	}
-	#header_1_right{
-		text-align : center;
-		line-height : 35px;
-		font-size : 12px;
-		text-indent:35px;
-	}
-	#header_1_right>a{
-		margin : 5px;
-	}
-	#header_1_right>a:hover{
-		cursor : pointer;
-	}
-	#header_2>ul{
-		width:100%;
-		height:100%;
-		list-style-type:none;
-		margin:auto;
-		padding:0;
-	}
-	#header_2>ul>li{
-		float:left;
-		width:25%;
-		height:100%;
-		line-height:55px;
-		text-align:center;
-	}
-	#header_2>ul>li a{
-		text-decoration:none;
-		color:black;
-		font-size:18px;
-		font-weight:900;
-	}
-	#header_2{
-		border-top:1px solid lightgray;
-	}
-	#header a{
-		text-decoration:none; 
-		color:black;
-	} 
-	
-	/*세부 페이지마다 필요한 공통 스타일*/
-	.content{
-		background-color: skyblue;
-		width:80%;
-		margin:auto;
-	}
-	.innerOuter{
-		border:1px solid blue;
-		width:80%;
-		margin:auto;
-		padding: 5% 10%;
-		background-color: white;
-	}
-	
+ body {
+        font-family: 'Arial', sans-serif;
+        background-color: #F0F4F8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+        text-align: center;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    label{
+    	 color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.0em;
+    }
+        .form-group {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .form-group .field-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .form-group label {
+        width: 150px; /* Adjust as needed */
+        text-align: right;
+        margin-right: 10px;
+    }
+    .form-group input {
+        flex-grow: 1;
+        width: 200px;
+    }
+    .btns {
+        margin-top: 20px;
+    }
+    .check-result {
+        font-size: 0.8em;
+        margin-left: 10px;
+        width: 150px; /* 고정된 너비 설정 */
+    }
+     .gender-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        width: 400px; /* 고정된 너비 설정 */
+    }
+    .gender-container label {
+        margin-right: 10px;
+     }
+ button {
+    background-color: white;
+    text-align: center;
+    color: black;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+button:hover {
+    background-color: black;
+    color: white;
+}
 </style>
-
 </head>
 <body>
-	
-
-		<div class="content">
+	<a href="index.jsp"><img src="resources/img/removebg-preview.png" alt="Logo"></a>
 		<br> <br>
 		<div class="innerOuter">
 			<h2>회원가입</h2>
 			<br>
-
-			<form action="insert.me" method="post">
-				<div class="form-group">
-					<label for="enrollUserId">* ID</label> <input type="text"
-						id="enrollUserId" name="userId" class="form-control"> <br>
-					<div id="checkResult" style='font-size: 0.8em;'></div>
-
-					<label for="enrollUserPwd">* PASSWORD</label> <input
-						type="password" id="enrollUserPwd" name="userPwd"
-						class="form-control"> <br> <label for="checkPwd">*
-						PASSWORD CHECK</label> <input type="password" id="pwdCheck"
-						class="form-control"> <br> <label for="userName">*
-						NAME</label> <input type="text" id="userName" name="userName"
-						class="form-control"> <br> <label for="email">
-						&nbsp; EMAIL</label> <input type="email" id="email" name="email"
-						class="form-control"> <br> 
-						<div id="checkEmailResult" style='font-size: 0.8em;'></div>
-						<label for="age">
-						&nbsp; AGE</label> <input type="number" id="age" name="age"
-						class="form-control"> <br> <label for="phone">
-						&nbsp; PHONE</label> <input type="tel" id="phone" name="phone"
-						class="form-control" placeholder="(-)없이 입력">  <br>
-
-					<label for=""> &nbsp; GENDER</label> &nbsp;&nbsp; <input
-						type="radio" id="male" value="M" name="gender" checked> <label
-						for="male">남자</label> &nbsp;&nbsp; <input type="radio" id="female"
-						value="F" name="gender"> <label for="female">여자</label>
-					&nbsp;&nbsp;
-				</div>
-				<div class="btns" align="center">
-					<button type="submit" class="btn btn-primary" disabled>회원가입</button>
-					<button type="reset" class="btn btn-danger">초기화</button>
-				</div>
-			</form>
-
+			 <form action="insert.me" method="post">
+            <div class="form-group">
+                <div class="field-container">
+                    <label for="enrollUserId">ID</label>
+                    <input type="text" id="enrollUserId" name="userId" class="form-control">
+                       <div id="checkResult" class="check-result"></div>
+                </div>
+                <div class="field-container">
+                    <label for="enrollUserPwd">PASSWORD</label>
+                    <input type="password" id="enrollUserPwd" name="userPwd" class="form-control">
+                </div>
+                <div class="field-container">
+                    <label for="pwdCheck">PASSWORD CHECK</label>
+                    <input type="password" id="pwdCheck" class="form-control">
+                </div>
+                <div class="field-container">
+                    <label for="userName">NAME</label>
+                    <input type="text" id="userName" name="userName" class="form-control">
+                </div>
+                <div class="field-container">
+                    <label for="email">&nbsp; EMAIL</label>
+                    <input type="email" id="email" name="email" class="form-control">
+                    <div id="checkEmailResult" class="check-result"></div>
+                </div>
+                <div class="field-container">
+                    <label for="age">&nbsp; AGE</label>
+                    <input type="number" id="age" name="age" class="form-control">
+                </div>
+                <div class="field-container">
+                    <label for="phone">&nbsp; PHONE</label>
+                    <input type="tel" id="phone" name="phone" class="form-control" placeholder="(-)없이 입력">
+                </div>
+               <div class="gender-container field-container">
+                    <label for="">GENDER</label>
+                    <label for="male">남자</label>
+                    <input type="radio" id="male" value="M" name="gender" checked>
+                    <label for="female">여자</label>
+                    <input type="radio" id="female" value="F" name="gender">
+                </div>
+            </div>
+            <div class="btns" align="center">
+                <button type="submit" disabled>회원가입</button>
+                <button type="reset">초기화</button>
+            </div>
+        </form>
 			<script>
 				$(function() {
 					//사용자가 입력한 아이디가 중복인지 확인하는 작업 (비동기처리)
@@ -171,26 +156,21 @@
 					//돌려받은 응답데이터를 이용하여 result div에 사용 가능한 아이디입니다.
 					//또는 사용불가능한 아이디입니다. 라는 텍스트를 담아 보여주기
 					//이때 사용 가능하다면 회원가입 버튼이 활성화 되도록 작업하기
-					//checkId() 메소드명 사용 
-
-					//아이디 입력 인풋상자 요소 
+					//checkId() 메소드명 사용
+					//아이디 입력 인풋상자 요소
 					var inputId = $("#enrollUserId");
 					var inputEmail = $("#email");
-
 					inputId.keyup(function() {
-
 						$.ajax({
 							url : "checkId.me",
 							data : {
 								checkId : $(inputId).val()
 							},
 							success : function(result) {
-
 								if (result == 'NNNNN') {//중복
 									$("#checkResult").show();
 									$("#checkResult").css("color", "red").text(
 											"사용불가능한 아이디입니다.");
-
 									//중복시 회원가입 버튼 비활성화
 									$("button[type=submit]").attr("disabled",
 											true);
@@ -202,50 +182,44 @@
 									$("button[type=submit]").attr("disabled",
 											false);
 								}
-
 							},
 							error : function() {
 								console.log("통신 오류");
 							}
 						});
-						
-						
+					});
+					inputEmail.keyup(function() {
 						$.ajax({
 							url : "checkEmailExist.me",
 							data : {
 								checkEmail : $(inputEmail).val()
 							},
 							success : function(result) {
-
 								if (result == 'NNNNN') {//중복
 									$("#checkEmailResult").show();
-									$("#checkEmailResult").css("color", "red").text(
-											"사용불가능한 이메일입니다.");
-
+									$("#checkEmailResult").css("color", "red")
+											.text("사용불가능한 이메일입니다.");
 									//중복시 회원가입 버튼 비활성화
 									$("button[type=submit]").attr("disabled",
 											true);
 								} else { //사용가능
 									$("#checkEmailResult").show();
-									$("#checkEmailResult").css("color", "green")
-											.text("사용가능한 이메일입니다.");
+									$("#checkEmailResult")
+											.css("color", "green").text(
+													"사용가능한 이메일입니다.");
 									//사용가능시 회원가입 버튼 활성화
 									$("button[type=submit]").attr("disabled",
 											false);
 								}
-
 							},
 							error : function() {
 								console.log("통신 오류");
 							}
 						});
-
 					});
-
 				});
 			</script>
 		</div>
-	</div>
 	
 </body>
 </html>

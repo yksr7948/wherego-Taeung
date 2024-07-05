@@ -12,8 +12,8 @@
 
 <input type="date" id="selectDate" name="selectDate" value="" min="" max="" />
 
-출발지 : <input type="text" id="departure" name="departure"/>
-도착지 : <input type="text" id="arrival" name="arrival"/>
+출발지 : <input type="text" id="departure" name="departure"/><button id="searchDp">출발지 검색</button>
+도착지 : <input type="text" id="arrival" name="arrival"/><button id="searchAr">도착지 검색</button>
 
 <button id="searchBtn">조회</button>
 
@@ -33,10 +33,34 @@
 	
 			</tbody>
 		</table>
+		
+		<table border="1"  id="dp">
+			<thead>
+				<tr>
+					<th>출발지</th>
+				</tr>
+			</thead>
+			<tbody>
+	
+			</tbody>
+		</table>
+		<table border="1"  id="arv">
+			<thead>
+				<tr>
+					<th>도착지</th>
+				</tr>
+			</thead>
+			<tbody>
+	
+			</tbody>
+		</table>
 
 <script>
 $(function() {
+	
 
+		
+		
 	$("#searchBtn").click(
 			function() {
 			
@@ -80,11 +104,103 @@ $(function() {
 					}
 				});
 
+			});
+	
+	$("#searchDp").click(
+			function() {
+			
+				$.ajax({
+					url : "searchDp.tr",
+					data : {
+						date : $("#selectDate").val().replace(/-/g, ""),
+						searchDp : $("#departure").val()
+					},
+					success : function(data) {
+						var items = data;
+						console.log("확인성공");
+						var str = "";
+						for (var i = 0; i < items.length; i++) {
+
+							var item = items[i];
+
+							str += "<tr>" 
+								+ "<td>"+item+"</td>"  
+								+ "</tr>";
+						}
+						$("#dp tbody").html(str);
+						
+						
+						},
+
+					error : function() {
+					}
+				});
+
 			}); 
-});
+	$("#searchAr").click(
+			function() {
+			
+				$.ajax({
+					url : "searchAr.tr",
+					data : {
+						date : $("#selectDate").val().replace(/-/g, ""),
+						searchDp : $("#departure").val(),
+						searchAr : $("#arrival").val()
+					},
+					success : function(data) {
+						var items = data;
+						console.log("확인성공");
+						var str = "";
+						for (var i = 0; i < items.length; i++) {
 
+							var item = items[i];
 
-console.log($("#selectDate").val());
+							str += "<tr>" 
+								+ "<td>"+item+"</td>"  
+								+ "</tr>";
+						}
+						$("#arv tbody").html(str);
+						
+						
+						},
+
+					error : function() {
+					}
+				});
+
+			}); 
+	$("#dp").on('click', 'tbody tr', function() {
+        // Get the text content of the clicked row
+        var selectedDeparture = $(this).find('td').text().trim();
+        
+        // Store the selected departure in the global variable
+        departure = selectedDeparture;
+
+        // Optionally, you can update the input field or do other actions
+        $("#departure").val(departure); // Update the input field with selected departure
+        
+        // Example of alerting the selected departure
+        alert("Selected departure: " + departure);
+    });
+	
+	$("#arv").on('click', 'tbody tr', function() {
+        // Get the text content of the clicked row
+        var selectedArrival = $(this).find('td').text().trim();
+        
+        // Store the selected departure in the global variable
+        arrival = selectedArrival;
+
+        // Optionally, you can update the input field or do other actions
+        $("#arrival").val(arrival); // Update the input field with selected departure
+        
+        // Example of alerting the selected departure
+        alert("Selected arrival: " + arrival);
+    });
+	
+	});
+	
+var departure ="";
+
 function formatDate(date) {
     let d = new Date(date),
         month = '' + (d.getMonth() + 1),

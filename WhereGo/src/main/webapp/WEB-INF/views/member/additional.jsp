@@ -7,24 +7,27 @@
     <title>해시태그 선택</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .hashtags {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
-            gap: 10px; /* 간격 조절 */
-        }
-        .hashtag {
-            padding: 10px 20px; /* 타원형을 위해 좌우 패딩을 더 크게 */
-            background-color: #f0f0f0;
-            border-radius: 25px; /* 타원형을 위해 크게 설정 */
-            border: 2px solid #ccc; /* 테두리 선 추가 */
-            cursor: pointer;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), inset 1px 1px 3px rgba(255, 255, 255, 0.3); /* 그림자 추가 */
-            text-align: center; /* 텍스트 가운데 정렬 */
-            transition: background 0.3s, box-shadow 0.3s; /* 전환 효과 */
-        }
+        font-family: Arial, sans-serif;
+        padding: 20px;
+		text-align: center; /* 전체 내용을 가운데 정렬 */
+    }
+    .hashtags {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr); /* 4열로 설정 */
+        gap: 10px; /* 간격 조절 */
+        max-width: 600px; /* 최대 너비 설정 */
+		margin: 0 auto; /* 중앙 정렬을 위한 마진 설정 */
+    }
+    .hashtag {
+        padding: 10px 20px; /* 타원형을 위해 좌우 패딩을 더 크게 */
+        background-color: #f0f0f0;
+        border-radius: 25px; /* 타원형을 위해 크게 설정 */
+        border: 2px solid #ccc; /* 테두리 선 추가 */
+        cursor: pointer;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3), inset 1px 1px 3px rgba(255, 255, 255, 0.3); /* 그림자 추가 */
+        text-align: center; /* 텍스트 가운데 정렬 */
+        transition: background 0.3s, box-shadow 0.3s; /* 전환 효과 */
+    }
         .selected {
             background: linear-gradient(145deg, #6d6d6d, #595959); /* 그라데이션 추가 */
             color: white;
@@ -35,10 +38,29 @@
             background: linear-gradient(145deg, #5a5a5a, #796e6e); /* 호버 시 그라데이션 변경 */
             box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.5), inset 1px 1px 5px rgba(255, 255, 255, 0.5); /* 호버 시 그림자 변경 */
         }
+	button {
+    background-color: white;
+    text-align: center;
+    color: black;
+    padding: 10px 20px;
+    margin-left: 20px;
+    border: 2px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+button:hover {
+    background-color: black;
+    color: white;
+}
     </style>
 </head>
 <body>
-	<h1>${userId }</h1>
+	<div class="title">
+	<a href="index.jsp"><img src="resources/img/removebg-preview.png" alt="Logo"></a>
+  </div>
     <h1>MBTI 선택</h1>
     <div class="hashtags hashtags-MBTI">
         <span class="hashtag">INFP</span>
@@ -85,8 +107,9 @@
     <form id="hashtagForm" action="additional.me" method="POST" accept-charset="UTF-8">
     	<input type="hidden" id="userId" name="userId" value="${userId}">
     	<input type="hidden" id="selectedMBTI" name="selectedMBTI" value="">
-    	<input  id="selectedWords" name="selectedWords" value="">
-        <button type="submit" onclick="updateFormValues()">제출</button>
+    	<input type="hidden" id="selectedWords" name="selectedWords" value="">
+		<br>
+        <button type="submit" onclick="updateFormValues()">확인</button>
     </form>
 
     <div class="check"></div> <!-- 결과 출력을 위한 div -->

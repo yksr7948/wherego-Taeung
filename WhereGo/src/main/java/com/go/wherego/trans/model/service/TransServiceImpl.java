@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.go.wherego.trans.model.dao.TransDao;
 import com.go.wherego.trans.model.vo.GTerminal;
+import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
 
 
@@ -38,6 +39,29 @@ public class TransServiceImpl implements TransService{
 	@Override
 	public String getSTerminalCode(String SterminalNm) {
 		return transdao.getSTerminalCode(sqlsession,SterminalNm);
+	}
+
+	@Override
+	public ArrayList<String> likeSearch(String title) {
+		return transdao.likeSearch(sqlsession,title);
+	}
+
+
+	@Override
+	public ArrayList<String> arriavlLikeSearch(String title) {
+		return transdao.arrivalLikeSearch(sqlsession,title);
+	}
+
+	@Override
+	public int insertInstant(ArrayList<Instant> list) {
+		return transdao.insertInstant(sqlsession, list);
+	}
+
+	@Override
+	public int deleteInstant() {
+		System.out.println("서비스");
+		 return transdao.deleteInstant(sqlsession);
+		
 	}
 
 

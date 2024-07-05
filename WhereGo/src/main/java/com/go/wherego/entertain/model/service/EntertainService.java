@@ -14,4 +14,10 @@ public interface EntertainService {
 
 	void insertWCResult(WC wc);
 
+	ArrayList<WC> getWcRanking();
+
+	int getEntireGame();
+
+	int getWinTime(String title);
+
 }

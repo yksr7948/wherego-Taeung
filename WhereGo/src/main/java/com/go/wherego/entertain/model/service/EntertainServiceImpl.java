@@ -31,4 +31,25 @@ public class EntertainServiceImpl implements EntertainService{
 		entertaindao.insertWCResult(sqlSession,wc);
 	}
 
+
+
+	@Override
+	public ArrayList<WC> getWcRanking() {
+		return entertaindao.getWcRanking(sqlSession);
+	}
+
+
+
+	@Override
+	public int getEntireGame() {
+		return entertaindao.getEntireGame(sqlSession);
+	}
+
+
+
+	@Override
+	public int getWinTime(String title) {
+		return entertaindao.getWinTime(sqlSession,title);
+	}
+
 }

@@ -1,6 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<%
+    if (session.getAttribute("loginUser") == null) {
+%>
+    <script type="text/javascript">
+        alert("로그인 후 사용 가능합니다");
+        window.location.href = "loginPage.me";
+    </script>
+<%
+        return; // 페이지 처리를 중단합니다.
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>

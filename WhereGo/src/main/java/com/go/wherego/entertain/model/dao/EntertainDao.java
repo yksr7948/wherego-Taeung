@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.go.wherego.entertain.model.vo.WC;
 import com.go.wherego.trip.model.vo.Trip;
 
+
 @Repository
 public class EntertainDao {
 
@@ -19,4 +20,16 @@ public class EntertainDao {
 		sqlSession.insert("entertainMapper.insertWCResult", wc);
 	}
 
+	public ArrayList<WC> getWcRanking(SqlSessionTemplate sqlSession) {
+		// TODO Auto-generated method stub
+		return (ArrayList)sqlSession.selectList("entertainMapper.getWcRanking");
+	}
+
+	public int getEntireGame(SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("entertainMapper.getEntireGame");
+	}
+
+	public int getWinTime(SqlSessionTemplate sqlSession, String title) {
+		return sqlSession.selectOne("entertainMapper.getWinTime",title);
+	}
 }

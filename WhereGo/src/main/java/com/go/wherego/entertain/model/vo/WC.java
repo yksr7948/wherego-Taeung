@@ -14,5 +14,7 @@ public class WC {
 	private String MBTI;
 	private String tagWords;
 	private String title;
-	private int count;
+	private String firstImage2;
+	private String contentId;
+	
 }

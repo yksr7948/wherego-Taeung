@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.go.wherego.trans.model.vo.GTerminal;
 import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
+import com.go.wherego.trans.model.vo.Train;
 
 
 
@@ -25,5 +26,7 @@ public interface TransService {
 	ArrayList<String> arriavlLikeSearch(String title);
 
 	int deleteInstant();
+	
+	ArrayList<Train> getArea();
 
 }

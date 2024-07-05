@@ -10,6 +10,7 @@ import com.go.wherego.trans.model.dao.TransDao;
 import com.go.wherego.trans.model.vo.GTerminal;
 import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
+import com.go.wherego.trans.model.vo.Train;
 
 
 @Service
@@ -62,6 +63,11 @@ public class TransServiceImpl implements TransService{
 		System.out.println("서비스");
 		 return transdao.deleteInstant(sqlsession);
 		
+	}
+	
+	@Override
+	public ArrayList<Train> getArea() {
+		return transdao.getArea(sqlsession);
 	}
 
 

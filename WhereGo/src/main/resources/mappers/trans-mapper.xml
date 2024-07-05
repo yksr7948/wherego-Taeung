@@ -21,6 +21,11 @@
 		<result column="ARRPLACENM" property="arrPlaceNm" />
 	</resultMap>
 	
+	<resultMap type="Train" id="TrainResultSet">
+	<result column="CITY" property="city"/>
+	<result column="CITY_CODE" property="cityCode"/>
+	</resultMap>
+	
 	
 	
 	<insert id="saveGTerminalInfo" parameterType="arraylist">
@@ -88,5 +93,9 @@
 	<delete id="deleteInstant">
 		DELETE FROM INSTANT
 	</delete>
+	
+	<select id="selectCitycode" resultMap="TrainResultSet">
+		SELECT * FROM TRAIN
+	</select>
 	
 </mapper>

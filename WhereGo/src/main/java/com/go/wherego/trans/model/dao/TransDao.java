@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.go.wherego.trans.model.vo.GTerminal;
 import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
+import com.go.wherego.trans.model.vo.Train;
 
 
 
@@ -47,6 +48,10 @@ public class TransDao {
 		System.out.println("dao");
 		return sqlsession.delete("transMapper.deleteInstant");
 		
+	}
+	
+	public ArrayList<Train> getArea(SqlSessionTemplate sqlsession) {
+		return (ArrayList)sqlsession.selectList("transMapper.selectCitycode");
 	}
 
 }

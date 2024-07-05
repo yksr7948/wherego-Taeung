@@ -26,7 +26,7 @@ public class ReviewController {
 		int listCount = rs.listCount();
 		int pageLimit = 10;
 		int boardLimit = 5;
-		System.out.println(123);
+		System.out.println(1234);
 		ReviewPage pi = ReviewPagination.getReviewPage(listCount, currentPage, pageLimit, boardLimit);
 		
 		ArrayList<Review> list = rs.selectList(pi);

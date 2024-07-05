@@ -26,4 +26,5 @@ public interface ReviewService {
 	ArrayList<ReviewReply> replyList(int boardNo);
 
 	ArrayList<Review> selectTopList();
+
 }

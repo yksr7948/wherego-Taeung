@@ -14,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.go.wherego.map.model.service.TravelMapService;
+import com.go.wherego.review.model.service.ReviewService;
+import com.go.wherego.review.model.vo.Review;
 import com.go.wherego.trip.model.service.TripService;
 import com.go.wherego.trip.model.vo.Likes;
 import com.go.wherego.trip.model.vo.PageInfo;
@@ -40,6 +41,7 @@ public class TripController {
 	
 	@Autowired
 	private TripService tripService;
+
 	
 	//메인 페이지로 이동
 	@RequestMapping("main")
@@ -501,10 +503,13 @@ public class TripController {
 		PageInfo pi = Pagination.getPageInfo(count, 1, pageLimit, boardLimit);
 		ArrayList<Trip> tList= tripService.searchTrip(map,pi);
 			
+		//지도
 	    double mapXDouble = 126.981611;
 	    double mapYDouble = 37.568477;
 	    String touristData;
 	    touristData = new TravelMapService().getTouristDataByKeyword(keyword);
+	    
+
 			
 		mv.addObject("touristData", touristData);
 		mv.addObject("mapX", mapXDouble);

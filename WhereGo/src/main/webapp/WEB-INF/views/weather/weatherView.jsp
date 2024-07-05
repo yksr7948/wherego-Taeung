@@ -35,7 +35,7 @@ background-color:aliceblue;
     margin-right: 10px;
 }
 .weather-info{
-
+	margin:auto;
 }
 .weather-info th{
 background-color:beige;
@@ -61,8 +61,8 @@ font-size:12px;
 }
 
 #wWeather>td{
-width:80px;
-height:100px;
+width:90px;
+height:110px;
 }
 .location-btn{
 width:80%;
@@ -122,9 +122,8 @@ font-size:26px;
 		</tr>
 		</table>
 	<br>
-	<h2 id="area">서울의 날씨</h2>
+	<h2 id="area">${area }의 날씨</h2>
 		<table class="weather-info" border="1">
-		<!-- 처음은 서울 날씨 보여주고 다른 버튼 클릭시 해당 지역의 날씨 조회 -->
 			<tr id="wDate">
 				<th rowspan="2">날짜</th>
 				<td colspan="2">3일후</td>
@@ -330,7 +329,7 @@ font-size:26px;
 					case "흐리고 비": weather="rain"; break;
 					case "흐리고 눈": weather="snow"; break;
 					}
-					str2 +="<td><img src='resources/img/weather/"+weather+".png' width='60' height='60' alt=''><br>"+arr[i]+"</td>";
+					str2 +="<td><img src='resources/img/weather/"+weather+".png' width='65' height='65' alt='날씨'><br>"+arr[i]+"</td>";
 				} 
 				$("#wWeather").html(str2);
 			},

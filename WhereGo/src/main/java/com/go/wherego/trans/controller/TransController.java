@@ -1,17 +1,17 @@
 package com.go.wherego.trans.controller;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,6 +19,7 @@ import com.go.wherego.trans.model.service.TransService;
 import com.go.wherego.trans.model.vo.GTerminal;
 import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
+import com.go.wherego.trans.model.vo.Train;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -27,6 +28,7 @@ import com.google.gson.JsonParser;
 public class TransController {
 
 	public static final String SERVICEKEY = "vVq7VKwdLRErcYMsndwQLiEDXaP1n2Zomtx%2BISxD%2FTjn1U5UofcDQqzwbYkaMtrocp2KvJZFs25lR7JRPG%2FLjw%3D%3D";
+	public static final String SERVICE_KEY="ueKBwAad327Iz5OxQC1LBnYtY33Hu7OOrwZzO2CghIQcpby32mjhGT8EMAsCZmMhl6kqeyADZVIVay3rTDinnw%3D%3D";
 	
 	@Autowired
 	private TransService transService;
@@ -456,6 +458,99 @@ public class TransController {
 				}
 				
 			}
+			
+	/*********************************************/
+	//철도
+			
+			
+			@GetMapping("Train.tr")
+			public String goTrain() {
+				return "trans/train";
+			}
+			
+			@ResponseBody
+			@GetMapping(value = "traintest.tr",produces = "text/plain;charset=UTF-8")
+			public String getTrain(String departDate, String departNo,String arriveNo,String trainNo) throws IOException {
+				String responseStr="";
+				HttpURLConnection urlConn=null;
+				BufferedReader br=null;
+				//URL객체 얻기(java.net.url)
+				String day=departDate.replace("-", "");
+				if(trainNo.equals("0")) {
+					trainNo="";
+				}
+				
+				URL requestUrl;
+				String url = "https://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo";
+				url += "?serviceKey="+SERVICE_KEY
+						+ "&pageNo="+URLEncoder.encode("1", "UTF-8")
+						+ "&numOfRows="+URLEncoder.encode("50", "UTF-8")
+						+ "&_type="+URLEncoder.encode("xml", "UTF-8")
+						+ "&depPlaceId="+departNo
+						+ "&arrPlaceId="+arriveNo
+						+ "&depPlandTime="+day
+						+ "&trainGradeCode="+trainNo;
+
+				requestUrl = new URL(url);
+				urlConn=(HttpURLConnection)requestUrl.openConnection();
+				urlConn.setRequestMethod("GET");
+				urlConn.setRequestProperty("Content-type", "application/json");
+				
+				br=new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+				
+				
+				String line="";
+				while((line=br.readLine())!=null) {
+					responseStr+=line;
+				}
+				
+				br.close();
+				urlConn.disconnect();
+				return responseStr;
+			}
+			
+			@ResponseBody
+			@GetMapping(value = "areadetail.tr",produces = "text/plain;charset=UTF-8")
+			public String getArea(String area) throws IOException{
+				String responseStr="";
+				HttpURLConnection urlConn=null;
+				BufferedReader br=null;
+				//URL객체 얻기(java.net.url)
+				URL requestUrl;
+				
+				String url="http://apis.data.go.kr/1613000/TrainInfoService/getCtyAcctoTrainSttnList";
+				url += "?serviceKey="+SERVICE_KEY
+						+ "&pageNo="+URLEncoder.encode("1", "UTF-8")
+						+ "&numOfRows="+URLEncoder.encode("50", "UTF-8")
+						+ "&_type="+URLEncoder.encode("xml", "UTF-8")
+						+ "&cityCode="+area;
+				
+				requestUrl = new URL(url);
+				urlConn=(HttpURLConnection)requestUrl.openConnection();
+				urlConn.setRequestMethod("GET");
+				urlConn.setRequestProperty("Content-type", "application/json");
+				
+				br=new BufferedReader(new InputStreamReader(urlConn.getInputStream()));
+				
+				
+				String line="";
+				while((line=br.readLine())!=null) {
+					responseStr+=line;
+				}
+				
+				br.close();
+				urlConn.disconnect();
+				
+				return responseStr;
+			}
+			
+			@ResponseBody
+			@GetMapping("getArea.tr")
+			public ArrayList<Train> getArea() {
+				ArrayList<Train> trList=transService.getArea();
+				return trList;
+			}
+	
 		
 		
 		

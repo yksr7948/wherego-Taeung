@@ -23,10 +23,18 @@ public interface TransService {
 
 	int insertInstant(ArrayList<Instant> list);
 
-	ArrayList<String> arriavlLikeSearch(String title);
+	ArrayList<String> arrivalLikeSearch(String title);
 
 	int deleteInstant();
 	
 	ArrayList<Train> getArea();
+
+	ArrayList<String> likeSSearch(String title);
+
+	int insertSInstant(ArrayList<Instant> list);
+
+	ArrayList<String> arrivalSLikeSearch(String title);
+
+	void deleteSInstant();
 
 }

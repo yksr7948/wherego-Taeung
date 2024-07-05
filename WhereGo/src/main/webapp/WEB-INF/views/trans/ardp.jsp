@@ -8,6 +8,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+<h1>고속버스</h1>
 <label for="selectDate">Select Date</label>
 
 <input type="date" id="selectDate" name="selectDate" value="" min="" max="" />

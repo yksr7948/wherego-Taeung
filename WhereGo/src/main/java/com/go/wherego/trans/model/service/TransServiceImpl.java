@@ -49,7 +49,7 @@ public class TransServiceImpl implements TransService{
 
 
 	@Override
-	public ArrayList<String> arriavlLikeSearch(String title) {
+	public ArrayList<String> arrivalLikeSearch(String title) {
 		return transdao.arrivalLikeSearch(sqlsession,title);
 	}
 
@@ -68,6 +68,27 @@ public class TransServiceImpl implements TransService{
 	@Override
 	public ArrayList<Train> getArea() {
 		return transdao.getArea(sqlsession);
+	}
+
+	@Override
+	public ArrayList<String> likeSSearch(String title) {
+		return transdao.likeSSearch(sqlsession, title);
+	}
+
+	@Override
+	public int insertSInstant(ArrayList<Instant> list) {
+		return transdao.insertSInstant(sqlsession,list);
+	}
+
+	@Override
+	public ArrayList<String> arrivalSLikeSearch(String title) {
+		return transdao.arrivalSLikeSearch(sqlsession,title);
+	}
+
+	@Override
+	public void deleteSInstant() {
+		transdao.deleteSInstant(sqlsession);
+		
 	}
 
 

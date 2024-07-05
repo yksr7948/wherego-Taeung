@@ -54,4 +54,21 @@ public class TransDao {
 		return (ArrayList)sqlsession.selectList("transMapper.selectCitycode");
 	}
 
+	public ArrayList<String> likeSSearch(SqlSessionTemplate sqlsession, String title) {
+		return (ArrayList)sqlsession.selectList("transMapper.likeSSearch",title);
+	}
+
+	public int insertSInstant(SqlSessionTemplate sqlsession, ArrayList<Instant> list) {
+		return sqlsession.insert("transMapper.insertSInstant",list);
+	}
+
+	public ArrayList<String> arrivalSLikeSearch(SqlSessionTemplate sqlsession, String title) {
+		return (ArrayList)sqlsession.selectList("transMapper.arrivalSLikeSearch",title);
+	}
+
+	public void deleteSInstant(SqlSessionTemplate sqlsession) {
+		sqlsession.delete("transMapper.deleteSInstant");
+		
+	}
+
 }

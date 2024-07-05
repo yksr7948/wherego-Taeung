@@ -207,7 +207,7 @@ public class TransController {
 			 
 			
 			
-			ArrayList<String> arrivalList = transService.arriavlLikeSearch(searchAr); // 위에 instant 테이블에 저장한 도착지 리스트에서 
+			ArrayList<String> arrivalList = transService.arrivalLikeSearch(searchAr); // 위에 instant 테이블에 저장한 도착지 리스트에서 
 																				//사용자가 검색한 단어로 like검색 
 			
 			HashSet<String> arrivalSet = new HashSet<String>(arrivalList);
@@ -331,7 +331,7 @@ public class TransController {
 			return str;
 		}
 		
-		//고속버스 시간표 저장
+		//시외버스 시간표 저장
 			@ResponseBody
 			@RequestMapping(value="saveSTerminalInfo.tr", produces ="application/text;charset=UTF-8")
 			public String saveSBusInfo() throws IOException {
@@ -393,8 +393,112 @@ public class TransController {
 				}
 				
 			}
+			//시외버스 출발지 like검색
+			@ResponseBody
+			@RequestMapping("searchSDp.tr")
+			public ArrayList<String> searchSDp(String searchDp, String date) throws IOException{
+
+				ArrayList<String> dlist = transService.likeSSearch(searchDp);
+				System.out.println(dlist);	
+				
+				return dlist;
+				
+			}
 			
-			//사용자가 찾는 고속버스 시간표 출력
+			//시외버스 도착지 like검색
+			@ResponseBody
+			@RequestMapping("searchSAr.tr")
+			public ArrayList<String> searchSAr(String searchDp,String searchAr,String date) throws IOException{
+				
+				String departureCode = transService.getSTerminalCode(searchDp);
+				
+				String url = "https://apis.data.go.kr/1613000/SuburbsBusInfoService/getStrtpntAlocFndSuberbsBusInfo";
+				url+="?serviceKey="+SERVICEKEY;
+				url+="&pageNo=1";
+				url+="&numOfRows=1000";
+				url+="&_type=json";
+				url+="&depTerminalId="+departureCode;
+				url+="&depPlandTime="+date;
+				
+				URL requestUrl = new URL(url);
+				
+				HttpURLConnection urlCon = (HttpURLConnection)requestUrl.openConnection();
+				urlCon.setRequestMethod("GET");
+				
+				BufferedReader br = new BufferedReader(new InputStreamReader(urlCon.getInputStream()));
+				
+				
+				String str = "";
+				
+				String line;
+				while((line=br.readLine()) != null) {
+					str+=line;
+				}
+				JsonObject jobj = JsonParser.parseString(str).getAsJsonObject();
+				
+				JsonObject response = jobj.getAsJsonObject("response");
+				
+				JsonObject body = response.getAsJsonObject("body");
+				JsonObject items = body.getAsJsonObject("items");
+				JsonArray item = items.getAsJsonArray("item");
+				
+				ArrayList<Instant> list = new ArrayList<>(); 
+				
+				for(int i=0;i<item.size();i++) {
+
+					JsonObject it = item.get(i).getAsJsonObject();
+					
+					list.add(new Instant(it.get("arrPlaceNm").getAsString()));
+				}
+				
+				// HashSet을 사용하여 중복을 제거
+				HashSet<Instant> set = new HashSet<>(list);
+
+				// HashSet을 다시 ArrayList로 변환
+				list.clear();
+				list.addAll(set);
+				
+				System.out.println("db에 넣을 리스트 : "+list);
+				
+				int insertResult = transService.insertSInstant(list); // 해당 출발지에 대한 도착지 LIST 저장
+				 
+				
+				
+				ArrayList<String> arrivalList = transService.arrivalSLikeSearch(searchAr); // 위에 instant 테이블에 저장한 도착지 리스트에서 
+																					//사용자가 검색한 단어로 like검색 
+				
+				HashSet<String> arrivalSet = new HashSet<String>(arrivalList);
+				
+				arrivalList.clear();
+				arrivalList.addAll(arrivalSet);
+				
+				System.out.println("like 검색 결과"+arrivalList);
+				transService.deleteSInstant();
+				return arrivalList;
+				
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			//사용자가 찾는 시외버스 시간표 출력
 			@RequestMapping("Sardp.tr")
 			public String Sardp() {
 				return "trans/sardp";
@@ -458,6 +562,26 @@ public class TransController {
 				}
 				
 			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
 			
 	/*********************************************/
 	//철도

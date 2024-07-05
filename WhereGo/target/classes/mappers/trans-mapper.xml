@@ -98,4 +98,35 @@
 		SELECT * FROM TRAIN
 	</select>
 	
+	
+	<!-- 시외버스  -->
+	<select id="likeSSearch" parameterType="String" resultType="String">
+		SELECT TERMINALNM FROM 
+		STERMINALCODE
+		WHERE TERMINALNM LIKE '%'||#{title}||'%'
+	</select>
+	
+	
+	<insert id="insertSInstant" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="arrPlaceNm">
+			INTO SINSTANT(arrPlaceNm)
+			VALUES(#{arrPlaceNm.arrPlaceNm})
+				  
+		</foreach>
+		SELECT * FROM DUAL
+
+	</insert>
+	
+	
+	<select id="arrivalSLikeSearch" parameterType="String" resultType="String">
+		SELECT arrPlaceNm FROM 
+		SINSTANT
+		WHERE arrPlaceNm LIKE '%'||#{title}||'%'
+	</select>
+	
+	<delete id="deleteSInstant">
+		DELETE FROM INSTANT
+	</delete>
+	
 </mapper>

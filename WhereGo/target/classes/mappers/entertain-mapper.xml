@@ -24,7 +24,8 @@
 		<result column="MBTI" property="MBTI"/>
 		<result column="TAG_WORD" property="tagWords"/>
 		<result column="TITLE" property="title"/>	
-		<result column="COUNT" property="count"/>
+		<result column="FIRST_IMAGE2" property="firstImage2"/>
+		<result column="CONTENT_ID" property="contentId"/>
 	</resultMap>
 
 
@@ -67,6 +68,34 @@
             	   ,#{MBTI}
             	 )
 	</insert>
+	
+	
+	<select id="getWcRanking" resultMap="wcResultSet">
+		<![CDATA[SELECT TITLE,FIRST_IMAGE2,CONTENT_ID,cnt
+FROM (
+    SELECT TITLE,cnt
+    FROM (
+        SELECT TITLE,COUNT(*) AS cnt
+        FROM WC
+        GROUP BY title
+        ORDER BY cnt ASC
+    )
+    WHERE ROWNUM <= 10]]>
+) 
+JOIN trip using(title)
+ORDER BY cnt desc
+	</select>
+	
+	<select id="getEntireGame" resultType="int">
+		SELECT COUNT(*)
+		FROM WC
+	</select>
+	
+	<select id="getWinTime" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM WC
+		WHERE TITLE=#{title}
+	</select>
 
 
 

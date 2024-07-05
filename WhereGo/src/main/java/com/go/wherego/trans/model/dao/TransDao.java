@@ -6,7 +6,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.go.wherego.trans.model.vo.GTerminal;
+import com.go.wherego.trans.model.vo.Instant;
 import com.go.wherego.trans.model.vo.STerminal;
+import com.go.wherego.trans.model.vo.Train;
 
 
 
@@ -28,6 +30,28 @@ public class TransDao {
 
 	public String getSTerminalCode(SqlSessionTemplate sqlsession, String SterminalNm) {
 		return sqlsession.selectOne("transMapper.getSTerminalCode",SterminalNm);
+	}
+
+	public ArrayList<String> likeSearch(SqlSessionTemplate sqlsession, String title) {
+		return (ArrayList)sqlsession.selectList("transMapper.likeSearch",title);
+	}
+
+	public int insertInstant(SqlSessionTemplate sqlsession, ArrayList<Instant> list) {
+		return sqlsession.insert("transMapper.insertInstant",list);
+	}
+
+	public ArrayList<String> arrivalLikeSearch(SqlSessionTemplate sqlsession, String title) {
+		return (ArrayList)sqlsession.selectList("transMapper.arrivalLikeSearch",title);
+	}
+
+	public int deleteInstant(SqlSessionTemplate sqlsession) {
+		System.out.println("dao");
+		return sqlsession.delete("transMapper.deleteInstant");
+		
+	}
+	
+	public ArrayList<Train> getArea(SqlSessionTemplate sqlsession) {
+		return (ArrayList)sqlsession.selectList("transMapper.selectCitycode");
 	}
 
 }

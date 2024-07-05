@@ -18,6 +18,8 @@
  		<typeAlias type="com.go.wherego.review.model.vo.ReviewReply" alias="ReviewReply"/> 
  		<typeAlias type="com.go.wherego.trans.model.vo.GTerminal" alias="GTerminal"/>
  		<typeAlias type="com.go.wherego.trans.model.vo.STerminal" alias="STerminal"/>
+ 		<typeAlias type="com.go.wherego.trans.model.vo.Instant" alias="instant"/>
+ 		<typeAlias type="com.go.wherego.trans.model.vo.Train" alias="Train"/> 
  	</typeAliases>
  	
  

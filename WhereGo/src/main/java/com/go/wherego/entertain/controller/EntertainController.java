@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +30,7 @@ public class EntertainController {
 	private MemberService memberService;
 
 	@RequestMapping("worldcup.en")
-	public String startWorldCup(Model model) {
+	public String startWorldCup(Model model, HttpSession session) {
 		ArrayList<Trip> list = entertainService.getTop100();
 		// System.out.println("처 음"+list);
 		model.addAttribute("list", new Gson().toJson(list));
@@ -94,6 +96,19 @@ public class EntertainController {
 			return "entertain/worldcup";
 		} else {
 			System.out.println("결승전 끝, 우승자는 : " + winnerName + " check : " + check + " 랭킹보기");
+			ArrayList<WC> list = entertainService.getWcRanking();
+			int entireGame=entertainService.getEntireGame(); //전체 게임 횟수 가져옴
+			ArrayList<Integer> win = new ArrayList<>(); // 각 여행지별 게임 이긴 횟수 저장할 list
+
+	        for (WC l : list) {
+	        	int winTime = entertainService.getWinTime(l.getTitle()); //각 title이 이긴 횟수 반복문으로 저장 
+	            win.add(winTime);
+	        }
+	        model.addAttribute("entireGame",entireGame);
+	        model.addAttribute("winList",win);
+			//model.addAttribute("list", new Gson().toJson(list));
+			model.addAttribute("list",list);
+			System.out.println(list);
 			return "entertain/ranking";
 		}
 	}

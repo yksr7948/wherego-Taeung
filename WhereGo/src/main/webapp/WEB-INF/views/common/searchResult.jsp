@@ -6,6 +6,10 @@
 <meta charset="UTF-8">
 <title>검색페이지</title>
 <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=r0j6vqaf5j"></script>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
 main {
     padding: 10px;
@@ -85,10 +89,52 @@ main {
 	display:none;
 	transition:0.3s;
 }
+.locationDetail {
+    margin-top: 5px;
+    margin-left: 5px;
+    text-align: center;
+    font-weight:900;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.locationDetail:hover{
+    background-color: #fff;
+    color: #333;
+}
 .hr{
 	border:1px solid lightgrey;
 	margin-top:5px;
 	margin-bottom:5px;
+}
+/* 게시판 */
+.review-search{
+	width:60%;
+	align:left;
+	padding:10px;
+	margin-left:10px;
+	margin-bottom:10px;
+	cursor:pointer;
+	background-color:azure;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.review-title{
+	font-weight:900;
+	font-size:24px;
+}
+.review-title:hover{
+	text-decoration:underline;
+}
+.review-content{
+	display:block;
+	font-size:16px;
+	height:45px;
+	display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+	overflow:hidden;
+	text-overflow:ellipsis;
 }
 </style>
 </head>
@@ -100,13 +146,11 @@ main {
 	<div class="search-area">
 		<div id="trip-search">
 		<h3 class="">#여행지</h3>
+		<c:if test="${empty tList }">
+			${keyword }와 관련된 여행지를 찾지 못했습니다.
+		</c:if>
 		<div class="card-container">
-			<c:if test="${empty tList }">
-				${keyword }와 관련된 여행지를 찾지 못했습니다.
-			</c:if>
-			
-			<c:forEach items="${tList }" var="t" end="3">
-			
+			<c:forEach items="${tList }" var="t" end="3">		
 			<div class="card">
 				<input type="hidden" value="${t.contentId }">
 				<img src="${t.firstImage2 }" alt="">
@@ -122,9 +166,9 @@ main {
 			</c:forEach>
 			
 		</div>
-		<c:if test="${tSize gt 4}">
-		<a href="searchDetail.wherego?keyword=${keyword }">더보기...</a>
-		</c:if>
+		<c:if test="${!empty tList }">
+		<a href="searchDetail.wherego?keyword=${keyword }" class="btn btn-info">${keyword }(으)로 검색된 여행지 모두 보기</a>
+		</c:if>	
 		<span></span>
 		</div>
 		<hr>
@@ -170,12 +214,13 @@ main {
                      });
                      if (matchedItem) {
                     	 markerInfo +="<span class='markertitle' style='font-size:18px;font-weight:900'>"
-                   			+matchedItem.title
-                   			+"</span>"
-                   			+"<span>"
-                   			+"<strong>주소</strong> : "+matchedItem.addr1+" "+matchedItem.addr2
-                   			+"</span>"
-                   			+"<img id='firstimage' src='"+matchedItem.firstimage+"' alt='대표 이미지' style='width:100%; height:auto;'>";
+                    			+matchedItem.title
+                    			+"</span>"
+                    			+"<span>"
+                    			+"<strong>주소</strong> : "+matchedItem.addr1+" "+matchedItem.addr2
+                    			+"</span>"
+                    			+"<img id='firstimage' src='"+matchedItem.firstimage+"' alt='대표 이미지' style='width:75%; height:auto;'>"
+                    			+"<button class='locationDetail btn btn-secondary' id='"+matchedItem.contentid+"'> 관광지 정보 상세보기 >> </button>";
                    		$("#map-marker-info").append(markerInfo);
                          markers = [];
 
@@ -215,17 +260,19 @@ main {
                          var bounds = new naver.maps.LatLngBounds();
                          
                          items.forEach(function(location,index) {
+                        	 
                         	 var id="detail"+(index+1);
                         	 markerInfo +="<span class='markertitle' id="+(index+1)+">"
-                      			+(index+1)+". "
-                      			+location.title
-                      			+"</span>"
-                      			+"<div class='markerdetail' id="+id+">"
-                      			+"<span>"
-                       			+"<strong>주소</strong> : "+location.addr1+" "+location.addr2
-                       			+"</span>"
-                       			+"</div>"
-                      			+"<div class='hr'></div>";
+                   			+(index+1)+". "
+                   			+location.title
+                   			+"</span>"
+                   			+"<div class='markerdetail' id="+id+">"
+                   			+"<span>"
+                    			+"<strong>주소</strong> : "+location.addr1+" "+location.addr2
+                    			+"</span><br>"
+                    			+"<button class='locationDetail btn btn-secondary' id='"+location.contentid+"'> 관광지 정보 상세보기 >> </button>"
+                    			+"</div>"
+                   			+"<div class='hr'></div>";
                              var marker = new naver.maps.Marker({
                                  position: new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)),
                                  map: map,
@@ -254,7 +301,8 @@ main {
 
                              markers.push(marker);
                              bounds.extend(new naver.maps.LatLng(parseFloat(location.mapy), parseFloat(location.mapx)));
-                         
+                         	
+                             
 
                          });
                          //모든 마커를 포함하도록 지도 중심 조정 및 줌 레벨 조정
@@ -281,6 +329,20 @@ main {
 		<hr>
 		<div id="board-search">
 		<h3>#게시글</h3>
+		<c:choose>
+		<c:when test="${empty rList}">
+		${keyword }(으)로 검색된 게시글이 없습니다.
+		</c:when>
+		<c:otherwise>
+		<c:forEach items="${rList}" var="r" end="3">
+			<div class="review-search">
+				<input type="hidden" class="boardNo" value="${r.boardNo}">
+				<div class="review-title">${r.boardTitle} by ${r.boardWriter}</div>
+				<div class="review-content">${r.boardContent}</div>
+			</div>
+		</c:forEach>
+		</c:otherwise>
+		</c:choose>
 		</div>
 	</div>
 	</div>
@@ -295,7 +357,6 @@ main {
 			var title=$(this).html().substring(3);
 			var id="#detail"+$(this).prop("id");
 			$(".markerdetail").hide();
-			console.log($(id));
 			$(id).show();
 			var infowindow = new naver.maps.InfoWindow({
                 content: '<div style="width:150px;text-align:center;padding:10px;">' + title + '</div>'
@@ -312,8 +373,9 @@ main {
 			});
 		});
 		
-		$("#locationdetail").click(function(){
-			console.log($(this));
+		$(".locationDetail").click(function(){
+			var id=$(this).prop("id");
+			location.href ='tripDetail.tl?contentId=' + id;
 		});
 		
 		$(".card").click(function(){

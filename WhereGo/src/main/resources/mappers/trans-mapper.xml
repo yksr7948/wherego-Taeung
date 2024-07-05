@@ -15,7 +15,19 @@
 		<result column="TERMINALNM" property="terminalNm" />
 		<result column="CITYNAME" property="cityName" />
 	</resultMap>
-
+	
+	
+	<resultMap type="instant" id="instantResultSet">
+		<result column="ARRPLACENM" property="arrPlaceNm" />
+	</resultMap>
+	
+	<resultMap type="Train" id="TrainResultSet">
+	<result column="CITY" property="city"/>
+	<result column="CITY_CODE" property="cityCode"/>
+	</resultMap>
+	
+	
+	
 	<insert id="saveGTerminalInfo" parameterType="arraylist">
 		INSERT ALL
 		<foreach collection="list" item="GTerminal">
@@ -53,6 +65,37 @@
 		SELECT TERMINALID 
 		FROM STERMINALCODE
 		WHERE TERMINALNM=#{terminalNm}
+	</select>
+	
+	<select id="likeSearch" parameterType="String" resultType="String">
+		SELECT TERMINALNM FROM 
+		GTERMINALCODE
+		WHERE TERMINALNM LIKE '%'||#{title}||'%'
+	</select>
+	
+	<insert id="insertInstant" parameterType="arraylist">
+		INSERT ALL
+		<foreach collection="list" item="arrPlaceNm">
+			INTO INSTANT(arrPlaceNm)
+			VALUES(#{arrPlaceNm.arrPlaceNm})
+				  
+		</foreach>
+		SELECT * FROM DUAL
+
+	</insert>
+	
+	<select id="arrivalLikeSearch" parameterType="String" resultType="String">
+		SELECT arrPlaceNm FROM 
+		INSTANT
+		WHERE arrPlaceNm LIKE '%'||#{title}||'%'
+	</select>
+	
+	<delete id="deleteInstant">
+		DELETE FROM INSTANT
+	</delete>
+	
+	<select id="selectCitycode" resultMap="TrainResultSet">
+		SELECT * FROM TRAIN
 	</select>
 	
 </mapper>

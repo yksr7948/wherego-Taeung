@@ -24,12 +24,10 @@
 	flex-direction: column;
 	justify-content: space-between;
 }
-
 .days-box-content {
 	display: flex;
 	flex-direction: column;
 }
-
 .days-box-title {
 	height: 80px;
 	color: white;
@@ -41,7 +39,6 @@
 	align-items: center;
 	justify-content: center;
 }
-
 .day-box {
 	height: 100px;
 	color: white;
@@ -51,12 +48,10 @@
 	border-bottom: 2px solid lightgray;
 	cursor: pointer;
 }
-
 .day-box span {
 	display: block;
 	margin: 15px 0;
 }
-
 .fomat-date {
 	font-size: 16px;
 }
@@ -105,14 +100,12 @@
 	background-color: #f4f4f9;
 	border: 2px solid lightgray;
 }
-
 .search-box input {
 	width: 60%;
 	height: 30px;
 	border-radius: 5px;
 	font-size: 16px;
 }
-
 .search-box button {
 	margin-left: 10px;
 	width: 80px;
@@ -127,7 +120,6 @@
 	cursor: pointer;
 	transition: background-color 0.3s, color 0.3s;
 }
-
 .search-box-list {
 	border-bottom: 2px solid lightgray;
 	min-height: 100px;
@@ -135,23 +127,19 @@
 	align-items: center;
 	padding: 10px;
 }
-
 .search-box-list img {
 	width: 12%;
 }
-
 .list-content {
 	width: 80%;
 	display: flex;
 	flex-direction: column;
 	text-align: center;
 }
-
 .list-title {
 	font-size: 21px;
 	font-weight: 900;
 }
-
 .list-addr {
 	color: grey;
 }
@@ -185,8 +173,15 @@
 </head>
 <body>
 	<%@ include file="/WEB-INF/views/common/header.jsp" %>
+	
 	<!-- 플래너 작성 -->
 	<div class="plan-container">
+	
+	<input type="hidden" name="userId" id="userId" value="${loginUser.userId}" />
+	<input type="hidden" name="title" id="title" value="${planner.title}" />
+	<input type="hidden" name="startDate" id="startDate" value="${planner.getStartDate()}" />
+	<input type="hidden" name="endDate" id="endDate" value="${planner.getEndDate()}" />
+	<input type="hidden" name="description" id="description" value="${planner.description}" />
 	
         <!-- days div -->
         <div class="days-box">
@@ -204,12 +199,12 @@
 
         <!-- days plan div -->
         <div class="day-plan-box">
-        
-        	<c:forEach items="${days }" var="day" varStatus="status">
-	            <div class="plans-box" data-date="<fmt:formatDate value="${day }" pattern="yyyy-MM-dd"/>">
-	                <div class="plans-box-title">DAY${status.count } | <fmt:formatDate value="${day }" pattern="MM.dd E요일"/></div>
-	            </div>
-        	</c:forEach>
+
+	        	<c:forEach items="${days }" var="day" varStatus="status">
+		            <div class="plans-box" data-date="<fmt:formatDate value="${day }" pattern="yyyy-MM-dd"/>">
+		                <div class="plans-box-title">DAY${status.count } | <fmt:formatDate value="${day }" pattern="MM.dd E요일"/></div>
+		            </div>
+	        	</c:forEach>
         	
         </div>
         
@@ -312,18 +307,19 @@
                  }
 		
         	    if(num<6){ // 일정은 5개까지만 추가 가능
-        	        parent.append(getHtml(item.title, item.mapx, item.mapy, num, data_date));
+        	        parent.append(getHtml(item.title, item.mapx, item.mapy, num, data_date, item.firstimage));
         	    }else{
-        	        alert("한번에 5개의 관광지를 선택 할 수 있습니다.");
+        	        alertify.alert("한번에 5개의 관광지를 선택 할 수 있습니다.");
         	    }
         	}
         	
-        	function getHtml(title, mapx, mapy, num, data_date){
+        	function getHtml(title, mapx, mapy, num, data_date, img){
         	   
-        		var div = '<div class="plan-box" data-date="' + data_date + '" data-y = "' + mapy + '" data-x = "' + mapx + '" data-place = "' + title + '" data-planNo="">';
+        		var div = '<div class="plan-box" data-date="'+data_date+'"data-y="'+mapy+'"data-x="'+mapx+'"data-place="'+title+'"data-planNo="">';
 					div += '<span class="plan-title">' + num + " . "+ title + '</span>'
-					div += '<span>시간 : <input type="time"></span>'
-					div += '<span>메모 : <input type="text"></span>'
+					div += '<span>시간 : <input class="plan-time" type="time"></span>'
+					div += '<span>메모 : <input class="plan-intro" type="text"></span>'
+					div += '<input type="hidden" name="firstimage" class="firstImage" value="'+img+'">'
 					div += '</div>';
 
         	    return div;
@@ -347,12 +343,90 @@
     </div>
     
     <br> <br> <br> 
+    
+    <!-- button -->
     <div class="save-button">
-		<button class="login-button">저장</button>
-		<button class="login-button">취소</button>
+		<button class="login-button" id="save-btn">저장</button>
+		<button class="login-button" onclick="history.back()">취소</button>
 	</div>
     
-	
+    <!-- button js -->
+	<script>
+		$(function(){
+			
+			//저장 버튼 클릭 js
+			$("#save-btn").click(function() {
+                var isValid = true;
+                
+                $('.plans-box').each(function (i){
+                    if($(this).children().length < 2){
+                        alertify.alert("각 여행일에는 최소 1개의 일정을 추가해주세요.");
+                        isValid = false;
+                        return false;
+                    }
+                });
+                
+                $('.plan-box').each(function (i){
+                    if($(this).find('.plan-time').val() == ""){
+                    	alertify.alert("시간은 필수 입력 항목입니다.");
+                        isValid = false;
+                        return false;
+                    }
+                });
+                
+                var planner = {
+                	userId : $("#userId").val(),
+                	title : $("#title").val(),
+                	startDate : $("#startDate").val(),
+                	endDate : $("#endDate").val(),
+                	description : $("#description").val()
+                };
+                
+                //플랜들 담을 배열 준비
+                var planList = new Array();
+                
+                if(isValid == true){
+                	
+                	$('.plan-box').each(function (i){
+                        // 플랜 1개의 데이터
+                        var plan = {
+                            day : $(this).attr("data-date"),
+                            time : $(this).find('.plan-time').val(),
+                            name : $(this).attr("data-place"),
+                            intro : $(this).find('.plan-intro').val(),
+                            mapx : $(this).attr("data-x"),
+                            mapy : $(this).attr("data-y"),
+                            firstImage : $(this).find(".firstImage").val()
+                        };
+                        
+						planList.push(plan);
+               		});
+
+                	// Plan 배열, Planner 데이터 묶기
+                    var toData = {
+                        planList : planList,
+                        planner : planner
+                    };
+                	
+                	$.ajax({
+                		url : "savePlanner.pl",
+                		contentType: "application/json",
+                		data: JSON.stringify(toData),
+                		type: "POST",
+                		success : function(result){
+                			
+                			alertify.alert("저장되었습니다.",function(){
+                				location.href = "planner.pl";
+                			});
+                		},
+                		error : function(data){
+                			console.log(data.responseText);
+                		}
+                	});
+                }
+			});
+		});
+	</script>
       
 	
 	

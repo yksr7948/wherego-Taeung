@@ -1,6 +1,7 @@
 package com.go.wherego.plan.controller;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,13 @@ public class PlannerController {
 
 	//플래너 페이지로 이동
 	@RequestMapping("planner.pl")
-	public String planList() {
+	public String planList(String userId, Model model) {
+		
+		ArrayList<Planner> plannerList = plannerService.selectPlanner(userId);
+		ArrayList<PlanData> planList = planDataService.selectPlanData(plannerList);
+		
+		model.addAttribute("plannerList", plannerList);
+		model.addAttribute("planList", planList);
 		
 		return "plan/plannerList";
 	}

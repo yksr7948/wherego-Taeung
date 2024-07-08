@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,13 +73,38 @@
 	background-color: rgba(0, 0, 0, 0.5);
 }
 .plan-box {
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-	height: 200px;
-	border-bottom: 2px solid lightgray;
-	display: flex;
-	flex-direction: column; /* 세로로 정렬 */
+    position: relative; /* 상대 위치 설정 */
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border-bottom: 2px solid lightgray;
+    display: flex;
+    flex-direction: column; /* 세로로 정렬 */
+    padding-right: 30px; /* 삭제 버튼과 제목 사이의 간격을 주기 위해 오른쪽 패딩 추가 */
+}
+.plan-delete {
+    position: absolute; /* 절대 위치 설정 */
+    top: 10px; /* 상단에서 10px 떨어져 위치 */
+    right: 10px; /* 우측에서 10px 떨어져 위치 */
+    background-color: white;
+    text-align: center;
+    color: black;
+    border: 2px solid black;
+    border-radius: 50%; /* 원 모양으로 만들기 위해 반지름 지정 */
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 15px; /* 버튼 크기 조정 */
+    height: 15px; /* 버튼 크기 조정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.plan-delete:hover {
+    background-color: black;
+    color: white;
 }
 .plan-title {
 	font-size: 24px;
@@ -210,17 +234,79 @@
         
         <!-- day-box 변경 -->        
        	<script>
-       			
       	var planslide =  document.querySelectorAll(".plans-box");
-       	
+
+      	// 각 Day의 마커와 경로를 저장할 객체를 추가합니다.
+	    var dayMarkers = {}; // 추가됨: 각 Day의 마커를 저장할 객체
+	    var dayPaths = {};   // 추가됨: 각 Day의 경로를 저장할 객체
+	    
 	    planChange(1);
 	      		
 	    function planChange(n){
+	        // 전환하기 전에 현재 마커와 경로를 저장합니다.
+	        saveCurrentMarkersAndPaths(); // 추가됨: 현재 마커와 경로를 저장
 	      	
 	    	for(var i=1; i<=planslide.length; i++){
 	    		planslide[i-1].style.display = "none";
 	    	}
 	    	planslide[n-1].style.display = "block";
+
+	        // 선택한 Day의 마커와 경로를 불러옵니다.
+	        loadMarkersAndPaths(n); // 추가됨: 선택한 Day의 마커와 경로를 불러옴
+	    }
+
+	    // 현재 마커와 경로를 저장하는 함수
+	    function saveCurrentMarkersAndPaths() { // 추가됨: 현재 마커와 경로를 저장하는 함수
+	        var currentDayIndex = getCurrentDayIndex();
+	        if (currentDayIndex === -1) return;
+	        
+	        dayMarkers[currentDayIndex] = markers.slice();
+	        dayPaths[currentDayIndex] = paths.slice();
+	        
+	        clearMarkersAndPaths();
+	    }
+
+	    // 특정 Day의 마커와 경로를 불러오는 함수
+	    function loadMarkersAndPaths(dayIndex) { // 추가됨: 특정 Day의 마커와 경로를 불러오는 함수
+	        if (dayMarkers[dayIndex]) {
+	            markers = dayMarkers[dayIndex];
+	            paths = dayPaths[dayIndex];
+
+	            for (var i = 0; i < markers.length; i++) {
+	                markers[i].setMap(map);
+	            }
+
+	            for (var i = 0; i < paths.length; i++) {
+	                paths[i].setMap(map);
+	            }
+
+	            // 해당 Day의 첫 번째 마커가 있는 위치로 지도를 이동합니다.
+	            if (markers.length > 0) {
+	                map.setCenter(markers[0].getPosition()); // 추가됨: 첫 번째 마커 위치로 지도 중심 이동
+	            }
+	        }
+	    }
+
+	    // 현재 활성화된 Day 인덱스를 얻는 함수
+	    function getCurrentDayIndex() { // 추가됨: 현재 활성화된 Day 인덱스를 얻는 함수
+	        for (var i = 0; i < planslide.length; i++) {
+	            if (planslide[i].style.display === "block") {
+	                return i + 1;
+	            }
+	        }
+	        return -1;
+	    }
+
+	    // 모든 마커와 경로를 초기화하는 함수
+	    function clearMarkersAndPaths() { // 추가됨: 모든 마커와 경로를 초기화하는 함수
+	        for (var i = 0; i < markers.length; i++) {
+	            markers[i].setMap(null);
+	        }
+	        for (var i = 0; i < paths.length; i++) {
+	            paths[i].setMap(null);
+	        }
+	        markers = [];
+	        paths = [];
 	    }
 		</script>
 		
@@ -313,18 +399,71 @@
         	    }
         	}
         	
+        	//일정 추가 div
         	function getHtml(title, mapx, mapy, num, data_date, img){
         	   
         		var div = '<div class="plan-box" data-date="'+data_date+'"data-y="'+mapy+'"data-x="'+mapx+'"data-place="'+title+'"data-planNo="">';
-					div += '<span class="plan-title">' + num + " . "+ title + '</span>'
-					div += '<span>시간 : <input class="plan-time" type="time"></span>'
-					div += '<span>메모 : <input class="plan-intro" type="text"></span>'
-					div += '<input type="hidden" name="firstimage" class="firstImage" value="'+img+'">'
-					div += '</div>';
+        		div += '<button class="plan-delete" onclick="planDelete(' + (num - 1) +  ')">&times;</button>'; // 변경: num 대신 (num - 1) 사용
+        		div += '<span class="plan-title">' + num + ". "+ title + '</span>';
+        		div += '<span>시간 : <input class="plan-time" type="time"></span>';
+        		div += '<span>메모 : <input class="plan-intro" type="text"></span>';
+        		div += '<input type="hidden" name="firstimage" class="firstImage" value="'+img+'">';
+        		div += '</div>';
 
         	    return div;
         	}
+        	
+        	// x버튼 눌렀을 때 플랜 삭제 및 마커 제거
+        	function planDelete(index){
+        	    var parent =  $('.plans-box[style*="display: block"]');
+        	    var kid = parent.children().eq(index + 1); // 일정 부분에 제목도 자식에 포함되기에 index +1
+        	    var next_kids = kid.nextAll();
+
+        	    // 마커 제거
+        	    var marker = markers[index];
+        	    if (marker) {
+        	        marker.setMap(null);
+        	        markers.splice(index, 1);
+        	    }
+
+        	    // 경로 제거
+        	    if (paths[index - 1]) {
+        	        paths[index - 1].setMap(null);
+        	        paths.splice(index - 1, 1);
+        	    }
+        	    if (paths[index]) {
+        	        paths[index].setMap(null);
+        	        paths.splice(index, 1);
+        	    }
+
+        	    kid.detach();
+
+        	    next_kids.each(function (idx, element){
+        	        var titleSpan = $(this).find('.plan-title');
+        	        var title = titleSpan.text().replace(/^\d+\./, '');
+        	        titleSpan.text((index + idx + 1) + '. ' + title);
+        	        
+        	        var btn = "planDelete(" + (index + idx) + ")";
+        	        $(this).find('button').attr("onclick", btn);
+        	    });
+
+        	    // 경로 재설정
+        	    paths = [];
+        	    for (var i = 0; i < markers.length; i++) {
+        	        if (i > 0) {
+        	            var path = new naver.maps.Polyline({
+        	                map: map,
+        	                path: [markers[i - 1].getPosition(), markers[i].getPosition()],
+        	                strokeColor: '#5347AA',
+        	                strokeWeight: 2
+        	            });
+        	            paths.push(path);
+        	        }
+        	    }
+        	}
         </script>
+        
+        
 
          <!-- map -->
         <div class="map-box" id="plan-map">
@@ -399,7 +538,7 @@
                             firstImage : $(this).find(".firstImage").val()
                         };
                         
-						planList.push(plan);
+						            planList.push(plan);
                		});
 
                 	// Plan 배열, Planner 데이터 묶기
@@ -416,7 +555,7 @@
                 		success : function(result){
                 			
                 			alertify.alert("저장되었습니다.",function(){
-                				location.href = "planner.pl";
+                				location.href = "planner.pl?userId="+$("#userId").val();
                 			});
                 		},
                 		error : function(data){

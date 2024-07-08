@@ -12,4 +12,5 @@ public interface PlannerService {
 	//플래너 리스트 가져오기
 	ArrayList<Planner> selectPlanner(String userId);
 	
+	Planner selectPlannerByNo(int plannerNo); // 추가된 메서드
 }

@@ -25,6 +25,9 @@ public class PlannerDao {
 		return (ArrayList)sqlSession.selectList("plannerMapper.selectPlanner", userId);
 	}
 	
+	public Planner selectPlannerByNo(int plannerNo, SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("plannerMapper.selectPlannerByNo", plannerNo);
+	}
 
 
 }

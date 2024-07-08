@@ -35,4 +35,8 @@ public class PlannerServiceImpl implements PlannerService {
 		return plannerList;
 	}
 
+	@Override
+	public Planner selectPlannerByNo(int plannerNo) {
+		return plannerDao.selectPlannerByNo(plannerNo, sqlSession);
+	}
 }

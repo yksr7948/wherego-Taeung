@@ -18,4 +18,5 @@ public interface PlanDataService {
 	//플랜들 가져오기
 	ArrayList<PlanData> selectPlanData(ArrayList<Planner> plannerList);
 
+	ArrayList<PlanData> selectPlanDataByPlannerNo(int plannerNo);
 }

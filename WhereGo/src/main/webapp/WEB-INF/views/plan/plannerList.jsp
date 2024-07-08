@@ -146,7 +146,7 @@
 				                    <p style="font-size: 24px; font-weight: 900;">${planner.title }</p>
 				                    <p>${planner.description }</p>
 				                    <p style="color: #888; font-size: 16px">${planner.startDate } ~ ${planner.endDate }</p>
-				                    <button class="detail-button">상세보기</button>
+            						<button class="detail-button" onclick="location.href='plannerDetailView.pl?plannerNo=${planner.plannerNo}'">상세보기</button>
 				                </div>
 				            </div>
 			        	</c:forEach>

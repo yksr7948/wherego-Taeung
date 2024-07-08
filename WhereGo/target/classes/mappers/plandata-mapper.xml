@@ -55,4 +55,10 @@
 		FROM PLAN_DATA
 		WHERE PLANNER_NO = #{plannerNo}
 	</select>
+	
+		<select id="selectPlanDataByPlannerNo" parameterType="int" resultMap="PlanDataResultSet">
+		SELECT *
+		FROM PLAN_DATA
+		WHERE PLANNER_NO = #{plannerNo}
+	</select>
 </mapper>

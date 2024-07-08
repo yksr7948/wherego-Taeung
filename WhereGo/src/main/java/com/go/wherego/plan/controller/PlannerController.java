@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,4 +55,15 @@ public class PlannerController {
 		return "plan/plannerInsert";
 	}
 	
+	// 플래너 상세보기 페이지로 이동
+	@RequestMapping("plannerDetailView.pl")
+	public String plannerDetailView(@RequestParam("plannerNo") int plannerNo, Model model) {
+		Planner planner = plannerService.selectPlannerByNo(plannerNo);
+		ArrayList<PlanData> planDataList = planDataService.selectPlanDataByPlannerNo(plannerNo);
+		
+		model.addAttribute("planner", planner);
+		model.addAttribute("planDataList", planDataList);
+		
+		return "plan/plannerDetailView";
+	}
 }

@@ -240,7 +240,7 @@ li {
                 </ul>
               </div>
             </li>
-            <li><a href="planner.pl">플래너</a>
+            <li><a href="planner.pl?userId=${loginUser.userId }">플래너</a>
           </ul>
         </div>
         <div class="search-bar">

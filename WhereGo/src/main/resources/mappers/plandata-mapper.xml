@@ -4,31 +4,20 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="planDataMapper">
 
-<!-- 	<insert id="insertPlanData" parameterType="arrayList"> -->
-<!-- 		INSERT ALL -->
-<!-- 		<foreach collection="list" item="PlanData"> -->
-<!-- 			INTO PLAN_DATA(PLAN_NO -->
-<!-- 						  ,PLANNER_NO -->
-<!-- 						  ,DAY -->
-<!-- 						  ,NAME -->
-<!-- 						  ,TIME -->
-<!-- 						  ,INTRO -->
-<!-- 						  ,MAPX -->
-<!-- 						  ,MAPY -->
-<!-- 						  ,FIRST_IMAGE) -->
-<!-- 			VALUES(SEQ_PLAN.NEXTVAL -->
-<!-- 				  ,#{PlanData.plannerNo} -->
-<!-- 				  ,#{PlanData.day} -->
-<!-- 				  ,#{PlanData.name} -->
-<!-- 				  ,#{PlanData.time} -->
-<!-- 				  ,#{PlanData.intro} -->
-<!-- 				  ,#{PlanData.mapx} -->
-<!-- 				  ,#{PlanData.mapy} -->
-<!-- 				  ,#{PlanData.firstImage})						  -->
-<!-- 		</foreach> -->
-<!-- 		SELECT * FROM DUAL -->
-<!-- 	</insert> -->
+	<!-- PlanData ResultMap -->
+	<resultMap type="PlanData" id="PlanDataResultSet">
+		<result column="PLAN_NO" property="planNo"/>
+		<result column="PLANNER_NO" property="plannerNo"/>
+		<result column="DAY" property="day"/>
+		<result column="NAME" property="name"/>
+		<result column="TIME" property="time"/>
+		<result column="INTRO" property="intro"/>
+		<result column="MAPX" property="mapx"/>
+		<result column="MAPY" property="mapy"/>
+		<result column="FIRST_IMAGE" property="firstImage"/>
+	</resultMap>
 
+	<!-- 플랜들 추가하기 -->
 	<insert id="insertPlanData" parameterType="arrayList">
 	    DECLARE
 	        v_plan_no NUMBER;
@@ -59,4 +48,11 @@
 	        </foreach>
 	    END;
 	</insert>
+	
+	<!-- 플랜들 가져오기 -->
+	<select id="selectPlanData" parameterType="_int" resultMap="PlanDataResultSet">
+		SELECT *
+		FROM PLAN_DATA
+		WHERE PLANNER_NO = #{plannerNo}
+	</select>
 </mapper>

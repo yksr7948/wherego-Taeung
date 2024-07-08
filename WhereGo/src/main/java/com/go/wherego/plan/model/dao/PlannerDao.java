@@ -1,5 +1,7 @@
 package com.go.wherego.plan.model.dao;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,12 @@ public class PlannerDao {
 		int result = sqlSession.insert("plannerMapper.insertPlanner", planner);
 		
 		return result;
+	}
+	
+	//planner List 가져오기
+	public ArrayList<Planner> selectPlanner(String userId, SqlSessionTemplate sqlSession) {
+
+		return (ArrayList)sqlSession.selectList("plannerMapper.selectPlanner", userId);
 	}
 	
 

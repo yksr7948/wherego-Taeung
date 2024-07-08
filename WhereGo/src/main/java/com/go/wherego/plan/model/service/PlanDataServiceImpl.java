@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.go.wherego.plan.model.dao.PlanDataDao;
 import com.go.wherego.plan.model.dao.PlannerDao;
 import com.go.wherego.plan.model.vo.PlanData;
+import com.go.wherego.plan.model.vo.Planner;
 
 @Service
 public class PlanDataServiceImpl implements PlanDataService{
@@ -50,6 +51,15 @@ public class PlanDataServiceImpl implements PlanDataService{
 		int result = planDataDao.insertPlanData(sqlSession, pList);
 		
 		return result;
+	}
+
+	//플랜들 가져오기
+	@Override
+	public ArrayList<PlanData> selectPlanData(ArrayList<Planner> plannerList) {
+		
+		ArrayList<PlanData> planList = planDataDao.selectPlanData(sqlSession, plannerList);
+		
+		return planList;
 	}
 
 }

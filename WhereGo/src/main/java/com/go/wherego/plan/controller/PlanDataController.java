@@ -87,8 +87,7 @@ public class PlanDataController {
 		
 		int result2 = planDataService.insertPlanData(pList);
 		
-		
-		if(result <= 0){
+		if(result <= 0 || result2 > 0){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("플래너 저장에 실패하였습니다, 다시 작성해주세요.");
         }
 

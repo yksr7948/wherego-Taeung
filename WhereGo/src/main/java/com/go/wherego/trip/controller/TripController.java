@@ -509,13 +509,14 @@ public class TripController {
 	    String touristData;
 	    touristData = new TravelMapService().getTouristDataByKeyword(keyword);
 	    
-
+	    ArrayList<Review> rList=null;
 			
 		mv.addObject("touristData", touristData);
 		mv.addObject("mapX", mapXDouble);
 		mv.addObject("mapY", mapYDouble);
 		mv.addObject("tList", tList);
 		mv.addObject("tSize", tList.size());
+		mv.addObject("rList", rList);
 		mv.addObject("keyword", keyword);
 		mv.setViewName("common/searchResult");
 		return mv;

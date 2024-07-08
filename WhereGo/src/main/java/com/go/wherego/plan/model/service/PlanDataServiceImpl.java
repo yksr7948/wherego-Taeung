@@ -61,5 +61,11 @@ public class PlanDataServiceImpl implements PlanDataService{
 		
 		return planList;
 	}
+	
+	// 특정 플래너의 플랜들 가져오기
+	@Override
+	public ArrayList<PlanData> selectPlanDataByPlannerNo(int plannerNo) {
+		return planDataDao.selectPlanDataByPlannerNo(sqlSession, plannerNo);
+	}
 
 }

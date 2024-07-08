@@ -89,6 +89,7 @@ color:white;
 	flex-direction: column;
 	align-items:flex-end;
 	background-color:beige;
+	margin-top:3px;
 }
 .trainimg{
 	margin-left:auto;

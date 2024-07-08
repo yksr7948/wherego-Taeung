@@ -263,6 +263,8 @@ li {
 						<a href="mypage.me" class="login-button">마이페이지</a> <a href="logout.me" class="login-button">로그아웃</a>
 					</c:otherwise>
 				</c:choose>
+		
+		
         <script>
     	$(function(){
     		$("#serach-icon").click(function(){
@@ -272,7 +274,12 @@ li {
     			} else {
     				location.href="search.wherego?keyword="+keyword;
     			}	
-    		})
+    		});
+    		var msg="${alertMsg}";
+        		if(msg!=""){
+        			alert(msg);
+        			<c:remove var="alertMsg"/>
+        		}
     	});
     	var input= document.getElementById("search-keyword");
     	input.addEventListener("keypress",function(event){
@@ -280,6 +287,8 @@ li {
     			event.preventDefault();
     			document.getElementById("serach-icon").click();
     		}
+    	console.log("${alertMsg}");
+    	
     	});
         </script>
       </article>

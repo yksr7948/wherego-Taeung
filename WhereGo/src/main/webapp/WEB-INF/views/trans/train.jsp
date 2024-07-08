@@ -204,8 +204,10 @@ color:white;
 			})
 		};
 		$(".area").on("change", function(){
+			console.log("변화감지됨");
 			var id=$(this).prop("id");
 			var area=$(this).val();
+			showLoading();
 			$.ajax({
 				url : "areadetail.tr",
 				data : {
@@ -237,6 +239,9 @@ color:white;
 				},
 				error : function(){
 					console.log("확인불가");
+				},
+				complete : function(){
+					hideLoading();
 				}
 			}); 
 		});

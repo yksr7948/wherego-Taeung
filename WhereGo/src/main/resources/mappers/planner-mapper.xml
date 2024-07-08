@@ -4,4 +4,25 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="plannerMapper">
 
+	<!-- planner 추가 -->
+	<insert id="insertPlanner" parameterType="planner" useGeneratedKeys="true" keyProperty="plannerNo">
+	    <selectKey keyProperty="plannerNo" resultType="int" order="BEFORE">
+	        SELECT SEQ_PLANNER.NEXTVAL FROM DUAL
+	    </selectKey>
+	    
+		INSERT INTO PLANNER(PLANNER_NO
+						   ,USER_ID
+						   ,TITLE
+						   ,DESCRIPTION
+						   ,START_DATE
+						   ,END_DATE
+						   ,CREATE_DATE)
+                    VALUES(#{plannerNo}
+                    	  ,#{userId}
+                    	  ,#{title}
+                    	  ,#{description}
+                    	  ,#{startDate}
+                    	  ,#{endDate}
+                    	  ,SYSDATE)
+	</insert>
 </mapper>

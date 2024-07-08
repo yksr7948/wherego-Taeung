@@ -5,11 +5,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.go.wherego.plan.model.dao.PlanDataDao;
+import com.go.wherego.plan.model.dao.PlannerDao;
+import com.go.wherego.plan.model.vo.PlanData;
 
 @Service
 public class PlanDataServiceImpl implements PlanDataService{
 
+	@Autowired
+	private PlanDataDao planDataDao;
+	@Autowired
+	private SqlSessionTemplate sqlSession;
+	
 	//days 가져오기
 	@Override
 	public List<Date> getDays(Date startDate, Date endDate) {
@@ -28,6 +39,15 @@ public class PlanDataServiceImpl implements PlanDataService{
         	cal.add(Calendar.DATE, 1);
             result.add(cal.getTime());
         }
+		
+		return result;
+	}
+
+	//planList 저장
+	@Override
+	public int insertPlanData(ArrayList<PlanData> pList) {
+
+		int result = planDataDao.insertPlanData(sqlSession, pList);
 		
 		return result;
 	}

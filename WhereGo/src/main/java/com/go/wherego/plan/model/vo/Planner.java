@@ -2,7 +2,7 @@ package com.go.wherego.plan.model.vo;
 
 import java.sql.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +16,13 @@ public class Planner {
 	private String userId;
 	private String title;
 	private String description;
-	private Date startDate;
-	private Date endDate;
-	private Date createDate;
+	
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date startDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date endDate;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
+    private Date createDate;
 }

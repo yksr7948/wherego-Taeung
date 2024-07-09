@@ -287,7 +287,6 @@ li {
     			event.preventDefault();
     			document.getElementById("serach-icon").click();
     		}
-    	console.log("${alertMsg}");
     	
     	});
         </script>

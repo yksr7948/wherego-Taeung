@@ -36,16 +36,24 @@
     justify-content: space-between;
     flex-wrap: wrap;
 }
+.planner-empty{
+	width: 100%; 
+	font-size: 24px; 
+	font-weight: 900; 
+	text-align: center;
+	margin-top: 30px;
+}
 .planner-item {
     background-color: #fafafa;
     border: 1px solid #ddd;
     border-radius: 10px;
-    width: 30%;
+    width: 300px;
     margin-bottom: 20px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 .planner-item img {
-    width: 100%;
+    width: 300px;
+    height: 200px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -126,37 +134,30 @@
         <hr>
         
         <div class="planner-grid">
-            <div class="planner-item">
-                <img src="resources/img/main/2.png"" alt="Map 1">
-                <div class="planner-info">
-                    <p>2021-09-28</p>
-                    <p>친구들과 여행</p>
-                    <p>2DAYS</p>
-                    <button class="detail-button">상세보기</button>
-                </div>
-            </div>
-            <div class="planner-item">
-                <img src="resources/img/main/1.png" alt="Map 2">
-                <div class="planner-info">
-                    <p>2021-10-15</p>
-                    <p>가족들과 힐링 여행기</p>
-                    <p>1DAYS</p>
-                    <button class="detail-button">상세보기</button>
-                </div>
-            </div>
-            <div class="planner-item">
-            	<div class="planner-map">
-                	<img src="resources/img/main/3.png" alt="Map 3">
-            	</div>
-                <div class="planner-info">
-                    <p>2021-09-23</p>
-                    <p>친구들과 서울 여행</p>
-                    <p>3DAYS</p>
-                    <button class="detail-button">상세보기</button>
-                </div>
-            </div>
+        		<c:choose>
+	        		<c:when test="${empty plannerList }">
+	        			<div class="planner-empty" >조회된 결과가 없습니다.</div>
+	        		</c:when>
+	        		<c:otherwise>
+        				<c:forEach items="${plannerList}" var="planner" varStatus="status">
+				            <div class="planner-item">
+				                <img src="${planList[status.index].firstImage }" alt="">
+				                <div class="planner-info">
+				                    <p style="font-size: 24px; font-weight: 900;">${planner.title }</p>
+				                    <p>${planner.description }</p>
+				                    <p style="color: #888; font-size: 16px">${planner.startDate } ~ ${planner.endDate }</p>
+            						<button class="detail-button" onclick="location.href='plannerDetailView.pl?plannerNo=${planner.plannerNo}'">상세보기</button>
+				                </div>
+				            </div>
+			        	</c:forEach>
+	        		</c:otherwise>
+        		</c:choose>
         </div>
     </div>
+    
+    <script>
+
+    </script>
     
     <!-- 모달 -->
 
@@ -209,6 +210,8 @@
 	
 	<script>
 		$(document).ready(function () {
+			
+			
 			$("#startDate").datepicker({
 				dateFormat: "yy-mm-dd", // 날짜의 형식
 				minDate: 0,

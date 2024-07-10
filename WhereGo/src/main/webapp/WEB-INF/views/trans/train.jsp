@@ -60,8 +60,41 @@ color:white;
 	width:150px;
 	height:30px;
 }
-.traintime{
-	background-color:orange;
+.trainResult{
+	border:1px solid black;
+	padding : 10px 10px;
+	margin-top : 5px;
+	border-radius: 8px;
+	background-color:white;
+}
+.train,.time,.traingrade{
+	display:flex;
+}
+.train,.traingrade{
+		border:1px solid green;
+}
+.train{
+	width:18%;
+	height:55px;
+	justify-content:center;
+	text-align:center;
+	flex: 0 1 auto;
+}
+.time{
+	justify-content: flex-start;
+	align-items:flex-start;
+}
+.traingrade{
+	justify-content: center;
+	flex-direction: column;
+	align-items:flex-end;
+	background-color:beige;
+	margin-top:3px;
+}
+.trainimg{
+	margin-left:auto;
+	float:right;
+	align-items:flex-end;
 }
 #departDate{
 	width:150px;
@@ -85,16 +118,23 @@ color:white;
 	height:40px;
 }
 #searchResult{
-	width:80%;
-	display:none;
+	width:80%;	
 }
-#searchResult th,td{
-	text-align:center;
-	height:25px;
+#depTime{
+	background-color:skyblue;
 }
-#searchResult th{
-	background-color:beige;
+#arrTime{
+	background-color:sandybrown;
 }
+#charge{
+	margin:auto;
+	font-size:24px;
+	font-weight:900;
+	text-align:right;
+}
+
+
+
 #loadingContainer {
             display: flex;
             position: fixed;
@@ -161,23 +201,12 @@ color:white;
 	<br>
 	<button id="search" class="btn btn-primary">조회하기</button><br>
 	<div id="stationroute">
+	<span id="departinfo"></span><span id="arriveinfo"></span>
 	<span id="depart"></span>역 >>> <span id="arrive"></span>역
 	</div>
-	<table border="1" id="searchResult">
-	<thead>
-		<tr>
-			<th style="width:15%">출발지</th>
-			<th style="width:20%">출발예정시간</th>
-			<th style="width:15%">도착지</th>
-			<th style="width:20%">도착예정시간</th>
-			<th style="width:10%">열차번호</th>
-			<th style="width:20%">열차종류</th>
-		</tr>
-	</thead>
-	<tbody id="trainResult">
+	<div id="searchResult">
 	
-	</tbody>
-	</table>
+	</div>
 	</main>
 	<!-- 로딩 애니메이션 -->
     <div id="loadingContainer">
@@ -204,7 +233,6 @@ color:white;
 			})
 		};
 		$(".area").on("change", function(){
-			console.log("변화감지됨");
 			var id=$(this).prop("id");
 			var area=$(this).val();
 			showLoading();
@@ -271,22 +299,56 @@ color:white;
 						if(count=="0"){
 							alert("검색된 결과가 없습니다.");
 						} else {
+						$("#depart").text($("#departid").prop("name"));
+						$("#arrive").text($("#arriveid").prop("name"));
 						var str="";
 						var items=$(result).find('item');
 						items.each(function(index,item){
-							var dTime=$(item).find('depplandtime').text().substring(8,10)+"시 "+$(item).find('depplandtime').text().substring(10,12)+"분";
-							var aTime=$(item).find('arrplandtime').text().substring(8,10)+"시 "+$(item).find('arrplandtime').text().substring(10,12)+"분";
-							str +="<tr>"
-								+"<td>"+$(item).find('depplacename').text()+"</td>"
-								+"<td class='traintime'>"+dTime+"</td>"
-								+"<td>"+$(item).find('arrplacename').text()+"</td>"								
-								+"<td class='traintime'>"+aTime+"</td>"
-								+"<td>"+$(item).find('trainno').text()+"</td>"
-								+"<td>"+$(item).find('traingradename').text()+"</td>"
-								+"</tr>";
+							var date=new Date();
+							var dep=$(item).find('depplandtime').text();
+							var arr=$(item).find('arrplandtime').text();
+							var depDate=new Date(dep.substring(0,4),
+												 dep.substring(4,6),
+												 dep.substring(6,8),
+												 dep.substring(8,10),
+												 dep.substring(10,12));
+							var arrDate=new Date(arr.substring(0,4),
+									 			arr.substring(4,6),
+									 			arr.substring(6,8),
+									 			arr.substring(8,10),
+									 			arr.substring(10,12));
+							
+							var travelMin=depDate.getInterval(arrDate);
+							var travelHour=(Math.floor(travelMin/60));
+							travelMin=travelMin-(travelHour*60);
+							if(travelHour=="0"){
+								var travelTime=travelMin+"분";
+							} else {
+								var travelTime=travelHour+"시간 "+travelMin+"분";
+							}
+							var trainname="";
+							switch($(item).find('traingradename').text().substring(0,3)){
+							case "KTX": trainname="KTX"; break;
+							case "새마을": trainname="Newtown"; break;
+							case "무궁화": trainname="muguonghwa"; break;
+							default: trainname="default"; break;
+							}
+							
+							var dTime=dep.substring(8,10)+"시 "+dep.substring(10,12)+"분";
+							var aTime=arr.substring(8,10)+"시 "+arr.substring(10,12)+"분";
+							str +="<li class='trainResult'>"
+								+"<div class='time'>"
+								+"<div class='train' id='depTime'>"+dTime+"<br>"+$(item).find('depplacename').text()+"</div>"
+								+"<div class='train'> → "+travelTime+" → </div>"
+								+"<div class='train' id='arrTime'>"+aTime+"<br>"+$(item).find('arrplacename').text()+"</div>"
+								+"<div class='train' id='charge' style='border:0'>"+$(item).find('adultcharge').text()+"원</div>"
+								+"<div class='train trainimg' style='border:0'><img src='resources/img/train/train-"+trainname+".png' width='100%' height='55' alt='기차'></div>"
+								+"</div>"
+								+"<div class='traingrade'>"+$(item).find('traingradename').text()+" "+$(item).find('trainno').text()+"호</div>"
+								+"</li>";
 						});
-						$("#trainResult").html(str);
-						$("#searchResult").show();
+						$("#searchResult").html(str);
+						
 						$("#stationroute").show();
 					}},
 					error : function(){
@@ -305,20 +367,29 @@ color:white;
 			var name=$(this).text();
 			var str="";
 			if(station=="depstation"){
-				str +="<input type='hidden' id='departid' value='"+id+"'>"
-					+name;
-				$("#depart").html(str);
+				str +="<input type='hidden' id='departid' name='"+name+"' value='"+id+"'>";
+				$("#departinfo").html(str);
 				$("#depdetail button").removeClass("station-select");
 				$(this).addClass("station-select");
 			} else {
-				str +="<input type='hidden' id='arriveid' value='"+id+"'>"
-				+name;
-				$("#arrive").html(str);
+				str +="<input type='hidden' id='arriveid' name='"+name+"' value='"+id+"'>";
+				$("#arriveinfo").html(str);
 				$("#arrdetail button").removeClass("station-select");
 				$(this).addClass("station-select");
 			}
 			
 		});
+		
+		Date.prototype.getInterval = function (otherDate) {
+			    var interval;
+			 
+			    if(this > otherDate)
+			        interval = this.getTime() - otherDate.getTime();
+			    else
+			        interval = otherDate.getTime() - this.getTime();
+			 
+			    return Math.floor(interval / (1000*60));
+			}
 		
 		function formatDate(date) {
 		    let d = new Date(date),

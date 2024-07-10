@@ -1,5 +1,7 @@
 package com.go.wherego.plan.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,4 +26,17 @@ public class PlannerServiceImpl implements PlannerService {
 		return result;
 	}
 
+	//plannner, plan리스트 가져오기
+	@Override
+	public ArrayList<Planner> selectPlanner(String userId) {
+
+		ArrayList<Planner> plannerList = plannerDao.selectPlanner(userId, sqlSession);
+		
+		return plannerList;
+	}
+
+	@Override
+	public Planner selectPlannerByNo(int plannerNo) {
+		return plannerDao.selectPlannerByNo(plannerNo, sqlSession);
+	}
 }

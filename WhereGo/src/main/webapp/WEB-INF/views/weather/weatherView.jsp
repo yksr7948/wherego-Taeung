@@ -327,6 +327,9 @@ font-size:26px;
 					case "구름많음": weather="sun_cloudy"; break;
 					case "흐림": weather="cloud";	 break;
 					case "흐리고 비": weather="rain"; break;
+					case "구름많고 비": weather="rain"; break;
+					case "구름많고 소나기": weather="sun_cloud_rain"; break;
+					case "흐리고 소나기": weather="rain"; break;
 					case "흐리고 눈": weather="snow"; break;
 					}
 					str2 +="<td><img src='resources/img/weather/"+weather+".png' width='65' height='65' alt='날씨'><br>"+arr[i]+"</td>";

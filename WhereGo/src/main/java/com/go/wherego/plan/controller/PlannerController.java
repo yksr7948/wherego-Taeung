@@ -20,6 +20,7 @@ import com.go.wherego.plan.model.service.PlanDataService;
 import com.go.wherego.plan.model.service.PlannerService;
 import com.go.wherego.plan.model.vo.PlanData;
 import com.go.wherego.plan.model.vo.Planner;
+import com.google.gson.Gson;
 
 @Controller
 public class PlannerController {
@@ -55,15 +56,28 @@ public class PlannerController {
 		return "plan/plannerInsert";
 	}
 	
-	// 플래너 상세보기 페이지로 이동
-	@RequestMapping("plannerDetailView.pl")
-	public String plannerDetailView(@RequestParam("plannerNo") int plannerNo, Model model) {
-		Planner planner = plannerService.selectPlannerByNo(plannerNo);
-		ArrayList<PlanData> planDataList = planDataService.selectPlanDataByPlannerNo(plannerNo);
-		
-		model.addAttribute("planner", planner);
-		model.addAttribute("planDataList", planDataList);
-		
-		return "plan/plannerDetailView";
-	}
+    // 플래너 상세보기 페이지로 이동
+    @RequestMapping("plannerDetailView.pl")
+    public String plannerDetailView(@RequestParam("plannerNo") int plannerNo, Model model) {
+        Planner planner = plannerService.selectPlannerByNo(plannerNo);
+        ArrayList<PlanData> planDataList = planDataService.selectPlanDataByPlannerNo(plannerNo);
+
+        if (!planDataList.isEmpty()) {
+            PlanData initialData = planDataList.get(0);
+            model.addAttribute("initialMapX", initialData.getMapx());
+            model.addAttribute("initialMapY", initialData.getMapy());
+        } else {
+            model.addAttribute("initialMapX", "0");
+            model.addAttribute("initialMapY", "0");
+        }
+
+        Gson gson = new Gson();
+        String planDataJson = gson.toJson(planDataList);
+        model.addAttribute("planDataJson", planDataJson);
+
+        model.addAttribute("planner", planner);
+        model.addAttribute("planDataList", planDataList);
+
+        return "plan/plannerDetailView";
+    }
 }

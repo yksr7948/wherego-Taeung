@@ -1,6 +1,7 @@
 package com.go.wherego.entertain.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -119,11 +120,9 @@ public class EntertainController {
 	@PostMapping("wcInfo.en")
 	public ArrayList<Trip> wcInfo(String title, String contentId){
 		ArrayList<Trip> list = null;
-		System.out.println("title"+title);
-		System.out.println("contentId"+contentId);
 		return list;
 		
 	}
-	
-
+	                                                 
+           
 }

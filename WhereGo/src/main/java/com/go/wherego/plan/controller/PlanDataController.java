@@ -36,11 +36,12 @@ public class PlanDataController {
 	//검색 리스트 가져오기
 	@ResponseBody
 	@RequestMapping(value="searchPlace.pl", produces="application/json;charset=UTF-8")
-	public String searchPlace(String keyword) throws IOException {
+	public String searchPlace(String keyword, String pageNo) throws IOException {
 		
 		String url = "http://apis.data.go.kr/B551011/KorService1/searchKeyword1";
 		url += "?serviceKey="+SERVICEKEY;
-		url += "&numOfRows=10&MobileOS=ETC&MobileApp=AppTest&_type=JSON&listYN=Y&arrange=O";
+		url += "&numOfRows=9&MobileOS=ETC&MobileApp=AppTest&_type=JSON&listYN=Y&arrange=O";
+		url += "&pageNo="+pageNo;
 		url += "&keyword="+URLEncoder.encode(keyword,"UTF-8");
 		
 		URL requestUrl = new URL(url);
@@ -58,6 +59,7 @@ public class PlanDataController {
 		while((line = br.readLine())!=null) {
 			responseStr+=line;
 		}
+		
 		
 		return responseStr;
 	}

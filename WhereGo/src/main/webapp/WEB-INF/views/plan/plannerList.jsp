@@ -222,7 +222,8 @@
 					var startDate = $(this).datepicker('getDate');
 					var minDate = $(this).datepicker('getDate');
 					endDate.datepicker('setDate', minDate);
-					startDate.setDate(startDate.getDate() + 30);
+					//여행일은 최대 10개까지
+					startDate.setDate(startDate.getDate() + 9);
 					endDate.datepicker('option', 'maxDate', startDate);
 					endDate.datepicker('option', 'minDate', minDate);
 				}

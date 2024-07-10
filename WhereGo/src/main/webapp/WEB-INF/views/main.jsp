@@ -13,6 +13,7 @@
 	align-items: center;
 	height: 100%;
 }
+
 .slideshow-container {
 	position: relative;
 	width: 100%;
@@ -22,22 +23,26 @@
 	background-color: #fff;
 	border-radius: 15px;
 }
+
 .slide {
 	display: none;
 	width: 100%;
 	position: absolute;
 	transition: transform 1s ease;
 }
+
 .active-slide {
 	display: block;
 	position: relative;
 }
+
 .slide img {
 	width: 100%;
 	height: auto;
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .text-overlay {
 	position: absolute;
 	bottom: 1px;
@@ -49,10 +54,12 @@
 	padding: 10px;
 	border-radius: 10px;
 }
+
 .dots-container {
 	text-align: center;
 	padding: 20px;
 }
+
 .dot {
 	cursor: pointer;
 	height: 15px;
@@ -63,6 +70,7 @@
 	display: inline-block;
 	transition: background-color 0.6s ease;
 }
+
 .active, .dot:hover {
 	background-color: #717171;
 }
@@ -75,6 +83,7 @@
 	margin-top: 3%;
 	text-align: center;
 }
+
 .trip-title {
 	font-size: 40px;
 	font-weight: 900;
@@ -95,52 +104,62 @@
 	background-color: #fff;
 	border-radius: 15px;
 }
+
 .trip-slides {
 	display: flex;
 	transition: transform 0.5s ease-out;
 }
+
 .trip-slide {
 	min-width: 100%;
 	box-sizing: border-box;
 	display: flex;
 	align-items: center;
 }
+
 .trip-description {
 	width: 40%;
 	padding: 20px;
 	text-align: left;
 	margin-left: 50px;
 }
-.rank{
+
+.rank {
 	font-size: 50px;
 	font-weight: 900;
 	margin-left: 35%;
 	background-color: gold;
 	border: 1px solid glod;
-	border-radius: 20%; 
+	border-radius: 20%;
 }
+
 .trip-description h2 {
 	font-size: 24px;
 	margin: 0 0 10px;
 }
+
 .trip-description p {
 	font-size: 14px;
 	margin: 5px 0 20px;
 }
+
 .trip-description button {
 	margin-top: 10%;
 	margin-left: 30%;
 }
+
 .trip-image {
 	width: 60%;
 	border: 20px solid lightgray;
 	border-radius: 20px;
 }
+
 .trip-image img {
 	width: 100%;
 	height: 600px; /* 이미지 높이를 늘림 */
 	object-fit: cover;
 }
+
 button.trip-prev, button.trip-next {
 	position: absolute;
 	top: 50%;
@@ -152,9 +171,11 @@ button.trip-prev, button.trip-next {
 	cursor: pointer;
 	z-index: 1;
 }
+
 button.trip-prev {
 	left: 10px;
 }
+
 button.trip-next {
 	right: 10px;
 }

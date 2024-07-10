@@ -1,6 +1,7 @@
 package com.go.wherego.entertain.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.go.wherego.entertain.model.service.EntertainService;
 import com.go.wherego.entertain.model.vo.WC;
@@ -96,21 +98,31 @@ public class EntertainController {
 			return "entertain/worldcup";
 		} else {
 			System.out.println("결승전 끝, 우승자는 : " + winnerName + " check : " + check + " 랭킹보기");
-			ArrayList<WC> list = entertainService.getWcRanking();
+			ArrayList<WC> list = entertainService.getWcRanking(); //랭킹10등 가져옴 
 			int entireGame=entertainService.getEntireGame(); //전체 게임 횟수 가져옴
 			ArrayList<Integer> win = new ArrayList<>(); // 각 여행지별 게임 이긴 횟수 저장할 list
-
+			ArrayList<WC> infoList = new ArrayList<WC>();
+			
 	        for (WC l : list) {
 	        	int winTime = entertainService.getWinTime(l.getTitle()); //각 title이 이긴 횟수 반복문으로 저장 
 	            win.add(winTime);
 	        }
 	        model.addAttribute("entireGame",entireGame);
-	        model.addAttribute("winList",win);
+	        model.addAttribute("winList",win);//우승 횟수 저장하는 int형 arraylist
 			//model.addAttribute("list", new Gson().toJson(list));
-			model.addAttribute("list",list);
+			model.addAttribute("list",list);//랭킹 10등 가져온 list
 			System.out.println(list);
 			return "entertain/ranking";
 		}
 	}
-
+	
+	@ResponseBody
+	@PostMapping("wcInfo.en")
+	public ArrayList<Trip> wcInfo(String title, String contentId){
+		ArrayList<Trip> list = null;
+		return list;
+		
+	}
+	                                                 
+           
 }

@@ -360,7 +360,7 @@ font{
 	    function like() {
 	        
 	    	if(userId == ""){
-	    		alertify.alert("로그인 후 사용 가능합니다.");
+	    		alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"로그인 후 사용 가능합니다.");
 	    	}else if (likeYN) {
 	        	
 	    		$.ajax({
@@ -376,7 +376,7 @@ font{
 	    				heart.classList.remove("fas");
 		    	        heart.classList.add("far");
 	        	        likeYN = false;
-	        	        alertify.alert("좋아요를 취소하였습니다.");
+	        	        alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">', "좋아요를 취소하였습니다.");
 	        	        $("#likeCount").text(result);
 	    				}
 	    			},
@@ -399,7 +399,7 @@ font{
 		        	        heart.classList.remove("far");
 		        	        heart.classList.add("fas"); // 채워진 하트로 변경
 		        	        likeYN = true;
-		        	        alertify.alert("좋아요!!");
+		        	        alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"좋아요!!");
 		        	        $("#likeCount").text(result);
 						}
 	        		},
@@ -508,11 +508,11 @@ font{
     			},
     			success : function(result){
     				if(result > 0){
-    					alertify.alert("댓글 작성 성공!");
+    					alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"댓글 작성 성공!");
 						$("#content").val("");
 						replyList();
     				}else{
-    					alertify.alert("댓글 작성 실패 ㅠㅠ");
+    					alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"댓글 작성 실패 ㅠㅠ");
     				}
     			},
     			error : function(){
@@ -546,7 +546,7 @@ font{
      			},
      			success : function(result){
      				
-     				alertify.alert("댓글 수정 성공!!");
+     				alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"댓글 수정 성공!!");
      	     		$("#replyContent"+replyNo).css({"display":"block"});
      	     		$("#editContent"+replyNo).css({"display":"none"});
      	     		replyList();
@@ -570,10 +570,10 @@ font{
      				},
      				success : function(data){
      					if(data > 0){
-     						alertify.alert("댓글 삭제 되었습니다.");
+     						alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"댓글 삭제 되었습니다.");
 	     					replyList();
      					}else{
-     						alertify.alert("댓글 삭제 실패");
+     						alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"댓글 삭제 실패");
      					}
      				},
      				error : function(){

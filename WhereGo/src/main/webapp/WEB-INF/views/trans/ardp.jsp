@@ -61,7 +61,7 @@
     background-color: black;
     color: white;
 }
-table.custom-table {
+table.custom-table ,#maindep{
         background-color: white;
         color: black;
         border: none; /* Hide all borders */
@@ -73,12 +73,12 @@ table.custom-table {
         margin: 20px auto; /* Center the table */
     }
 
-    table.custom-table th, table.custom-table td {
+   #maindep th,#maindep td, table.custom-table th, table.custom-table td {
         padding: 10px 20px;
         border: none; /* Hide all borders */
     }
 
-    table.custom-table tbody tr:hover {
+    #maindep tbody td:hover,table.custom-table tbody td:hover {
         background-color: gray;
         color: white;
         cursor: pointer;
@@ -144,7 +144,36 @@ table.custom-table {
 	
 			</tbody>
 		</table>
-
+		
+		<table border="1" id="maindep" >
+			<thead>
+				<tr>
+					<th colspan="4">주요 출발지</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>서울경부</td>
+					<td>광주</td>
+					<td>부산</td>
+					<td>부산사상</td>
+				</tr>
+				<tr>
+					<td>동서울</td>
+					<td>대전복합</td>
+					<td>전주</td>
+					<td>유성</td>
+				</tr>
+				<tr>
+					<td>천안</td>
+					<td>동대구</td>
+					<td>성남(분당)</td>
+					<td>센트럴시티(서울)</td>
+				</tr>
+			</tbody>
+		</table>
+		<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <script>
 $(function() {
 
@@ -156,7 +185,7 @@ $(function() {
 		
 	$("#searchBtn").click(
 			function() {
-			
+				$("#maindep").addClass("hidden");
 				$.ajax({
 					url : "getGArdp.tr",
 					data : {
@@ -219,7 +248,7 @@ $(function() {
 	
 	$("#searchDp").click(
 			function() {
-			
+				$("#maindep").addClass("hidden");
 				$.ajax({
 					url : "searchDp.tr",
 					data : {
@@ -252,7 +281,7 @@ $(function() {
 			}); 
 	$("#searchAr").click(
 			function() {
-			
+				$("#maindep").addClass("hidden");
 				$.ajax({
 					url : "searchAr.tr",
 					data : {
@@ -312,6 +341,16 @@ $(function() {
         
         // Example of alerting the selected departure
         alert("Selected arrival: " + arrival);
+    });
+	$("#maindep").on('click', 'tbody td', function() {
+        // 클릭된 출발지의 텍스트를 가져옵니다.
+        var selectedMainDep = $(this).text().trim();
+        
+        // 그 값을 #departure 입력 필드에 설정합니다.
+        $("#departure").val(selectedMainDep);
+        
+        // 그 값을 alert 창에 띄웁니다.
+        alert("선택된 출발지: " + selectedMainDep);
     });
 	
 	});

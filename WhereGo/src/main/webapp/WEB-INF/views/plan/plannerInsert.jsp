@@ -10,7 +10,7 @@
 	width: 100%;
 	margin: 0px auto;
 	display: flex;
-	min-height: 1000px;
+	min-height: 1080px;
 	height: auto;
 }
 
@@ -178,6 +178,29 @@
 	background-color: black;
 	color: white;
 }
+/* search-box-pagingbar */
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    margin:auto;
+}
+.pagination li>a{
+	width: 40px;
+	height: auto;
+	color: black;
+	text-align: center;
+	margin-right: 10px;
+}
+.pagination li>a:hover {
+    background-color: lightgray;
+}
+.current-page a{
+	color: black;
+	background: lightgray;
+	cursor: auto;
+}
+
 
 /* map(맵) */
 .map-box {
@@ -313,28 +336,47 @@
         <!-- search-box -->
         <div class="search-box">
             <div class="days-box-title">
-                <input type="text" id="plan-keyword" size="15">
+                <input type="text" id="plan-keyword" size="15"  value="이태원">
                 <button type="button" onclick="searchPlace();">검색</button>
             </div>
+            
+            <!-- 검색 리스트 영역 -->
+            <div id="list-area"></div>
+            
+            <!-- 페이징바 영역 -->
+            <div id="pagingbar-area"></div>
         </div>
         
         <!-- search js -->
+        
+        
         <script>
+        $(document).ready(function() {
+            searchPlace(1);
+        });
+        
 	        var markers = [];
 	        var paths = [];
             
-        	function searchPlace(){
+	        //검색 기능
+        	function searchPlace(pageNumber){
+	        	if(pageNumber == null){	        		
+	        		pageNumber = 1;
+	        	}
         		
         		$(".search-box-list").remove();
         		
         		$.ajax({
         			url : "searchPlace.pl",
         			data : {
-        				keyword : $("#plan-keyword").val()
+        				keyword : $("#plan-keyword").val(),
+        				pageNo: pageNumber
         			},
         			success : function(list){
         				
-	        			var items = list.response.body.items.item;
+	        			var items = list.response.body.items.item;	
+	        			
+	        			var totalCount = list.response.body.totalCount;
 	        			
 	        			var str = "";
 	        			
@@ -352,19 +394,59 @@
         						+ "<button class='add-plan-button' data-item='" + itemStr + "'>+</button>"
         						+ "</div>";
         				}
- 						$(".search-box").append(str);	
+ 						$("#list-area").append(str);	
+ 						
+ 						//페이징 처리
+ 						updatePagingBar(totalCount/9, pageNumber);
  						
  			        	$(".add-plan-button").on("click",function(){
  			        		var item = $(this).data("item");
  			        		addPlan(item);
  			        	});
         			},
-        			error : function(){
-        				console.log("통신오류");
+        			error : function(xhr, status, error){
+        				console.error('Error fetching data:', error);
         			}
         		});
         	}
+	        
+	        //페이징 바 처리
+	        function updatePagingBar(totalPages, currentPage) {
+			    
+	        	var pagingBarHtml = '';
+			    
+			    //현재 페이지 그룹
+			    var currentGroup = Math.ceil(currentPage / 5);
+			    
+			    // 첫 번째 페이지 그룹의 첫 페이지 번호
+			    var startPage = (currentGroup - 1) * 5 + 1;
+			    
+			 	// 마지막 페이지 그룹의 마지막 페이지 번호
+			    var endPage = Math.min(startPage + 4, totalPages);
+			    
+			    // 이전 그룹 버튼
+			    if (currentGroup > 1) {
+			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + ((currentGroup - 2) * 5 + 1) + ')">&laquo; Prev</a>';
+			    }
+			    
+			    // 페이지 번호 생성
+			    for (var i = startPage; i <= endPage; i++) {
+			        if (i === currentPage) {
+			            pagingBarHtml += '<span>' + i + '</span>';  // 현재 페이지는 활성화된 스타일을 적용
+			        } else {
+			            pagingBarHtml += '<a href="#" onclick="searchPlace(' + i + ')">' + i + '</a>';  // 다른 페이지는 클릭 가능한 링크
+			        }
+			    }
+
+			    // 다음 그룹 버튼
+			    if (endPage < totalPages) {
+			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + (endPage + 1) + ')">Next &raquo;</a>';
+			    }
+			    
+			    $('#pagingbar-area').html(pagingBarHtml);  // 페이징 바를 업데이트합니다
+			}
         	
+	        // +버튼 누를시 
         	function addPlan(item){
         		
         		 var parent =  $('.plans-box[style*="display: block"]');
@@ -395,7 +477,7 @@
         	    if(num<6){ // 일정은 5개까지만 추가 가능
         	        parent.append(getHtml(item.title, item.mapx, item.mapy, num, data_date, item.firstimage));
         	    }else{
-        	        alertify.alert("한번에 5개의 관광지를 선택 할 수 있습니다.");
+        	        alertify.alert('새로운 제목',"한번에 5개의 관광지를 선택 할 수 있습니다.");
         	    }
         	}
         	
@@ -538,7 +620,7 @@
                             firstImage : $(this).find(".firstImage").val()
                         };
                         
-						            planList.push(plan);
+					planList.push(plan);
                		});
 
                 	// Plan 배열, Planner 데이터 묶기

@@ -70,17 +70,39 @@ font{
 /* 지도 */
 #map-container{
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     margin-top: 20px;
 }
 #map{
     width: 100%;
-    height: 400px;
+    height: 600px; /* 지도 높이를 더 크게 설정 */
+    position: relative;
+}
+#legend {
+    background: white;
+    padding: 10px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    margin-top: 20px; /* 코스 아래에 위치하도록 설정 */
+    width: 100%;
+    text-align: center;
+}
+#legend div {
+    display: inline-flex;
+    align-items: center;
+    margin: 5px;
+}
+#legend div span {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
 
 /* 날짜 버튼 */
 #day-buttons {
-    display: flex;
+    display: none; /* 버튼을 숨김 */
     justify-content: center;
     margin-bottom: 20px;
 }
@@ -132,16 +154,9 @@ font{
     <!-- 지도 API -->  
     <h1 class="main-title">코스</h1>
     <br> <br>
-    <div id="day-buttons">
-        <c:forEach var="plan" items="${planDataList}" varStatus="status">
-            <c:if test="${status.first || plan.day != previousDay}">
-                <button class="day-btn" id="btn-day${plan.day}" onclick="showDay('${plan.day}')">Day ${status.index + 1}</button>
-                <c:set var="previousDay" value="${plan.day}" />
-            </c:if>
-        </c:forEach>
-    </div>
     <div id="map-container">
         <div id="map"></div>
+        <div id="legend"></div> <!-- 범례를 코스 아래에 추가 -->
     </div>  
     
     <script>
@@ -156,13 +171,12 @@ font{
         var map = new naver.maps.Map('map', mapOptions);
 
         var planDataList = JSON.parse('<c:out value="${planDataJson}" escapeXml="false" />');
-        console.log('planDataList:', planDataList);  // 데이터를 콘솔에 출력하여 확인합니다.
 
         var markers = [];
         var polylines = [];
 
-        var currentMarkers = [];
-        var currentPolyline = null;
+        var colorList = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];  // 색깔 리스트
+        var colorIndex = 0;
 
         var groupedData = planDataList.reduce(function(acc, location) {
             var day = location.day;  // 날짜 형식 변환 없이 그대로 사용
@@ -201,55 +215,35 @@ font{
             return acc;
         }, {});
 
-        console.log('groupedData:', groupedData);  // 그룹화된 데이터를 콘솔에 출력하여 확인합니다.
 
-        function showDay(day) {
-            console.log("Showing day: " + day);
-            if (!groupedData[day]) {
-                console.error("No data found for day: " + day);
-                return;
-            }
+        var legend = document.getElementById('legend');
+
+        // 모든 경로를 지도에 표시
+        Object.keys(groupedData).forEach(function(day) {
+            var color = colorList[colorIndex % colorList.length];  // 색깔을 순환하여 사용
+            colorIndex++;
             
-            // 기존 마커 제거
-            currentMarkers.forEach(function(marker) {
-                marker.setMap(null);
-            });
-            if (currentPolyline) {
-                currentPolyline.setMap(null);
-            }
-
-            // 선택한 날짜의 마커와 경로 설정
-            currentMarkers = groupedData[day].markers;
-            currentMarkers.forEach(function(marker) {
+            // 마커를 지도에 표시
+            groupedData[day].markers.forEach(function(marker) {
                 marker.setMap(map);
             });
 
-            currentPolyline = new naver.maps.Polyline({
+            // 경로를 지도에 표시
+            var polyline = new naver.maps.Polyline({
                 map: map,
                 path: groupedData[day].path,
-                strokeColor: '#FF0000',
+                strokeColor: color,
                 strokeOpacity: 0.8,
                 strokeWeight: 6
             });
+            polylines.push(polyline);
 
-            // 버튼 활성화 상태 설정
-            document.querySelectorAll('.day-btn').forEach(function(button) {
-                button.classList.remove('active');
-            });
-            var activeButton = document.getElementById('btn-day' + day);
-            if (activeButton) {
-                activeButton.classList.add('active');
-            }
-        }
+            // 범례에 추가
+            var legendItem = document.createElement('div');
+            legendItem.innerHTML = '<span style="background-color:' + color + ';"></span> ' + day;
+            legend.appendChild(legendItem);
+        });
 
-        var firstDay = Object.keys(groupedData)[0];
-        if (firstDay) {
-            showDay(firstDay);
-            var firstButton = document.getElementById('btn-day' + firstDay);
-            if (firstButton) {
-                firstButton.classList.add('active');
-            }
-        }
     </script>
 
 </main>

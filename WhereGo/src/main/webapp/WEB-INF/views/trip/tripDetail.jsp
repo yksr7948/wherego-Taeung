@@ -461,12 +461,14 @@ font{
     				var str = ""
     				
     				for(var i in data){
+    					var date=new Date(data[i].createDate);
+    					var dFormat=date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+" "+date.getHours()+":"+date.getMinutes();
      					str += "<tr>";
     					str += "<th><img src='resources/img/trip-board/user_profile.png'></th>";
     					str += "<td>";
    						str += "<span style='font-weight: bold; margin-right: 10px;'>"+data[i].userId+"</span>";
    						
-     					str += "<span style='color:#888'>"+data[i].createDate+"</span>";
+     					str += "<span style='color:#888'>"+dFormat+"</span>";
    					if(loginUser === data[i].userId){
  	    					str += "<span class='update'><a onclick='deleteReply("+data[i].replyNo+")'>삭제하기</a></span>";
  	    					str += "<span class='update'><font> &nbsp; / &nbsp;</font></span>";

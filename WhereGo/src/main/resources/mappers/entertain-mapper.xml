@@ -78,7 +78,7 @@ FROM (
         SELECT TITLE,COUNT(*) AS cnt
         FROM WC
         GROUP BY title
-        ORDER BY cnt ASC
+        ORDER BY cnt desc
     )
     WHERE ROWNUM <= 10]]>
 ) 

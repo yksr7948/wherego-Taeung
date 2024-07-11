@@ -128,9 +128,9 @@ main {
 			<c:set var="w" value="${winList[status.index]}" />
 			<c:set var="winRate" value="${w * 100 / entireGame}" />
 			<div class="card">
-				<input type="hidden" value="${a.contentId}" id="hiddenContentId${status.index}"> 
-				<input type="hidden" value="${a.title}" id="hiddenTitle${status.index}">
-				<img
+				<input type="hidden" value="${a.contentId}"
+					id="hiddenContentId${status.index}"> <input type="hidden"
+					value="${a.title}" id="hiddenTitle${status.index}"> <img
 					src="${a.firstImage2}" alt="">
 				<div class="card-content">
 					<h2>${status.index + 1}등
@@ -139,9 +139,10 @@ main {
 							maxFractionDigits="1" />
 						%
 					</h2>
-					<a class="rank-button mbti-btn" data-index="${status.index}">mbti</a>  <a href=""
-						class="rank-button">해시태그</a> <a href="" class="rank-button">성별</a>
-					<a href="" class="rank-button">나이</a>
+					<a class="rank-button mbti-btn" data-index="${status.index}"
+						data-toggle="modal" data-target="#updatePwdForm">mbti</a> <a
+						href="" class="rank-button">해시태그</a> <a href=""
+						class="rank-button">성별</a> <a href="" class="rank-button">나이</a>
 				</div>
 			</div>
 		</c:forEach>
@@ -158,11 +159,21 @@ main {
 
 				<!-- Modal Header -->
 				<div class="modal-header">
-					<h4 class="modal-title">비밀번호 변경</h4>
+					<h4 class="modal-title">MBTI 픽</h4>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body" align="center">
-				
+					<table border="1">
+						<thead>
+							<tr>
+								<th>MBTI</th>
+								<th>Count</th>
+							</tr>
+						</thead>
+						<tbody id="mbti-table-body">
+							<!-- 데이터가 동적으로 추가될 영역 -->
+						</tbody>
+					</table>
 				</div>
 
 				<!--  Modal footer -->
@@ -176,41 +187,53 @@ main {
 
 
 	<script>
-	 $(function() {
-	        $(".card img").click(function() {
-	        	 var contentId = $(this).siblings("input[type=hidden]").val();
-		            location.href = "tripDetail.tl?contentId=" + contentId;
-		            console.log(contentId);
-	        });
-	        $(".mbti-btn").click(function() {
-	        	 var index = $(this).data("index");
-	        	 var eachContentId = $("#hiddenContentId" + index).val();
-	        	 var eachTitle = $("#hiddenTitle" + index).val();
-	        	 
-	        	 console.log("Content ID: " + eachContentId);
-	        	 console.log("Title: " + eachTitle);
-	        	 
-	        	 $.ajax({
-	        	        url: "wcInfo.en",
-	        	        type: "POST",
-	        	        data: {
-	        	            contentId: eachContentId,
-	        	            title: eachTitle
-	        	        },
-	        	        success: function(response) {
-	        	            console.log("Data sent successfully.");
-	        	            console.log("Response: " + response);
-	        	        },
-	        	        error: function(xhr, status, error) {
-	        	            console.error("Error occurred: " + status + " - " + error);
-	        	        }
-	        	    });
+		$(function() {
+			$(".card img").click(function() {
+				var contentId = $(this).siblings("input[type=hidden]").val();
+				location.href = "tripDetail.tl?contentId=" + contentId;
+				console.log(contentId);
+			});
+			$(".mbti-btn")
+					.click(
+							function() {
+								var index = $(this).data("index");
+								var eachContentId = $(
+										"#hiddenContentId" + index).val();
+								var eachTitle = $("#hiddenTitle" + index).val();
 
-	        	 // 각 변수를 저장하거나 원하는 작업을 수행합니다.
-	        });
+								console.log("Content ID: " + eachContentId);
+								console.log("Title: " + eachTitle);
+
+								$.ajax({
+									url : "getMbti.en",
+									type : "POST",
+									data : {
+										contentId : eachContentId,
+										title : eachTitle
+									},
+									success : function(response) {
+										$("#mbti-table-body").empty();
+										
+										console.log(response);
+
+										// 새 데이터로 테이블 채우기
+										$.each(response, function(key, value) {
+											$("#mbti-table-body").append(
+													"<tr><td>" + key
+															+ "</td><td>"
+															+ value
+															+ "</td></tr>");
+										});
+									},
+									error : function(xhr, status, error) {
+										console.error("Error occurred: "
+												+ status + " - " + error);
+									}
+								});
+
+								// 각 변수를 저장하거나 원하는 작업을 수행합니다.
+							});
 		});
-	 
-	 
 	</script>
 
 	<%@include file="/WEB-INF/views/common/footer.jsp"%>

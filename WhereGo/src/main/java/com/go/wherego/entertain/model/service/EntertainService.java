@@ -1,6 +1,9 @@
 package com.go.wherego.entertain.model.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -19,5 +22,11 @@ public interface EntertainService {
 	int getEntireGame();
 
 	int getWinTime(String title);
+
+	ArrayList<HashMap<String, BigDecimal>> getWcMbti(String title);
+
+//	HashMap<String, Integer> getMbti(String title);
+
+	
 
 }

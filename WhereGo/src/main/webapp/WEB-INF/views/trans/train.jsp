@@ -96,6 +96,16 @@ color:white;
 	float:right;
 	align-items:flex-end;
 }
+.paging{
+	width:50px;
+	height:50px;
+	margin:5px 5px;
+	border-radius:5px;
+}
+.paging-select{
+	background-color:#333;
+	color:#fff;
+}
 #departDate{
 	width:150px;
 	height:30px;
@@ -207,6 +217,9 @@ color:white;
 	<div id="searchResult">
 	
 	</div>
+	<div id="paging-bar">
+	
+	</div>
 	</main>
 	<!-- 로딩 애니메이션 -->
     <div id="loadingContainer">
@@ -273,9 +286,11 @@ color:white;
 				}
 			}); 
 		});
-
 		
-		$("#search").click(function(){
+		function searchTrain(pageNumber){
+			if(pageNumber==null){
+				pageNumber=1;
+			}
 			var train=$("#trainselect").val();
 			var depart=$("#departid").val();
 			var arrive=$("#arriveid").val();
@@ -292,7 +307,8 @@ color:white;
 						departDate : date,
 						departNo : depart,
 						arriveNo : arrive,
-						trainNo : train
+						trainNo : train,
+						pageNo : pageNumber
 					},
 					success : function(result){
 						var count=$(result).find('totalCount').text();
@@ -350,6 +366,10 @@ color:white;
 						$("#searchResult").html(str);
 						
 						$("#stationroute").show();
+						
+						console.log(pageNumber);
+						//페이징 처리
+ 						updatePagingBar(count, pageNumber);
 					}},
 					error : function(){
 						console.log("실행실패");
@@ -359,6 +379,35 @@ color:white;
 					}
 				});
 			}
+		}
+		
+		//페이징 바 처리
+        function updatePagingBar(totalPages, currentPage) {
+		    
+        	var pagingBarHtml = '';
+			console.log(currentPage);
+		    var startPage =1;
+
+		    var endPage = Math.floor((totalPages/50)+1);
+
+		    for (var i = startPage; i <= endPage; i++) {
+		        if (i == currentPage) {
+		            pagingBarHtml += '<button class="paging paging-select" disabled>' + i + '</button>';
+		        } else {
+		            pagingBarHtml += '<button class="paging">' + i + '</button>';
+		        }
+		    }
+
+			$('#paging-bar').html(pagingBarHtml);   // 페이징 바를 업데이트합니다
+		}
+
+		
+		$("#search").click(function(){
+			searchTrain();
+		});
+		
+		$(document).on("click","button[class=paging]",function(){
+			searchTrain($(this).text());
 		});
 		
 		$(document).on("click","button[class=station]",function(){

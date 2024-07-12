@@ -594,7 +594,7 @@ public class TransController {
 			
 			@ResponseBody
 			@GetMapping(value = "traintest.tr",produces = "text/plain;charset=UTF-8")
-			public String getTrain(String departDate, String departNo,String arriveNo,String trainNo) throws IOException {
+			public String getTrain(String departDate, String departNo,String arriveNo,String trainNo,int pageNo) throws IOException {
 				String responseStr="";
 				HttpURLConnection urlConn=null;
 				BufferedReader br=null;
@@ -607,7 +607,7 @@ public class TransController {
 				URL requestUrl;
 				String url = "https://apis.data.go.kr/1613000/TrainInfoService/getStrtpntAlocFndTrainInfo";
 				url += "?serviceKey="+SERVICE_KEY
-						+ "&pageNo="+URLEncoder.encode("1", "UTF-8")
+						+ "&pageNo="+pageNo
 						+ "&numOfRows="+URLEncoder.encode("50", "UTF-8")
 						+ "&_type="+URLEncoder.encode("xml", "UTF-8")
 						+ "&depPlaceId="+departNo

@@ -26,6 +26,7 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/planner.pl"/>
+			<mapping path="/worldcup.en"/>
 			<beans:bean class="com.go.wherego.common.LoginInterceptor"></beans:bean>
 		</interceptor>
 	</interceptors>

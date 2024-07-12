@@ -80,4 +80,16 @@ public class PlannerController {
 
         return "plan/plannerDetailView";
     }
+    
+    //플래너 삭제하기
+    @ResponseBody
+    @RequestMapping("deletePlanner.pl")
+    public int deletePlanner(int plannerNo) {
+    	
+    	int result = plannerService.deletePlanner(plannerNo);
+    	
+    	return result;
+    	
+    }
+    
 }

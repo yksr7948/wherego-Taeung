@@ -28,6 +28,12 @@ public class PlannerDao {
 	public Planner selectPlannerByNo(int plannerNo, SqlSessionTemplate sqlSession) {
 		return sqlSession.selectOne("plannerMapper.selectPlannerByNo", plannerNo);
 	}
+	
+	//플래너 삭제하기
+	public int deletePlanner(int plannerNo, SqlSessionTemplate sqlSession) {
+
+		return sqlSession.delete("plannerMapper.deletePlanner", plannerNo);
+	}
 
 
 }

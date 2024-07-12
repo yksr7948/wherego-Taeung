@@ -39,4 +39,13 @@ public class PlannerServiceImpl implements PlannerService {
 	public Planner selectPlannerByNo(int plannerNo) {
 		return plannerDao.selectPlannerByNo(plannerNo, sqlSession);
 	}
+
+	//플래너 조회하기
+	@Override
+	public int deletePlanner(int plannerNo) {
+
+		int result = plannerDao.deletePlanner(plannerNo, sqlSession);
+		
+		return result;
+	}
 }

@@ -17,6 +17,7 @@
 	
 	<!-- planner 추가 -->
 	<insert id="insertPlanner" parameterType="planner" useGeneratedKeys="true" keyProperty="plannerNo">
+		<!-- planner 삽입하기 전에 plannerNo값 가져오기 -->
 	    <selectKey keyProperty="plannerNo" resultType="int" order="BEFORE">
 	        SELECT SEQ_PLANNER.NEXTVAL FROM DUAL
 	    </selectKey>
@@ -37,17 +38,26 @@
                     	  ,SYSDATE)
 	</insert>
 	
-	<!-- 플래너 가져오기 -->
+	<!-- 플래너 가져오기(아이디로) -->
 	<select id="selectPlanner" parameterType="string" resultMap="plannerResultSet">
 		SELECT *
 		FROM PLANNER
 		WHERE USER_ID = #{userId}
 	</select>
 	
-		<select id="selectPlannerByNo" parameterType="int" resultMap="plannerResultSet">
+	<!-- 플래너 가져오기(번호로) -->
+	<select id="selectPlannerByNo" parameterType="_int" resultMap="plannerResultSet">
 		SELECT *
 		FROM PLANNER
 		WHERE PLANNER_NO = #{plannerNo}
 	</select>
+	
+	<!-- 플래너 삭제하기 -->
+	<delete id="deletePlanner" parameterType="_int">
+		DELETE 
+		FROM PLANNER
+		WHERE PLANNER_NO= #{plannerNo}
+	</delete>
+	
 	
 </mapper>

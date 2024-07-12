@@ -64,7 +64,11 @@
     margin: 5px 0;
     color: #555;
 }
-.detail-button {
+.button-area{
+    display: flex;
+    gap: 10px;
+}
+.button-area button{
     display: block;
     width: 100%;
     padding: 10px;
@@ -103,16 +107,13 @@
 	gap: 0.5rem;
 	margin-bottom: 20px;
 }
-
 .date-form input {
     width: 120px;
 }
-
 .input-group {
 	display: flex;
 	align-items: center;
 }
-
 .input-group-text {
 	margin-left: 0.5rem;
 	cursor: pointer;
@@ -124,6 +125,7 @@
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
+    <input id="userId" type="hidden" value="${loginUser.userId }">
     
     <div class="planner-container">
         <div class="plan-title">
@@ -146,7 +148,10 @@
 				                    <p style="font-size: 24px; font-weight: 900;">${planner.title }</p>
 				                    <p>${planner.description }</p>
 				                    <p style="color: #888; font-size: 16px">${planner.startDate } ~ ${planner.endDate }</p>
-            						<button class="detail-button" onclick="location.href='plannerDetailView.pl?plannerNo=${planner.plannerNo}'">상세보기</button>
+            						<div class="button-area">
+	            						<button class="detail-button" onclick="location.href='plannerDetailView.pl?plannerNo=${planner.plannerNo}'">상세보기</button>
+	            						<button class="delete-button" onclick="deletePlanner('${planner.plannerNo}');">삭제하기</button>
+            						</div>
 				                </div>
 				            </div>
 			        	</c:forEach>
@@ -156,7 +161,36 @@
     </div>
     
     <script>
-
+    	//플래너 삭제하기
+		function deletePlanner(plannerNo){
+    		
+			var result = confirm("댓글을 삭제하시면 다시 되돌릴 수 없습니다. 정말 삭제하시겠습니까?");
+			
+			if(result){
+				$.ajax({
+					url : "deletePlanner.pl",
+					data : {
+						plannerNo
+					},
+					success : function(response){
+						console.log(response);
+						if(response == '1'){
+							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"삭제되었습니다.",function(){
+								location.href = "planner.pl?userId="+$("#userId").val();
+							});
+						}else{
+							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"삭제 도중 오류 발생...");
+						}
+					},
+					error : function(){
+						console.log("에러");
+					}
+				});
+			}
+    		
+		}
+    	
+    	
     </script>
     
     <!-- 모달 -->

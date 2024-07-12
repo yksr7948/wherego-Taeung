@@ -179,28 +179,28 @@
 	color: white;
 }
 /* search-box-pagingbar */
-.pagination {
+#pagingbar-area {
     display: flex;
     justify-content: center;
-    padding: 20px 0;
-    margin:auto;
+    align-items: center;
+    margin: 20px 0;
 }
-.pagination li>a{
-	width: 40px;
-	height: auto;
-	color: black;
-	text-align: center;
-	margin-right: 10px;
+#pagingbar-area a, #pagingbar-area span {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border: 2px solid black;  
+    border-radius: 5px;
+    color: black;
+    transition: background-color 0.3s, color 0.3s;
 }
-.pagination li>a:hover {
-    background-color: lightgray;
+#pagingbar-area span {
+    background-color: black;
+    color: white;
 }
-.current-page a{
-	color: black;
-	background: lightgray;
-	cursor: auto;
+#pagingbar-area a:hover {
+    background-color: white;
+    color: black;
 }
-
 
 /* map(맵) */
 .map-box {
@@ -347,9 +347,7 @@
             <div id="pagingbar-area"></div>
         </div>
         
-        <!-- search js -->
-        
-        
+        <!-- search js --> 
         <script>
         $(document).ready(function() {
             searchPlace(1);
@@ -394,7 +392,7 @@
         						+ "<button class='add-plan-button' data-item='" + itemStr + "'>+</button>"
         						+ "</div>";
         				}
- 						$("#list-area").append(str);	
+ 						$("#list-area").html(str);	
  						
  						//페이징 처리
  						updatePagingBar(totalCount/9, pageNumber);
@@ -426,21 +424,21 @@
 			    
 			    // 이전 그룹 버튼
 			    if (currentGroup > 1) {
-			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + ((currentGroup - 2) * 5 + 1) + ')">&laquo; Prev</a>';
+			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + ((currentGroup - 2) * 5 + 1) + ')">Prev</a>';
 			    }
 			    
 			    // 페이지 번호 생성
 			    for (var i = startPage; i <= endPage; i++) {
 			        if (i === currentPage) {
-			            pagingBarHtml += '<span>' + i + '</span>';  // 현재 페이지는 활성화된 스타일을 적용
+			            pagingBarHtml += '<span>' + i + '</span>';
 			        } else {
-			            pagingBarHtml += '<a href="#" onclick="searchPlace(' + i + ')">' + i + '</a>';  // 다른 페이지는 클릭 가능한 링크
+			            pagingBarHtml += '<a href="#" onclick="searchPlace(' + i + ')">' + i + '</a>';
 			        }
 			    }
 
 			    // 다음 그룹 버튼
 			    if (endPage < totalPages) {
-			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + (endPage + 1) + ')">Next &raquo;</a>';
+			        pagingBarHtml += '<a href="#" onclick="searchPlace(' + (endPage + 1) + ')">Next</a>';
 			    }
 			    
 			    $('#pagingbar-area').html(pagingBarHtml);  // 페이징 바를 업데이트합니다

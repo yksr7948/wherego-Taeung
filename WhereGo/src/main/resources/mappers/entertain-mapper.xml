@@ -25,7 +25,22 @@
 		<result column="TAG_WORD" property="tagWords"/>
 		<result column="TITLE" property="title"/>	
 		<result column="FIRST_IMAGE2" property="firstImage2"/>
-		<result column="CONTENT_ID" property="contentId"/>
+		<result column="contentId" property="count"/>
+	</resultMap>
+	
+	<resultMap type="hashmap" id="mapMbti">
+		<result column="mbti" property="mbti"/>
+		<result column="count" property="count"/>
+	</resultMap>
+	
+	<resultMap type="hashmap" id="mapAge">
+		<result column="age" property="age"/>
+		<result column="count" property="count"/>
+	</resultMap>
+	
+	<resultMap type="hashmap" id="mapGender">
+		<result column="gender" property="gender"/>
+		<result column="count" property="count"/>
 	</resultMap>
 
 
@@ -96,10 +111,50 @@ ORDER BY cnt desc
 		FROM WC
 		WHERE TITLE=#{title}
 	</select>
-
-
-
 	
-
-
+	
+	<select id="getWcMbti" parameterType="String" resultMap="mapMbti"> 
+	<!-- <select id="getWcMbti" parameterType="String" resultType="hashmap"> -->
+		<![CDATA[SELECT MBTI,COUNT
+	FROM (
+    SELECT MBTI, COUNT(*) AS COUNT
+    FROM WC
+    WHERE TITLE = #{title}
+    GROUP BY MBTI
+    ORDER BY COUNT(*) DESC
+	)
+	WHERE ROWNUM <=]]> 3
+	</select>
+	
+	<select id="getMbtiCount">
+		SELECT COUNT(*)
+		FROM WC
+		WHERE TITLE=#{title}
+	</select>
+	
+	
+	<select id="getWcAge" parameterType="String" resultMap="mapMbti"> 
+		<![CDATA[SELECT AGE,COUNT
+	FROM (
+    SELECT AGE, COUNT(*) AS COUNT
+    FROM WC
+    WHERE TITLE = #{title}
+    GROUP BY AGE
+    ORDER BY COUNT(*) DESC
+	)
+	WHERE ROWNUM <=]]> 3
+	</select>
+	
+	<select id="getWcGender" parameterType="String" resultMap="mapGender"> 
+		<![CDATA[SELECT GENDER,COUNT
+	FROM (
+    SELECT GENDER, COUNT(*) AS COUNT
+    FROM WC
+    WHERE TITLE = #{title}
+    GROUP BY GENDER
+    ORDER BY COUNT(*) DESC
+	)
+	WHERE ROWNUM <=]]> 3
+	</select>
+	
 </mapper>

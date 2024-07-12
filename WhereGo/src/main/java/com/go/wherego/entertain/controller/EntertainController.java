@@ -1,8 +1,10 @@
 package com.go.wherego.entertain.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -42,7 +44,7 @@ public class EntertainController {
 	@RequestMapping("rullet.en")
 	public String startRullet(Model model) {
 		ArrayList<Trip> list = entertainService.getTop100();
-		ArrayList<Trip> ranList=makeRandom(list);
+		ArrayList<Trip> ranList = makeRandom(list);
 		model.addAttribute("list", new Gson().toJson(ranList));
 		System.out.println(ranList);
 		return "entertain/realRullet";
@@ -55,23 +57,23 @@ public class EntertainController {
 	 * Gson().toJson(list)); }
 	 */
 
-	 //가져온 Trip 랜덤으로 섞어서 16개 가져오기
+	// 가져온 Trip 랜덤으로 섞어서 16개 가져오기
 	public static ArrayList<Trip> makeRandom(ArrayList<Trip> list) {
 
-        Random random = new Random();
-        Set<Trip> selectedElements = new HashSet<>();
-        ArrayList<Trip> resultList = new ArrayList<>();
+		Random random = new Random();
+		Set<Trip> selectedElements = new HashSet<>();
+		ArrayList<Trip> resultList = new ArrayList<>();
 
-        while (selectedElements.size() < 12) {
-            int randomIndex = random.nextInt(list.size());
-            Trip trip = list.get(randomIndex);
-            if (selectedElements.add(trip)) {
-                resultList.add(trip);
-            }
-        }
-        
-        return resultList;
-    }
+		while (selectedElements.size() < 12) {
+			int randomIndex = random.nextInt(list.size());
+			Trip trip = list.get(randomIndex);
+			if (selectedElements.add(trip)) {
+				resultList.add(trip);
+			}
+		}
+
+		return resultList;
+	}
 
 	@PostMapping("wcResult.en")
 	public String insertWcResult(String userId, String winnerName, String check, Model model) {
@@ -98,31 +100,77 @@ public class EntertainController {
 			return "entertain/worldcup";
 		} else {
 			System.out.println("결승전 끝, 우승자는 : " + winnerName + " check : " + check + " 랭킹보기");
-			ArrayList<WC> list = entertainService.getWcRanking(); //랭킹10등 가져옴 
-			int entireGame=entertainService.getEntireGame(); //전체 게임 횟수 가져옴
+			ArrayList<WC> list = entertainService.getWcRanking(); // 랭킹10등 가져옴
+			int entireGame = entertainService.getEntireGame(); // 전체 게임 횟수 가져옴
 			ArrayList<Integer> win = new ArrayList<>(); // 각 여행지별 게임 이긴 횟수 저장할 list
 			ArrayList<WC> infoList = new ArrayList<WC>();
-			
-	        for (WC l : list) {
-	        	int winTime = entertainService.getWinTime(l.getTitle()); //각 title이 이긴 횟수 반복문으로 저장 
-	            win.add(winTime);
-	        }
-	        model.addAttribute("entireGame",entireGame);
-	        model.addAttribute("winList",win);//우승 횟수 저장하는 int형 arraylist
-			//model.addAttribute("list", new Gson().toJson(list));
-			model.addAttribute("list",list);//랭킹 10등 가져온 list
-			System.out.println(list);
+
+			for (WC l : list) {
+				int winTime = entertainService.getWinTime(l.getTitle()); // 각 title이 이긴 횟수 반복문으로 저장
+				win.add(winTime);
+			}
+			model.addAttribute("entireGame", entireGame);
+			model.addAttribute("winList", win);// 우승 횟수 저장하는 int형 arraylist
+			// model.addAttribute("list", new Gson().toJson(list));
+			model.addAttribute("list", list);// 랭킹 10등 가져온 list
 			return "entertain/ranking";
 		}
 	}
+
 	
-	@ResponseBody
-	@PostMapping("wcInfo.en")
-	public ArrayList<Trip> wcInfo(String title, String contentId){
-		ArrayList<Trip> list = null;
-		return list;
-		
-	}
-	                                                 
-           
+	  @ResponseBody
+	  @PostMapping(value="getMbti.en",produces = "application/json;charset=UTF-8")
+	  public ArrayList<HashMap<String,BigDecimal>> wcInfo(String title, String
+	  contentId, Model model){
+	  
+	  // HashMap resultMap= entertainService.getWcMbti(title);
+	  ArrayList<HashMap<String,BigDecimal>> result =
+	  entertainService.getWcMbti(title); 
+	  System.out.println(result);
+//	  int mbtiCount = entertainService.getMbtiCount(title); //해당 여행지의 이긴 총 횟수 \
+//	  System.out.println(mbtiCount);
+	   
+//	   return resultMap; 
+	   return result; 
+	   }
+	 
+	  
+	  @ResponseBody
+	  @PostMapping(value="getage.en",produces = "application/json;charset=UTF-8")
+	  public ArrayList<HashMap<String,BigDecimal>> ageInfo(String title, String
+	  contentId, Model model){
+	  
+	  // HashMap resultMap= entertainService.getWcMbti(title);
+	  ArrayList<HashMap<String,BigDecimal>> result =
+	  entertainService.getWcAge(title); 
+	  System.out.println(result);
+ 
+	   return result; 
+	   }
+	  
+	  @ResponseBody
+	  @PostMapping(value="getGender.en",produces = "application/json;charset=UTF-8")
+	  public ArrayList<HashMap<String,BigDecimal>> genderInfo(String title, String
+	  contentId, Model model){
+	  
+	  // HashMap resultMap= entertainService.getWcMbti(title);
+	  ArrayList<HashMap<String,BigDecimal>> result =
+	  entertainService.getWcGender(title); 
+	  System.out.println(result);
+ 
+	   return result; 
+	   }
+	  
+
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping(value="getMbti.en",produces = "application/json;charset=UTF-8")
+	 * public HashMap<String, Integer> getWcMbti(String title, String contentId,
+	 * Model model){ HashMap<String, Integer> mbtiList =
+	 * entertainService.getMbti(title); System.out.println(mbtiList);
+	 * 
+	 * return mbtiList; }
+	 */
+
 }

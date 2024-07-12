@@ -16,5 +16,6 @@ public class WC {
 	private String title;
 	private String firstImage2;
 	private String contentId;
+	private String count;
 	
 }

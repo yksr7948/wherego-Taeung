@@ -1,6 +1,8 @@
 package com.go.wherego.entertain.model.dao;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,4 +34,26 @@ public class EntertainDao {
 	public int getWinTime(SqlSessionTemplate sqlSession, String title) {
 		return sqlSession.selectOne("entertainMapper.getWinTime",title);
 	}
+
+	public ArrayList<HashMap<String, BigDecimal>> getWcMbti(SqlSessionTemplate sqlSession, String title) {
+		return (ArrayList)sqlSession.selectList("entertainMapper.getWcMbti", title);
+	}
+
+	public int getMbtiCount(SqlSessionTemplate sqlSession, String title) {
+		return sqlSession.selectOne("entertainMapper.getMbtiCount",title);
+	}
+
+	public ArrayList<HashMap<String, BigDecimal>> getWcAge(SqlSessionTemplate sqlSession, String title) {
+		return (ArrayList)sqlSession.selectList("entertainMapper.getWcAge", title);
+	}
+
+	public ArrayList<HashMap<String, BigDecimal>> getWcGender(SqlSessionTemplate sqlSession, String title) {
+		return (ArrayList)sqlSession.selectList("entertainMapper.getWcGender", title);
+	}
+
+//	public HashMap<String, Integer> getMbti(SqlSessionTemplate sqlSession, String title) {
+//		return (HashMap)sqlSession.selectMap("entertainMapper.getWcMbti",title,"MBTI");
+//	}
+	
+	
 }

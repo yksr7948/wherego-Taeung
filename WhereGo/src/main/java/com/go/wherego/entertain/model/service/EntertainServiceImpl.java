@@ -1,6 +1,9 @@
 package com.go.wherego.entertain.model.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +54,44 @@ public class EntertainServiceImpl implements EntertainService{
 	public int getWinTime(String title) {
 		return entertaindao.getWinTime(sqlSession,title);
 	}
+
+
+
+	@Override
+	public ArrayList<HashMap<String, BigDecimal>> getWcMbti(String title) {
+		return entertaindao.getWcMbti(sqlSession, title);
+	}
+
+
+
+	@Override
+	public int getMbtiCount(String title) {
+		return entertaindao.getMbtiCount(sqlSession,title);
+	}
+
+
+
+	@Override
+	public ArrayList<HashMap<String, BigDecimal>> getWcAge(String title) {
+		return entertaindao.getWcAge(sqlSession,title);
+	}
+
+
+
+	@Override
+	public ArrayList<HashMap<String, BigDecimal>> getWcGender(String title) {
+		return entertaindao.getWcGender(sqlSession,title);
+	}
+
+
+
+	/*
+	 * @Override public HashMap<String, Integer> getMbti(String title) { return
+	 * entertaindao.getMbti(sqlSession,title); }
+	 */
+
+
+
+	
 
 }

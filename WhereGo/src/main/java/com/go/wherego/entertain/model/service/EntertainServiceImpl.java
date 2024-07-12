@@ -64,6 +64,27 @@ public class EntertainServiceImpl implements EntertainService{
 
 
 
+	@Override
+	public int getMbtiCount(String title) {
+		return entertaindao.getMbtiCount(sqlSession,title);
+	}
+
+
+
+	@Override
+	public ArrayList<HashMap<String, BigDecimal>> getWcAge(String title) {
+		return entertaindao.getWcAge(sqlSession,title);
+	}
+
+
+
+	@Override
+	public ArrayList<HashMap<String, BigDecimal>> getWcGender(String title) {
+		return entertaindao.getWcGender(sqlSession,title);
+	}
+
+
+
 	/*
 	 * @Override public HashMap<String, Integer> getMbti(String title) { return
 	 * entertaindao.getMbti(sqlSession,title); }

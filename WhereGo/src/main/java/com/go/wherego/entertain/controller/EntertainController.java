@@ -119,7 +119,6 @@ public class EntertainController {
 
 	
 	  @ResponseBody
-	  
 	  @PostMapping(value="getMbti.en",produces = "application/json;charset=UTF-8")
 	  public ArrayList<HashMap<String,BigDecimal>> wcInfo(String title, String
 	  contentId, Model model){
@@ -128,11 +127,40 @@ public class EntertainController {
 	  ArrayList<HashMap<String,BigDecimal>> result =
 	  entertainService.getWcMbti(title); 
 	  System.out.println(result);
-	  
+//	  int mbtiCount = entertainService.getMbtiCount(title); //해당 여행지의 이긴 총 횟수 \
+//	  System.out.println(mbtiCount);
+	   
 //	   return resultMap; 
 	   return result; 
 	   }
 	 
+	  
+	  @ResponseBody
+	  @PostMapping(value="getage.en",produces = "application/json;charset=UTF-8")
+	  public ArrayList<HashMap<String,BigDecimal>> ageInfo(String title, String
+	  contentId, Model model){
+	  
+	  // HashMap resultMap= entertainService.getWcMbti(title);
+	  ArrayList<HashMap<String,BigDecimal>> result =
+	  entertainService.getWcAge(title); 
+	  System.out.println(result);
+ 
+	   return result; 
+	   }
+	  
+	  @ResponseBody
+	  @PostMapping(value="getGender.en",produces = "application/json;charset=UTF-8")
+	  public ArrayList<HashMap<String,BigDecimal>> genderInfo(String title, String
+	  contentId, Model model){
+	  
+	  // HashMap resultMap= entertainService.getWcMbti(title);
+	  ArrayList<HashMap<String,BigDecimal>> result =
+	  entertainService.getWcGender(title); 
+	  System.out.println(result);
+ 
+	   return result; 
+	   }
+	  
 
 	/*
 	 * @ResponseBody

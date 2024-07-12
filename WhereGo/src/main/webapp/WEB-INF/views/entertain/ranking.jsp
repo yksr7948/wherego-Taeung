@@ -130,7 +130,9 @@ main {
 			<div class="card">
 				<input type="hidden" value="${a.contentId}"
 					id="hiddenContentId${status.index}"> <input type="hidden"
-					value="${a.title}" id="hiddenTitle${status.index}"> <img
+					value="${a.title}" id="hiddenTitle${status.index}"> 
+					<input type="hidden" value="${w}" id="hiddenWinTime${status.index }">
+					<img
 					src="${a.firstImage2}" alt="">
 				<div class="card-content">
 					<h2>${status.index + 1}등
@@ -140,9 +142,14 @@ main {
 						%
 					</h2>
 					<a class="rank-button mbti-btn" data-index="${status.index}"
-						data-toggle="modal" data-target="#updatePwdForm">mbti</a> <a
-						href="" class="rank-button">해시태그</a> <a href=""
-						class="rank-button">성별</a> <a href="" class="rank-button">나이</a>
+						data-toggle="modal" data-target="#mbtiForm">mbti</a> 
+						
+						<a href="" class="rank-button" >해시태그</a> 
+						<a href="" class="rank-button gender-btn" data-index="${status.index}"
+						data-toggle="modal" data-target="#genderForm">성별</a> 
+						<a href="" class="rank-button age-btn" data-index="${status.index}"
+						data-toggle="modal" data-target="#ageForm">나이</a>
+						
 				</div>
 			</div>
 		</c:forEach>
@@ -153,7 +160,7 @@ main {
 	<br>
 
 	<h1></h1>
-	<div class="modal" id="updatePwdForm">
+	<div class="modal" id="mbtiForm">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
@@ -167,7 +174,7 @@ main {
 						<thead>
 							<tr>
 								<th>MBTI</th>
-								<th>Count</th>
+								<th>비율</th>
 							</tr>
 						</thead>
 						<tbody id="mbti-table-body">
@@ -184,6 +191,71 @@ main {
 			</div>
 		</div>
 	</div>
+	
+	<div class="modal" id="ageForm">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">나이대별 픽</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body" align="center">
+					<table border="1">
+						<thead>
+							<tr>
+								<th>나이</th>
+								<th>비율</th>
+							</tr>
+						</thead>
+						<tbody id="age-table-body">
+							<!-- 데이터가 동적으로 추가될 영역 -->
+						</tbody>
+					</table>
+				</div>
+
+				<!--  Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="genderForm">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">성별 픽</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body" align="center">
+					<table border="1">
+						<thead>
+							<tr>
+								<th>성별</th>
+								<th>비율</th>
+							</tr>
+						</thead>
+						<tbody id="gender-table-body">
+							<!-- 데이터가 동적으로 추가될 영역 -->
+						</tbody>
+					</table>
+				</div>
+
+				<!--  Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
 
 
 	<script>
@@ -200,9 +272,11 @@ main {
 								var eachContentId = $(
 										"#hiddenContentId" + index).val();
 								var eachTitle = $("#hiddenTitle" + index).val();
+								var eachWinTime = $("#hiddenWinTime" + index).val();
 
 								console.log("Content ID: " + eachContentId);
 								console.log("Title: " + eachTitle);
+								console.log("winTime: " + eachWinTime);
 
 								$.ajax({
 									url : "getMbti.en",
@@ -212,27 +286,111 @@ main {
 										title : eachTitle
 									},
 									success : function(response) {
-										$("#mbti-table-body").empty();
-										
-										console.log(response);
+										if (Array.isArray(response)) {
+					                        // 테이블 본문 비우기
+					                        $("#mbti-table-body").empty();
 
-										// 새 데이터로 테이블 채우기
-										$.each(response, function(key, value) {
-											$("#mbti-table-body").append(
-													"<tr><td>" + key
-															+ "</td><td>"
-															+ value
-															+ "</td></tr>");
-										});
-									},
-									error : function(xhr, status, error) {
-										console.error("Error occurred: "
-												+ status + " - " + error);
+					                        console.log(response);
+
+					                        // 새 데이터로 테이블 채우기
+					                        $.each(response, function(index, item) {
+					                            var ratio = (item.count / eachWinTime) * 100; // 비율 계산
+					                            $("#mbti-table-body").append(
+					                                "<tr><td>" + item.mbti + "</td><td>" + ratio.toFixed(2) + "%</td></tr>"
+					                            );
+					                        });
+								        } else {
+								            console.error("Response is not an array.");
+								        }
 									}
 								});
 
 								// 각 변수를 저장하거나 원하는 작업을 수행합니다.
 							});
+			$(".age-btn")
+			.click(
+					function() {
+						var index = $(this).data("index");
+						var eachContentId = $(
+								"#hiddenContentId" + index).val();
+						var eachTitle = $("#hiddenTitle" + index).val();
+						var eachWinTime = $("#hiddenWinTime" + index).val();
+
+						console.log("Content ID: " + eachContentId);
+						console.log("Title: " + eachTitle);
+						console.log("winTime: " + eachWinTime);
+
+						$.ajax({
+							url : "getage.en",
+							type : "POST",
+							data : {
+								contentId : eachContentId,
+								title : eachTitle
+							},
+							success : function(response) {
+								if (Array.isArray(response)) {
+			                        // 테이블 본문 비우기
+			                        $("#age-table-body").empty();
+
+			                        console.log(response);
+
+			                        // 새 데이터로 테이블 채우기
+			                        $.each(response, function(index, item) {
+			                            var ratio = (item.count / eachWinTime) * 100; // 비율 계산
+			                            $("#age-table-body").append(
+			                                "<tr><td>" + item.AGE + "</td><td>" + ratio.toFixed(2) + "%</td></tr>"
+			                            );
+			                        });
+						        } else {
+						            console.error("Response is not an array.");
+						        }
+							}
+						});
+
+						// 각 변수를 저장하거나 원하는 작업을 수행합니다.
+					});
+			$(".gender-btn")
+			.click(
+					function() {
+						var index = $(this).data("index");
+						var eachContentId = $(
+								"#hiddenContentId" + index).val();
+						var eachTitle = $("#hiddenTitle" + index).val();
+						var eachWinTime = $("#hiddenWinTime" + index).val();
+
+						console.log("Content ID: " + eachContentId);
+						console.log("Title: " + eachTitle);
+						console.log("winTime: " + eachWinTime);
+
+						$.ajax({
+							url : "getGender.en",
+							type : "POST",
+							data : {
+								contentId : eachContentId,
+								title : eachTitle
+							},
+							success : function(response) {
+								if (Array.isArray(response)) {
+			                        // 테이블 본문 비우기
+			                        $("#gender-table-body").empty();
+
+			                        console.log(response);
+
+			                        // 새 데이터로 테이블 채우기
+			                        $.each(response, function(index, item) {
+			                            var ratio = (item.count / eachWinTime) * 100; // 비율 계산
+			                            $("#gender-table-body").append(
+			                                "<tr><td>" + item.gender + "</td><td>" + ratio.toFixed(2) + "%</td></tr>"
+			                            );
+			                        });
+						        } else {
+						            console.error("Response is not an array.");
+						        }
+							}
+						});
+
+						// 각 변수를 저장하거나 원하는 작업을 수행합니다.
+					});
 		});
 	</script>
 

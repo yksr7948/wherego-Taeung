@@ -25,6 +25,12 @@ public interface EntertainService {
 
 	ArrayList<HashMap<String, BigDecimal>> getWcMbti(String title);
 
+	int getMbtiCount(String title);
+
+	ArrayList<HashMap<String, BigDecimal>> getWcAge(String title);
+
+	ArrayList<HashMap<String, BigDecimal>> getWcGender(String title);
+
 //	HashMap<String, Integer> getMbti(String title);
 
 	

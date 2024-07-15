@@ -77,9 +77,9 @@
             },
             success: function(findId) {
                 if (findId == null || findId.trim() === "") { // Check if findId is null or empty string
-                    alert("등록된 아이디가 없습니다.");
+                	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"등록된 아이디가 없습니다.");
                 } else {
-                    alert("회원님의 아이디는 " + findId + "입니다.");
+                	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"회원님의 아이디는 " + findId + "입니다.");
                 }
             },
             error: function() {

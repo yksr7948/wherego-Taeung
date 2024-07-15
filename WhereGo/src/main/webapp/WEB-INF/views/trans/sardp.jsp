@@ -208,7 +208,7 @@ $(function() {
 					success : function(data) {
 						var check=data.response.body.totalCount;
 						if(check==0){
-							alert("해당 노선 없습니다.");
+							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"해당 노선 없습니다.");
 						}else{
 						
 						
@@ -252,7 +252,7 @@ $(function() {
 						
 					},
 					error : function() {
-						 alert("출발지, 도착지를 확인하세요");
+						alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"출발지, 도착지를 확인하세요");
 					}
 				});
 
@@ -322,7 +322,7 @@ $(function() {
 						},
 
 					error : function() {
-						 alert("출발지를 선택하세요");
+						alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"출발지를 선택하세요");
 					}
 				});
 
@@ -338,7 +338,7 @@ $(function() {
         $("#departure").val(departure); // Update the input field with selected departure
         
         // Example of alerting the selected departure
-        alert("Selected departure: " + departure);
+        alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"Selected departure: " + departure);
     });
 	
 	$("#arv").on('click', 'tbody tr', function() {
@@ -352,7 +352,7 @@ $(function() {
         $("#arrival").val(arrival); // Update the input field with selected departure
         
         // Example of alerting the selected departure
-        alert("Selected arrival: " + arrival);
+        alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"Selected arrival: " + arrival);
     });
 	 $("#maindep").on('click', 'tbody td', function() {
 	        // 클릭된 출발지의 텍스트를 가져옵니다.
@@ -362,7 +362,7 @@ $(function() {
 	        $("#departure").val(selectedMainDep);
 	        
 	        // 그 값을 alert 창에 띄웁니다.
-	        alert("선택된 출발지: " + selectedMainDep);
+	        alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"선택된 출발지: " + selectedMainDep);
 	    });
 	
 	});

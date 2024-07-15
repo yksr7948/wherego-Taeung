@@ -235,7 +235,7 @@ button.trip-next {
 			}
 			slides[slideIndex - 1].classList.add("active-slide");
 			updateDots();
-			setTimeout(showSlides, 10000);
+			setTimeout(showSlides, 7000);
 		}
 
 		function currentSlide(n) {

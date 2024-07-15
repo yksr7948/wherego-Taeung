@@ -105,7 +105,7 @@ public class TripController {
 		
 		String url = "http://apis.data.go.kr/B551011/KorService1/areaBasedList1";
 		url+="?serviceKey="+SERVICEKEY;
-		url+="&numOfRows=1000";
+		url+="&numOfRows=5000";
 		url+="&MobileOS=ETC";
 		url+="&MobileApp=AppTest"; //결과 개수 
 		url+="&_type=json";

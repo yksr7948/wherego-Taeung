@@ -120,7 +120,7 @@ a {
     </div>
     	<c:if test="${not empty errorMsg}">
 		<script>
-			alert("${errorMsg}");
+			alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"${errorMsg}");
 		</script>
 		<c:remove var="errorMsg" />
 	</c:if>

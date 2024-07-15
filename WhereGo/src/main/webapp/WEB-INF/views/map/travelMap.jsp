@@ -297,13 +297,13 @@
                         map.setZoom(map.getZoom() - 1);
                     }
                 } else {
-                    alert("응답을 찾을 수 없습니다");
+                	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"응답을 찾을 수 없습니다");
                 }
             } catch (e) {
-                alert("JSON 데이터 분석 오류: " + e);
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"JSON 데이터 분석 오류: " + e);
             }
         } else {
-            alert("관광 데이터가 없습니다");
+        	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"관광 데이터가 없습니다");
         }
 
         naver.maps.Event.addListener(map, 'click', function(e) {
@@ -415,10 +415,10 @@
 
                 }, function(error) {
                     hideLoading();
-                    alert("오류가 발생했습니다. 오류 코드: " + error.code);
+                    alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"오류가 발생했습니다. 오류 코드: " + error.code);
                 });
             } else {
-                alert("이 브라우저에서는 위치를 지원하지 않습니다.");
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"이 브라우저에서는 위치를 지원하지 않습니다.");
             }
         }
 
@@ -470,14 +470,14 @@
                             markers.push(marker);
                         });
                     } else {
-                        alert("주변 관광 데이터가 없습니다.");
+                    	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"주변 관광 데이터가 없습니다.");
                     }
                 } else {
-                    alert("관광 데이터를 가져오지 못했습니다.");
+                	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"관광 데이터를 가져오지 못했습니다.");
                 }
             };
             xhr.onerror = function() {
-                alert("관광 데이터를 가져오는 동안 오류가 발생했습니다.");
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"관광 데이터를 가져오는 동안 오류가 발생했습니다.");
             };
             xhr.send();
         }

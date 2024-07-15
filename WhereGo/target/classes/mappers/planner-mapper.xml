@@ -43,6 +43,7 @@
 		SELECT *
 		FROM PLANNER
 		WHERE USER_ID = #{userId}
+		ORDER BY PLANNER_NO
 	</select>
 	
 	<!-- 플래너 가져오기(번호로) -->

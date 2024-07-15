@@ -475,7 +475,7 @@
         	    if(num<6){ // 일정은 5개까지만 추가 가능
         	        parent.append(getHtml(item.title, item.mapx, item.mapy, num, data_date, item.firstimage));
         	    }else{
-        	        alertify.alert('새로운 제목',"한번에 5개의 관광지를 선택 할 수 있습니다.");
+        	    	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"한번에 5개의 관광지를 선택 할 수 있습니다.");
         	    }
         	}
         	
@@ -579,7 +579,7 @@
                 
                 $('.plans-box').each(function (i){
                     if($(this).children().length < 2){
-                        alertify.alert("각 여행일에는 최소 1개의 일정을 추가해주세요.");
+                    	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"각 여행일에는 최소 1개의 일정을 추가해주세요.");
                         isValid = false;
                         return false;
                     }
@@ -587,7 +587,7 @@
                 
                 $('.plan-box').each(function (i){
                     if($(this).find('.plan-time').val() == ""){
-                    	alertify.alert("시간은 필수 입력 항목입니다.");
+                    	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"시간은 필수 입력 항목입니다.");
                         isValid = false;
                         return false;
                     }
@@ -634,7 +634,7 @@
                 		type: "POST",
                 		success : function(result){
                 			
-                			alertify.alert("저장되었습니다.",function(){
+                			alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"저장되었습니다.",function(){
                 				location.href = "planner.pl?userId="+$("#userId").val();
                 			});
                 		},

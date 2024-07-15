@@ -17,6 +17,18 @@
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+.planner-empty{
+	width: 100%; 
+	font-size: 24px; 
+	font-weight: 900; 
+	text-align: center;
+	margin-top: 30px;
+}
+.planner-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 97px; 
+}
 .plan-title {
     display: flex;
     justify-content: space-between;
@@ -30,18 +42,6 @@
 }
 .login-button {
 	text-align: right;
-}
-.planner-grid {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-.planner-empty{
-	width: 100%; 
-	font-size: 24px; 
-	font-weight: 900; 
-	text-align: center;
-	margin-top: 30px;
 }
 .planner-item {
     background-color: #fafafa;
@@ -82,7 +82,7 @@
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
 }
-.detail-button:hover {
+.button-area button:hover {
     background-color: black;
     color: white;
 }
@@ -175,11 +175,11 @@
 					success : function(response){
 						console.log(response);
 						if(response == '1'){
-							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"삭제되었습니다.",function(){
+							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"삭제되었습니다.",function(){
 								location.href = "planner.pl?userId="+$("#userId").val();
 							});
 						}else{
-							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;" alt="이미지 설명">' ,"삭제 도중 오류 발생...");
+							alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',"삭제 도중 오류 발생...");
 						}
 					},
 					error : function(){

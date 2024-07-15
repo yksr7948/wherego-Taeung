@@ -312,14 +312,14 @@ li {
     		$("#serach-icon").click(function(){
     			var keyword=$("#search-keyword").val();
     			if(keyword==""){
-    				alert("검색어가 입력되지 않았습니다.");
+    				alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"검색어가 입력되지 않았습니다.");
     			} else {
     				location.href="search.wherego?keyword="+keyword;
     			}	
     		})
 				var msg="${alertMsg}";
         			if(msg!=""){
-        				alert(msg);
+        				alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">',msg);
         				<c:remove var="alertMsg"/>
         			}
     	});

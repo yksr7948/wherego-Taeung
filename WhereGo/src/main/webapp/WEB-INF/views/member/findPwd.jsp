@@ -146,12 +146,12 @@ function checkEmail() {
         },
         success: function(result) {
             if (result > 0) {
-                alert("이메일 인증에 성공하셨습니다. 비밀번호를 변경해주세요!");
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"이메일 인증에 성공하셨습니다. 비밀번호를 변경해주세요!");
                 $("#mailOn").hide();
                 $("#btn").hide();
                 $("#passwordChange").show();
             } else {
-                alert("이메일 인증 실패!! 이메일 인증을 재시도 해주세요.");
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"이메일 인증 실패!! 이메일 인증을 재시도 해주세요.");
             }
         },
         error: function() {
@@ -173,9 +173,9 @@ function sendEmail() {
                 $("#mailOn").show();
                 $("#btn").show();
            
-                alert(userId + " 회원님의 이메일로 인증번호를 전송했습니다.");
+                alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,userId + " 회원님의 이메일로 인증번호를 전송했습니다.");
             } else {
-                alert("이메일로 인증번호 전송 실패했습니다.");
+            	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"이메일로 인증번호 전송 실패했습니다.");
             }
         },
         error: function() {
@@ -190,7 +190,7 @@ function changePassword() {
     var confirmPassword = $("#confirmPassword").val();
 
     if (newPassword !== confirmPassword) {
-        alert("비밀번호가 일치하지 않습니다.");
+    	alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"비밀번호가 일치하지 않습니다.");
     }else{
     	$.ajax({
 			url : "changePwd.me",
@@ -201,12 +201,12 @@ function changePassword() {
 			success : function(result) {
 				//console.log(result);
 				if (result=="NNNNY") {
-					alert("비밀번호 변경완료!!");
+					alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"비밀번호 변경완료!!");
 					location.href="login.me";
 				} else if(result=="NNNNN1"){
-					alert("비밀번호 가 같지 않습니다!!");
+					alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"비밀번호 가 같지 않습니다!!");
 				}else {
-					alert("비밀번호 변경실패!!");
+					alertify.alert('<img src="resources/img/removebg-preview.png" style="width: 30px;">' ,"비밀번호 변경실패!!");
 				}
 			},
 			error : function() {

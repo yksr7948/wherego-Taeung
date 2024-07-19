@@ -33,9 +33,8 @@
   - FrameWork/Library : SpringLegacy, Mybatis, cos, jstl, lombok, Ajax..
   - 개발 도구 : STS3, Visual Studio Code
   - DB : Oracle 11c
-  - API : GoogleMap, Daum PostCode
-  - Collaboration
- : GitHub, Slack
+  - API : NAVER MAP, 공공데이터 포털 Open API
+  - Collaboration: GitHub, Slack
 
 ## ERD
 ![WHEREGO-ERD](https://github.com/user-attachments/assets/ae01625e-783f-49ac-9d63-4d597e4275f9)

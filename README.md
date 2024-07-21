@@ -39,5 +39,14 @@
 ## ERD
 ![WHEREGO-ERD](https://github.com/user-attachments/assets/ae01625e-783f-49ac-9d63-4d597e4275f9)
 
+## VIEW
+
+### 회원가입 및 로그인
+![login-gif](https://github.com/user-attachments/assets/92546e39-340c-4703-98db-c5c0815f27c8)
+
+### 여행지 리스트 및 상세보기
+![trip-gif](https://github.com/user-attachments/assets/9ad43047-9573-4044-82dd-36487ad498f6)
+
+
 
 

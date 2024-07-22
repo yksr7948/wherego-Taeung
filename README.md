@@ -47,7 +47,7 @@
 ### 여행지 리스트 및 상세보기
 ![trip-gif](https://github.com/user-attachments/assets/9ad43047-9573-4044-82dd-36487ad498f6)
 
-### 플래너 작성 및 상서보기
+### 플래너 작성 및 상세보기
 ![planner-gif](https://github.com/user-attachments/assets/e0d1acd2-9339-4e00-959b-a218194b9d32)
 
 

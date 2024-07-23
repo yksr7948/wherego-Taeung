@@ -91,6 +91,18 @@
       2. plan 데이터는 each문을 사용하여 여러 일정의 데이터를 attr과 find를 사용하여 받아올 수 있었다.
       3. 모달에서 입력했던 데이터는 planner로 묶어주었고 일정들의 데이터는 planList로 묶어주었다
       4. planList와 planner를 하나로 묶어주었고 json화 시켜 AJax로 Controller로 보내주었다.
+     
+4. ### 플래너 저장 (플랜 저장)
+
+      ![image](https://github.com/user-attachments/assets/48ac6ca6-9480-4fb1-a9fd-16c3b1cdda34)
+
+     - 문제점 : 두 테이블을 한번에 저장하다 보니 planner와 plan-data 테이블을 연결 시켜줄 시퀀스가 아직 뽑히지 않은 상태이기 때문에 연결 시켜줄 방법이 없었음
+     - 문제 해결 :
+       
+       ![image](https://github.com/user-attachments/assets/a49d4f85-f4fd-4306-b28f-06bcad4bb3fa)
+
+       planner를 삽입하기 전에 시퀀스 값을 미리 뽑아와 plannerNo에 삽입시켰고 이로 인해 두 테이블을 연결 시켜줄 수 있었다.
+
 
 
 

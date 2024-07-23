@@ -41,8 +41,8 @@
 
 ## VIEW
 
-### 회원가입 및 로그인
-![login-gif](https://github.com/user-attachments/assets/92546e39-340c-4703-98db-c5c0815f27c8)
+### 메인 화면
+![main-gif](https://github.com/user-attachments/assets/a4c82995-a636-4a33-8e7d-3bc9fba5e045)
 
 ### 여행지 리스트 및 상세보기
 ![trip-gif](https://github.com/user-attachments/assets/9ad43047-9573-4044-82dd-36487ad498f6)
@@ -50,6 +50,47 @@
 ### 플래너 작성 및 상세보기
 ![planner-gif](https://github.com/user-attachments/assets/e0d1acd2-9339-4e00-959b-a218194b9d32)
 
+## 문제 해결
+  1. ### 데이터 저장 방식
+     - 문제점 : OPEN API의 대량의 데이터를 어떻게 데이터베이스와 연결을 하고 한번에 저장을 할까?
+     - 해결 방법 :
+       1. 디버깅을 하면서 데이터가 어떻게 넘어오는지 이해를 하려 했다.
+       2. JSON 객체 안에 ITEM요소에 데이터들이 있다는 것을 알게 되었고 이 ITEM까지 접근한 뒤 필요한 데이터만 VO에 담았다.
+          
+          ![image](https://github.com/user-attachments/assets/e40f96ff-c44b-4f35-9e0e-7c744cd48c52)
+
+       4. 대량의 데이터들이 들어있는 VO를 mapper까지 전달하였고 Mybatis의 foreach문을 사용하여 대량의 데이터를 한번에 저장할 수 있었다.
+
+          ![image](https://github.com/user-attachments/assets/dfe6dbc9-4b42-4392-bd70-b978a066dbda)
+
+  ---
+  
+  2. ### 플래너 저장 (플랜 추가 버튼) 
+     - 문제점 : 플래너 저장 페이지에서 검색해서 나온 List의 + 버튼을 눌렀을 때 plan영역으로 데이터를 보내려 했지만 구문 오류라 값이 넘어가지를 않았다.
+     - 해결 방법 :
+       1. 보내려는 값이 객체 형태이기 떄문에 다른 div로 바로 넘길 수가 없었다.
+      
+          ![image](https://github.com/user-attachments/assets/26a532b3-0d88-416e-9061-376a7da3e422)
+
+       2. 데이터가 들어있는 item을 JSON.Stringify 함수를 사용해서 객체를 json형식으로 바꿔주었고 정상적으로 값이 전달될 수 있었다.
+    
+          ![image](https://github.com/user-attachments/assets/f46c0387-914f-4796-afa3-f68430250f47)
+          ![image](https://github.com/user-attachments/assets/63bb6b27-7711-4a05-a90d-c9de4d02a67b)
+      
+       3. 이 전달받은 데이터를 통해 지도에 마커를 찍는 기능, 마커와 마커사이 선긋기 기능을 넣었고, plan영역의 div 속성명에 전달받은 데이터들의 값을 넣어주었다.
+          
+ ---
+ 
+ 3. ### 플래너 저장 (플랜 저장 버튼)
+    - 문제점 : 여러 개의 plan 데이터와 모달에서 입력했던 데이터를 저장 버튼을 누를 시 어떻게 Controller에 전달할까?
+    - 해결 방법 :
+      
+      ![image](https://github.com/user-attachments/assets/d98c3b93-e052-4001-8ebf-06ad3944925a)
+
+      1. 모달에서 입력했던 데이터는 hidden으로 숨기고 값을 받아올 수 있었다.
+      2. plan 데이터는 each문을 사용하여 여러 일정의 데이터를 attr과 find를 사용하여 받아올 수 있었다.
+      3. 모달에서 입력했던 데이터는 planner로 묶어주었고 일정들의 데이터는 planList로 묶어주었다
+      4. planList와 planner를 하나로 묶어주었고 json화 시켜 AJax로 Controller로 보내주었다.
 
 
 

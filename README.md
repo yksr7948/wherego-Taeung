@@ -92,6 +92,8 @@
       3. 모달에서 입력했던 데이터는 planner로 묶어주었고 일정들의 데이터는 planList로 묶어주었다
       4. planList와 planner를 하나로 묶어주었고 json화 시켜 AJax로 Controller로 보내주었다.
      
+ ---
+     
 4. ### 플래너 저장 (플랜 저장)
 
       ![image](https://github.com/user-attachments/assets/48ac6ca6-9480-4fb1-a9fd-16c3b1cdda34)

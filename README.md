@@ -77,7 +77,7 @@
           ![image](https://github.com/user-attachments/assets/f46c0387-914f-4796-afa3-f68430250f47)
           ![image](https://github.com/user-attachments/assets/63bb6b27-7711-4a05-a90d-c9de4d02a67b)
       
-       3. 이 전달받은 데이터를 통해 지도에 마커를 찍는 기능, 마커와 마커사이 선긋기 기능을 넣었고, plan영역의 div 속성명에 전달받은 데이터들의 값을 넣어주었다.
+       3. 이 전달받은 데이터를 통해 지도에 마커를 찍는 기능, 마커와 마커사이 선긋기 기능을 넣었고, plan영역의 활성화 되어있는 div 속성명에 전달받은 데이터들의 값을 넣어주었다.
           
  ---
  

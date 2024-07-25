@@ -4,124 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-/* 플래너 리스트 */
-.planner-container {
-    width: 60%;
-    min-height: 800px;
-    margin: 20px auto;
-    margin-top: 5%;
-    padding: 20px;
-    background-color: white;
-    border: 1px solid lightgray;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-.planner-empty{
-	width: 100%; 
-	font-size: 24px; 
-	font-weight: 900; 
-	text-align: center;
-	margin-top: 30px;
-}
-.planner-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 97px; 
-}
-.plan-title {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.plan-title p {
-	font-weight: 900;
-	font-size: 48px;
-    text-align: left;
-    color: #333;
-}
-.login-button {
-	text-align: right;
-}
-.planner-item {
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    width: 300px;
-    margin-bottom: 20px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-.planner-item img {
-    width: 300px;
-    height: 200px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-.planner-info {
-    padding: 15px;
-}
-.planner-info p {
-    margin: 5px 0;
-    color: #555;
-}
-.button-area{
-    display: flex;
-    gap: 10px;
-}
-.button-area button{
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: white;
-    text-align: center;
-    color: black;
-    border: 2px solid black;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 900;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-.button-area button:hover {
-    background-color: black;
-    color: white;
-}
-
-/* 모달 영역 */
-#plannerModal{
-	display: none; 
-    position: fixed; 
-    z-index: 9999; 
-    left: 0;
-    top: 0;
-    width: 100%; 
-    height: 100%; 
-    overflow: auto; 
-    background-color: rgb(0,0,0); 
-    background-color: rgba(0,0,0,0.4); 
-    padding-top: 60px; 
-}
-.date-form {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	margin-bottom: 20px;
-}
-.date-form input {
-    width: 120px;
-}
-.input-group {
-	display: flex;
-	align-items: center;
-}
-.input-group-text {
-	margin-left: 0.5rem;
-	cursor: pointer;
-}
-.ui-datepicker {
-	z-index: 9999 !important; /* 캘린더가 모달 앞에 오도록 z-index 설정 */
-}
-</style>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/planList-style.css">
 </head>
 <body>
     <%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -143,7 +26,15 @@
 	        		<c:otherwise>
         				<c:forEach items="${plannerList}" var="planner" varStatus="status">
 				            <div class="planner-item">
-				                <img src="${planList[status.index].firstImage }" alt="">
+				                <!-- 플래너 번호에 맞는 이미지 가져오기 -->
+				            	<c:set var="firstImage" value="" />
+				                <c:forEach items="${planList}" var="plan" varStatus="planStatus">
+							            <c:if test="${plan.plannerNo == planner.plannerNo && empty firstImage}">
+							            	<c:set var="firstImage" value="${plan.firstImage}" />
+							            </c:if>
+						        </c:forEach>
+
+						        <img src="${firstImage}" alt="">
 				                <div class="planner-info">
 				                    <p style="font-size: 24px; font-weight: 900;">${planner.title }</p>
 				                    <p>${planner.description }</p>

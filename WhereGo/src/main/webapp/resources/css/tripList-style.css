@@ -1,0 +1,101 @@
+main {
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    margin-top: 5%;
+}
+#area-title{
+	font-weight: 900;
+}
+
+/* 지역별 이동 버튼 */
+.area-container {
+    text-align: left;
+    margin-bottom: 40px;
+    margin-left: 30px;
+}
+.area-container a {
+	border: 2px solid black;
+	background-color: white;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 10px;
+}
+.area-container a:hover {  
+	background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+/* 여행지 리스트 */
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 300px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+    flex: 0 0 calc(25% - 20px);
+    box-sizing: border-box;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+.card>img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 15px;
+}
+
+.card-content h2 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.card-content p {
+    margin: 0;
+    color: #555;
+    font-size: 11px;
+}
+
+
+/* 페이징처리 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    margin:auto;
+}
+.pagination li>a{
+	width: 50px;
+	height: auto;
+	color: black;
+	text-align: center;
+	margin-right: 10px;
+}
+.pagination li>a:hover {
+    background-color: lightgray;
+}
+.current-page a{
+	color: black;
+	background: lightgray;
+	cursor: auto;
+}

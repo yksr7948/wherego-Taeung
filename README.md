@@ -30,7 +30,7 @@
   - 개발 언어 : Java (11)
   - Front-End : HTML5, CSS3, JavaScript, JQuery, Ajax
   - Back-End : JAVA, JSP&Servlet
-  - FrameWork/Library : SpringLegacy, Mybatis, cos, jstl, lombok, Ajax..
+  - FrameWork/Library : Mybatis, cos, jstl, lombok, Ajax..
   - 개발 도구 : STS3, Visual Studio Code
   - DB : Oracle 11c
   - API : NAVER MAP, 공공데이터 포털 Open API
@@ -54,12 +54,11 @@
   1. ### 데이터 저장 방식
      - 문제점 : OPEN API의 대량의 데이터를 어떻게 데이터베이스와 연결을 하고 한번에 저장을 할까?
      - 해결 방법 :
-       1. 디버깅을 하면서 데이터가 어떻게 넘어오는지 이해를 하려 했다.
-       2. JSON 객체 안에 ITEM요소에 데이터들이 있다는 것을 알게 되었고 이 ITEM까지 접근한 뒤 필요한 데이터만 VO에 담았다.
+          디버깅을 하면서 데이터가 어떻게 넘어오는지 이해를 하려 했고 JSON 객체 안에 ITEM요소에 데이터들이 있다는 것을 알게 되었다. ITEM까지 접근한 뒤 필요한 데이터만 VO에 담았다.
           
           ![image](https://github.com/user-attachments/assets/e40f96ff-c44b-4f35-9e0e-7c744cd48c52)
 
-       4. 대량의 데이터들이 들어있는 VO를 mapper까지 전달하였고 Mybatis의 foreach문을 사용하여 대량의 데이터를 한번에 저장할 수 있었다.
+          대량의 데이터들이 들어있는 VO를 mapper까지 전달하였고 Mybatis의 foreach문을 사용하여 대량의 데이터를 한번에 저장할 수 있었다.
 
           ![image](https://github.com/user-attachments/assets/dfe6dbc9-4b42-4392-bd70-b978a066dbda)
 

@@ -96,14 +96,16 @@
      
 4. ### 플래너 저장 (플랜 저장)
 
-      ![image](https://github.com/user-attachments/assets/48ac6ca6-9480-4fb1-a9fd-16c3b1cdda34)
+      ![image](https://github.com/user-attachments/assets/6feec5d2-b61b-4deb-b3ca-d80aa95c0d2e)
 
-     - 문제점 : 두 테이블을 한번에 저장하다 보니 planner와 plan-data 테이블을 연결 시켜줄 시퀀스가 아직 뽑히지 않은 상태이기 때문에 연결 시켜줄 방법이 없었음
-     - 문제 해결 :
+     - 문제점 : 하나의 플래너 안에는 많은 플랜 데이터들이 있을 수 있는데 이 플랜 데이터들을 한번에 저장하는 과정에서 문제가 발생했다. 이유는 이 구문에서는 시퀀스 값이 하나만 뽑아져 모든 플랜 데이터에 저장되었다. 이로 인해 기본키인 plan_no에 중복된 값이 들어갔고 오류가 발생했다.
+     - 잘못된 문제 해결 : 이 구문에 separator=";" 를 사용하여 새로운 시퀀스 값을 뽑아오려고 했지만 매퍼에서는 ;을 사용하면 오류가 나기 때문에 잘못된 접근이였다.
+
+      ![image](https://github.com/user-attachments/assets/f790a8f1-e442-4a07-8255-15d8dc8b96f4)
        
-       ![image](https://github.com/user-attachments/assets/a49d4f85-f4fd-4306-b28f-06bcad4bb3fa)
+     - 문제 해결 :
 
-       planner를 삽입하기 전에 시퀀스 값을 미리 뽑아와 plannerNo에 삽입시켰고 이로 인해 두 테이블을 연결 시켜줄 수 있었다.
+       PL/SQL문은 ;을 사용해도 오류가 나지 않는다는 것을 알게 되었고 이로 인해 새로운 시퀀스 값을 뽑을 수 있게 되었다. 변수명을 하나 지정한 다음에 이 시퀀스 값을 변수에 대입을 해주었고 이 변수를 통해 플랜 데이터 하나하나에 새로운 시퀀스 값을 대입 해주었다.
 
 
 
